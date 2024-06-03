@@ -27,7 +27,8 @@ class _SelectCameraLensState extends State<SelectCameraLens> {
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
                 ..._cameras.map((CameraDescription camera) {
-                  if (camera.lensDirection == CameraLensDirection.front) return Container();
+                  if (camera.lensDirection == CameraLensDirection.front)
+                    return Container();
                   return GestureDetector(
                     onTap: () {
                       isCameraReady.value = false;

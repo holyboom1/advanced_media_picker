@@ -49,13 +49,14 @@ class _DirectoryWidgetState extends State<DirectoryWidget> {
                   child: AssetEntityImage(
                     pathData[widget.path.id]!.value.first,
                     fit: BoxFit.cover,
-                    loadingBuilder:
-                        (BuildContext context, Widget child, ImageChunkEvent? loadingProgress) {
+                    loadingBuilder: (BuildContext context, Widget child,
+                        ImageChunkEvent? loadingProgress) {
                       return loadingProgress == null
                           ? child
                           : Shimmer.fromColors(
                               baseColor: widget.theme.shimmerBaseColor,
-                              highlightColor: widget.theme.shimmerHighlightColor,
+                              highlightColor:
+                                  widget.theme.shimmerHighlightColor,
                               child: child,
                             );
                     },
@@ -71,8 +72,9 @@ class _DirectoryWidgetState extends State<DirectoryWidget> {
                         border: widget.theme.selectIconBorder,
                         shape: BoxShape.circle,
                       ),
-                      child:
-                          value.id == widget.path.id ? widget.theme.selectIcon : const SizedBox(),
+                      child: value.id == widget.path.id
+                          ? widget.theme.selectIcon
+                          : const SizedBox(),
                     ),
                   ),
                 ),

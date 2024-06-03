@@ -16,7 +16,8 @@ class PickerBottomSheet extends StatefulWidget {
 
 class _PickerBottomSheetState extends State<PickerBottomSheet> {
   final GlobalKey<State<StatefulWidget>> _sheet = GlobalKey();
-  final DraggableScrollableController _controller = DraggableScrollableController();
+  final DraggableScrollableController _controller =
+      DraggableScrollableController();
 
   @override
   void initState() {
@@ -66,7 +67,8 @@ class _PickerBottomSheetState extends State<PickerBottomSheet> {
     _controller.dispose();
   }
 
-  DraggableScrollableSheet get sheet => _sheet.currentWidget! as DraggableScrollableSheet;
+  DraggableScrollableSheet get sheet =>
+      _sheet.currentWidget! as DraggableScrollableSheet;
 
   @override
   Widget build(BuildContext context) {
@@ -107,7 +109,8 @@ class _PickerBottomSheetState extends State<PickerBottomSheet> {
                                   Container(
                                     width: 40,
                                     height: 4,
-                                    margin: const EdgeInsets.only(top: 8, bottom: 8),
+                                    margin: const EdgeInsets.only(
+                                        top: 8, bottom: 8),
                                     decoration: BoxDecoration(
                                       color: widget.style.dragIndicatorColor,
                                       borderRadius: BorderRadius.circular(2),
@@ -121,7 +124,8 @@ class _PickerBottomSheetState extends State<PickerBottomSheet> {
                               child: AnimatedSize(
                                 duration: kThemeAnimationDuration,
                                 child: Container(
-                                  padding: const EdgeInsets.symmetric(vertical: 8),
+                                  padding:
+                                      const EdgeInsets.symmetric(vertical: 8),
                                   margin: const EdgeInsets.only(bottom: 8),
                                   height: isNeedToShowDirectories ? 100 : 0,
                                   width: double.infinity,

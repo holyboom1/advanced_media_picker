@@ -29,7 +29,8 @@ Map<String, int> _totalEntitiesCount = <String, int>{};
 Map<String, int> _pages = <String, int>{};
 Map<String, bool> _hasMoreToLoad = <String, bool>{};
 
-ValueNotifier<AssetPathEntity?> _selectedPath = ValueNotifier<AssetPathEntity?>(null);
+ValueNotifier<AssetPathEntity?> _selectedPath =
+    ValueNotifier<AssetPathEntity?>(null);
 ValueNotifier<List<AssetPathEntity>> _availablePath =
     ValueNotifier<List<AssetPathEntity>>(<AssetPathEntity>[]);
 final Map<String, ValueNotifier<List<AssetEntity>>> pathData =
@@ -39,8 +40,10 @@ ValueNotifier<List<AssetEntity>> _selectedAssets =
 
 List<CameraDescription> _cameras = <CameraDescription>[];
 
-ValueNotifier<List<XFile>> _capturedImages = ValueNotifier<List<XFile>>(<XFile>[]);
-ValueNotifier<List<XFile>> _capturedVideos = ValueNotifier<List<XFile>>(<XFile>[]);
+ValueNotifier<List<XFile>> _capturedImages =
+    ValueNotifier<List<XFile>>(<XFile>[]);
+ValueNotifier<List<XFile>> _capturedVideos =
+    ValueNotifier<List<XFile>>(<XFile>[]);
 
 int limitToSelection = -1;
 int videoDuration = -1;
@@ -48,7 +51,10 @@ bool isNeedToShowCamera = true;
 bool isNeedToTakeVideo = true;
 
 Future<List<XFile>> onClose() async {
-  final List<XFile> assets = <XFile>[..._capturedImages.value, ..._capturedVideos.value];
+  final List<XFile> assets = <XFile>[
+    ..._capturedImages.value,
+    ..._capturedVideos.value
+  ];
   await Future.forEach(_selectedAssets.value, (AssetEntity element) async {
     final File? file = await element.file;
     if (file != null) {
@@ -65,9 +71,11 @@ Future<List<XFile>> onClose() async {
 
 void onOnSelectAsset(AssetEntity asset) {
   if (_selectedAssets.value.contains(asset)) {
-    _selectedAssets.value = <AssetEntity>[..._selectedAssets.value]..remove(asset);
+    _selectedAssets.value = <AssetEntity>[..._selectedAssets.value]
+      ..remove(asset);
   } else {
-    if (limitToSelection != -1 && _selectedAssets.value.length >= limitToSelection) {
+    if (limitToSelection != -1 &&
+        _selectedAssets.value.length >= limitToSelection) {
       return;
     }
     _selectedAssets.value = <AssetEntity>[..._selectedAssets.value, asset];
@@ -82,7 +90,10 @@ Future<void> loadMoreAsset({
     page: page,
     size: _sizePerPage,
   );
-  pathData[path.id]!.value = <AssetEntity>[...pathData[path.id]!.value, ...entities];
+  pathData[path.id]!.value = <AssetEntity>[
+    ...pathData[path.id]!.value,
+    ...entities
+  ];
   _pages[path.id] = page;
   _hasMoreToLoad[path.id] = entities.length < _totalEntitiesCount[path.id]!;
 }
@@ -97,7 +108,8 @@ Future<void> getAssetsPath({
 
   final Completer<void> completer = Completer<void>();
   if (_availablePath.value.isNotEmpty) {
-    unawaited(Future.forEach(_availablePath.value, (AssetPathEntity element) async {
+    unawaited(
+        Future.forEach(_availablePath.value, (AssetPathEntity element) async {
       pathData[element.id] = ValueNotifier<List<AssetEntity>>(<AssetEntity>[]);
       final List<AssetEntity> entities = await element.getAssetListPaged(
         page: 0,
@@ -106,7 +118,8 @@ Future<void> getAssetsPath({
       pathData[element.id]!.value = entities;
       _totalEntitiesCount[element.id] = await element.assetCountAsync;
       _pages[element.id] = 0;
-      _hasMoreToLoad[element.id] = entities.length < _totalEntitiesCount[element.id]!;
+      _hasMoreToLoad[element.id] =
+          entities.length < _totalEntitiesCount[element.id]!;
       if (element == _availablePath.value.first) {
         _selectedPath.value = element;
         completer.complete();

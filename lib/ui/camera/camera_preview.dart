@@ -21,7 +21,8 @@ class _CameraPreviewWidgetState extends State<CameraPreviewWidget> {
       focusY = details.localPosition.dy;
 
       final double fullWidth = MediaQuery.of(context).size.width;
-      final double cameraHeight = fullWidth * cameraController!.value.aspectRatio;
+      final double cameraHeight =
+          fullWidth * cameraController!.value.aspectRatio;
 
       final double xp = focusX / fullWidth;
       final double yp = focusY / cameraHeight;
@@ -31,7 +32,8 @@ class _CameraPreviewWidgetState extends State<CameraPreviewWidget> {
 
       await cameraController!.setFocusPoint(point);
 
-      unawaited(Future<void>.delayed(const Duration(seconds: 2)).whenComplete(() {
+      unawaited(
+          Future<void>.delayed(const Duration(seconds: 2)).whenComplete(() {
         showFocusCircle.value = false;
       }));
     }
@@ -68,7 +70,8 @@ class _CameraPreviewWidgetState extends State<CameraPreviewWidget> {
                             width: 40,
                             decoration: BoxDecoration(
                               shape: BoxShape.circle,
-                              border: Border.all(color: Colors.white, width: 1.5),
+                              border:
+                                  Border.all(color: Colors.white, width: 1.5),
                             ),
                           ),
                         );

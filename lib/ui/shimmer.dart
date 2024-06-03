@@ -1,55 +1,8 @@
-///
-/// A package provides an easy way to add shimmer effect to Flutter application
-///
-
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 
-///
-/// An enum defines all supported directions of shimmer effect
-///
-/// * [ShimmerDirection.ltr] left to right direction
-/// * [ShimmerDirection.rtl] right to left direction
-/// * [ShimmerDirection.ttb] top to bottom direction
-/// * [ShimmerDirection.btt] bottom to top direction
-///
 enum ShimmerDirection { ltr, rtl, ttb, btt }
 
-///
-/// A widget renders shimmer effect over [child] widget tree.
-///
-/// [child] defines an area that shimmer effect blends on. You can build [child]
-/// from whatever [Widget] you like but there're some notices in order to get
-/// exact expected effect and get better rendering performance:
-///
-/// * Use static [Widget] (which is an instance of [StatelessWidget]).
-/// * [Widget] should be a solid color element. Every colors you set on these
-/// [Widget]s will be overridden by colors of [gradient].
-/// * Shimmer effect only affects to opaque areas of [child], transparent areas
-/// still stays transparent.
-///
-/// [period] controls the speed of shimmer effect. The default value is 1500
-/// milliseconds.
-///
-/// [direction] controls the direction of shimmer effect. The default value
-/// is [ShimmerDirection.ltr].
-///
-/// [gradient] controls colors of shimmer effect.
-///
-/// [loop] the number of animation loop, set value of `0` to make animation run
-/// forever.
-///
-/// [enabled] controls if shimmer effect is active. When set to false the animation
-/// is paused
-///
-///
-/// ## Pro tips:
-///
-/// * [child] should be made of basic and simple [Widget]s, such as [Container],
-/// [Row] and [Column], to avoid side effect.
-///
-/// * use one [Shimmer] to wrap list of [Widget]s instead of a list of many [Shimmer]s
-///
 @immutable
 class Shimmer extends StatefulWidget {
   final Widget child;
@@ -69,11 +22,6 @@ class Shimmer extends StatefulWidget {
     this.enabled = true,
   });
 
-  ///
-  /// A convenient constructor provides an easy and convenient way to create a
-  /// [Shimmer] which [gradient] is [LinearGradient] made up of `baseColor` and
-  /// `highlightColor`.
-  ///
   Shimmer.fromColors({
     super.key,
     required this.child,
@@ -83,10 +31,19 @@ class Shimmer extends StatefulWidget {
     this.direction = ShimmerDirection.ltr,
     this.loop = 0,
     this.enabled = true,
-  }) : gradient = LinearGradient(
-            begin: Alignment.topLeft,
-            colors: <Color>[baseColor, baseColor, highlightColor, baseColor, baseColor],
-            stops: const <double>[0.0, 0.35, 0.5, 0.65, 1.0]);
+  }) : gradient = LinearGradient(begin: Alignment.topLeft, colors: <Color>[
+          baseColor,
+          baseColor,
+          highlightColor,
+          baseColor,
+          baseColor
+        ], stops: const <double>[
+          0.0,
+          0.35,
+          0.5,
+          0.65,
+          1.0
+        ]);
 
   @override
   _ShimmerState createState() => _ShimmerState();
@@ -94,10 +51,13 @@ class Shimmer extends StatefulWidget {
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     super.debugFillProperties(properties);
-    properties.add(DiagnosticsProperty<Gradient>('gradient', gradient, defaultValue: null));
+    properties.add(DiagnosticsProperty<Gradient>('gradient', gradient,
+        defaultValue: null));
     properties.add(EnumProperty<ShimmerDirection>('direction', direction));
-    properties.add(DiagnosticsProperty<Duration>('period', period, defaultValue: null));
-    properties.add(DiagnosticsProperty<bool>('enabled', enabled, defaultValue: null));
+    properties.add(
+        DiagnosticsProperty<Duration>('period', period, defaultValue: null));
+    properties
+        .add(DiagnosticsProperty<bool>('enabled', enabled, defaultValue: null));
     properties.add(DiagnosticsProperty<int>('loop', loop, defaultValue: 0));
   }
 }

@@ -48,14 +48,11 @@ you can consider adding `android:requestLegacyExternalStorage="true"`
 to your `AndroidManifest.xml` in order to obtain resources:
 
 ```xml
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example">
 
-    <application
-        android:label="example"
-        android:icon="@mipmap/ic_launcher"
-        android:requestLegacyExternalStorage="true">
-    </application>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="com.example">
+
+    <application android:label="example" android:icon="@mipmap/ic_launcher"
+        android:requestLegacyExternalStorage="true"></application>
 </manifest>
 ```
 
@@ -63,7 +60,8 @@ to your `AndroidManifest.xml` in order to obtain resources:
 
 #### iOS config preparation
 
-Define the `NSPhotoLibraryUsageDescription` , `NSCameraUsageDescription` and `NSMicrophoneUsageDescription`
+Define the `NSPhotoLibraryUsageDescription` , `NSCameraUsageDescription`
+and `NSMicrophoneUsageDescription`
 key-value in the `ios/Runner/Info.plist`:
 
 ```plist
@@ -107,7 +105,6 @@ However, there is a slight difference in behavior (based on the emulator):
 On Android, the access permission to a certain resource cannot be revoked once it is granted,
 even if it hasn't been selected when using `presentLimited` in future actions.
 
-
 ### Usage
 
 1. Add the plugin to your `pubspec.yaml` file:
@@ -127,16 +124,17 @@ import 'package:advanced_media_picker/advanced_media_picker.dart';
 
 ```dart
 
-final List<XFile> result = await AdvancedMediaPicker.openPicker(
-                                                              context: context,
-                                                              style: PickerStyle(),
-                                                              cameraStyle: CameraStyle(),
-                                                              allowedTypes: PickerAssetType.image,
-                                                              maxVideoDuration: 60,
-                                                              selectionLimit: 10,
-                                                              showCamera: true,
-                                                              videoCamera : true,
-                                                        );
+final List<XFile> result = 
+        await AdvancedMediaPicker.openPicker(
+                                    context: context,
+                                    style: PickerStyle(),
+                                    cameraStyle: CameraStyle(),
+                                    allowedTypes: PickerAssetType.image,
+                                    maxVideoDuration: 60,
+                                    selectionLimit: 10,
+                                    showCamera : true,
+                                    videoCamera : true,
+                                    );
 ```
 
 ### Parameters
@@ -193,11 +191,9 @@ enum PickerAssetType {
 - `showCamera`: A boolean to show the camera button.
 - `videoCamera`: A boolean to allow the user to take videos.
 
-
-
 ## Screenshots / Demo
 
-* 
+*
 
 ______________________________________________
 

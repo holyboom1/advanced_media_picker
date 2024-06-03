@@ -30,8 +30,8 @@ class AssetWidget extends StatelessWidget {
                 fit: BoxFit.cover,
                 isOriginal: false,
                 thumbnailSize: const ThumbnailSize(150, 150),
-                loadingBuilder:
-                    (BuildContext context, Widget child, ImageChunkEvent? loadingProgress) {
+                loadingBuilder: (BuildContext context, Widget child,
+                    ImageChunkEvent? loadingProgress) {
                   return loadingProgress == null
                       ? child
                       : Shimmer.fromColors(
@@ -44,7 +44,8 @@ class AssetWidget extends StatelessWidget {
             ),
             ValueListenableBuilder<List<AssetEntity>>(
               valueListenable: _selectedAssets,
-              builder: (BuildContext context, List<AssetEntity> value, Widget? child) {
+              builder: (BuildContext context, List<AssetEntity> value,
+                  Widget? child) {
                 return Align(
                   alignment: theme.selectIconAlignment,
                   child: Padding(

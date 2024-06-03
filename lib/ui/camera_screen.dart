@@ -12,7 +12,8 @@ class CameraScreen extends StatefulWidget {
   State<CameraScreen> createState() => _CameraScreenState();
 }
 
-ValueNotifier<FlashMode> flashModeNotifier = ValueNotifier<FlashMode>(FlashMode.off);
+ValueNotifier<FlashMode> flashModeNotifier =
+    ValueNotifier<FlashMode>(FlashMode.off);
 CameraController? cameraController;
 ValueNotifier<bool> isCameraReady = ValueNotifier<bool>(false);
 ValueNotifier<bool> isRecording = ValueNotifier<bool>(false);
@@ -50,7 +51,8 @@ class _CameraScreenState extends State<CameraScreen> {
   }
 
   Future<void> takePicture() async {
-    if (limitToSelection != -1 && _capturedImages.value.length >= limitToSelection) {
+    if (limitToSelection != -1 &&
+        _capturedImages.value.length >= limitToSelection) {
       return;
     }
     if (cameraController != null && !isRecording.value) {
@@ -70,7 +72,8 @@ class _CameraScreenState extends State<CameraScreen> {
   }
 
   Future<void> takeVideo() async {
-    if (limitToSelection != -1 && _capturedVideos.value.length >= limitToSelection) {
+    if (limitToSelection != -1 &&
+        _capturedVideos.value.length >= limitToSelection) {
       return;
     }
     if (cameraController != null) {
@@ -91,10 +94,12 @@ class _CameraScreenState extends State<CameraScreen> {
   void flipCamera() {
     if (cameraController != null) {
       isCameraReady.value = false;
-      if (cameraController!.description.lensDirection == CameraLensDirection.front) {
+      if (cameraController!.description.lensDirection ==
+          CameraLensDirection.front) {
         cameraController = CameraController(
           _cameras.firstWhere(
-            (CameraDescription element) => element.lensDirection == CameraLensDirection.back,
+            (CameraDescription element) =>
+                element.lensDirection == CameraLensDirection.back,
           ),
           ResolutionPreset.medium,
         )..initialize().then((_) {
@@ -103,7 +108,8 @@ class _CameraScreenState extends State<CameraScreen> {
       } else {
         cameraController = CameraController(
           _cameras.firstWhere(
-            (CameraDescription element) => element.lensDirection == CameraLensDirection.front,
+            (CameraDescription element) =>
+                element.lensDirection == CameraLensDirection.front,
           ),
           ResolutionPreset.medium,
         )..initialize().then((_) {
@@ -129,7 +135,8 @@ class _CameraScreenState extends State<CameraScreen> {
           ValueListenableBuilder<bool>(
             valueListenable: isCameraReady,
             builder: (BuildContext context, bool value, Widget? child) {
-              if (cameraController!.description.lensDirection != CameraLensDirection.front &&
+              if (cameraController!.description.lensDirection !=
+                      CameraLensDirection.front &&
                   _cameras.length > 2) return const SelectCameraLens();
               return Container();
             },
@@ -160,7 +167,9 @@ class _CameraScreenState extends State<CameraScreen> {
                           onTap: takePicture,
                           onLongPress: takeVideo,
                           child: Icon(
-                            isRecordingValue ? Icons.stop : Icons.fiber_manual_record,
+                            isRecordingValue
+                                ? Icons.stop
+                                : Icons.fiber_manual_record,
                             color: isRecordingValue ? Colors.red : Colors.white,
                             size: 90,
                           ),
