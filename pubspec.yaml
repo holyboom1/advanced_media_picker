@@ -1,7 +1,7 @@
-name: flutter_media_picker
-description: "Flutter media picker plugin"
+name: advanced_media_picker
+description: "Flutter advanced media picker plugin"
 version: 0.0.1
-homepage:
+homepage: https://github.com/holyboom1/flutter_tg_picker
 
 environment:
   sdk: '>=3.4.1 <4.0.0'
@@ -14,6 +14,7 @@ dependencies:
   photo_manager_image_provider: ^2.1.1
   flutter_sticky_header: ^0.6.5
   camera: ^0.11.0+1
+  cross_file: ^0.3.4+1
 
 dev_dependencies:
   flutter_test:
@@ -21,10 +22,3 @@ dev_dependencies:
   flutter_lints: ^4.0.0
 
 flutter:
-  plugin:
-    platforms:
-      android:
-        package: com.xlabs.flutter_media_picker
-        pluginClass: FlutterMediaPickerPlugin
-      ios:
-        pluginClass: FlutterMediaPickerPlugin

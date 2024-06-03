@@ -1,8 +1,5 @@
+import 'package:advanced_media_picker/advanced_media_picker.dart';
 import 'package:flutter/material.dart';
-import 'dart:async';
-
-import 'package:flutter/services.dart';
-import 'package:flutter_media_picker/flutter_media_picker.dart';
 
 void main() {
   runApp(const MyApp());
@@ -19,12 +16,6 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     super.initState();
-    initPlatformState();
-  }
-
-  // Platform messages are asynchronous, so we initialize in an async method.
-  Future<void> initPlatformState() async {
-    if (!mounted) return;
   }
 
   @override
@@ -49,7 +40,15 @@ class MyButton extends StatelessWidget {
       child: ElevatedButton(
         child: const Text('Open Picker'),
         onPressed: () async {
-          final result = await FlutterMediaPicker().openPicker(context: context);
+          final List<XFile> result = await AdvancedMediaPicker.openPicker(
+              context: context,
+              style: PickerStyle(),
+              cameraStyle: CameraStyle(),
+              allowedTypes: PickerAssetType.image,
+              maxVideoDuration: 60,
+              selectionLimit: 10,
+              showCamera: true,
+              videoCamera: true);
           print(result);
         },
       ),

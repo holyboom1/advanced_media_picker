@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 
-import '../../flutter_media_picker_impl.dart';
+import '../../advanced_media_picker_impl.dart';
 
 class CameraPreviewWidget extends StatefulWidget {
   const CameraPreviewWidget({super.key});
