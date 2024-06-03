@@ -1,4 +1,4 @@
-part of '../flutter_media_picker_impl.dart';
+part of '../advanced_media_picker_impl.dart';
 
 class CameraView extends StatefulWidget {
   final PickerStyle style;
