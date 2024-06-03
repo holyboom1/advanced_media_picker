@@ -28,12 +28,8 @@ class _CameraPreviewWidgetState extends State<CameraPreviewWidget> {
       showFocusCircle.value = true;
 
       final Offset point = Offset(xp, yp);
-      print("point : $point");
 
       await cameraController!.setFocusPoint(point);
-
-      // Manually set light exposure
-      //controller.setExposurePoint(point);
 
       unawaited(Future<void>.delayed(const Duration(seconds: 2)).whenComplete(() {
         showFocusCircle.value = false;

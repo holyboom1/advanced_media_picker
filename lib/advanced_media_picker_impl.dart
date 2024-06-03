@@ -8,7 +8,6 @@ import 'package:photo_manager/photo_manager.dart';
 import 'package:photo_manager_image_provider/photo_manager_image_provider.dart';
 
 import 'advanced_media_picker.dart';
-import 'models/camera_style.dart';
 import 'ui/camera/camera_preview.dart';
 import 'ui/camera/flash_mode_button.dart';
 import 'ui/shimmer.dart';
@@ -22,11 +21,7 @@ part 'ui/content_view.dart';
 part 'ui/directory_widget.dart';
 part 'ui/picker_bottom_sheet.dart';
 
-final FilterOptionGroup _filterOptionGroup = FilterOptionGroup(
-  imageOption: const FilterOption(),
-  audioOption: const FilterOption(),
-  videoOption: const FilterOption(),
-);
+final FilterOptionGroup _filterOptionGroup = FilterOptionGroup();
 
 const int _sizePerPage = 20;
 

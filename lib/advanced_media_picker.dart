@@ -10,9 +10,10 @@ import 'models/camera_style.dart';
 import 'models/picker_style.dart';
 
 export 'package:cross_file/cross_file.dart' show XFile;
+
 export 'advanced_media_picker_impl.dart' show PickerAssetType;
-export 'models/picker_style.dart';
 export 'models/camera_style.dart';
+export 'models/picker_style.dart';
 
 class AdvancedMediaPicker {
   static Future<List<XFile>> openPicker({
@@ -43,7 +44,7 @@ class AdvancedMediaPicker {
     try {
       await Navigator.push(
         context,
-        PageRouteBuilder(
+        PageRouteBuilder<void>(
           barrierColor: Colors.black26,
           transitionsBuilder: (
             BuildContext context,
@@ -53,7 +54,7 @@ class AdvancedMediaPicker {
           ) {
             return SlideTransition(
               position: animation.drive(
-                Tween(
+                Tween<Offset>(
                   begin: const Offset(0.0, 1.0),
                   end: Offset.zero,
                 ),

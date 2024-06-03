@@ -49,7 +49,6 @@ class MyButton extends StatelessWidget {
               selectionLimit: 10,
               showCamera: true,
               videoCamera: true);
-          print(result);
         },
       ),
     );

@@ -26,24 +26,10 @@ class _CameraViewState extends State<CameraView> {
     cameraController = CameraController(
       _cameras.first,
       ResolutionPreset.medium,
-    )..initialize().then((_) {
-        if (!mounted) {
-          return;
-        }
-        cameraController?.setFocusMode(FocusMode.auto);
-        setState(() {});
-      }).catchError((Object e) {
-        if (e is CameraException) {
-          switch (e.code) {
-            case 'CameraAccessDenied':
-              // Handle access errors here.
-              break;
-            default:
-              // Handle other errors here.
-              break;
-          }
-        }
-      });
+    );
+    await cameraController?.initialize();
+    await cameraController?.setFocusMode(FocusMode.auto);
+    setState(() {});
   }
 
   @override
@@ -63,7 +49,7 @@ class _CameraViewState extends State<CameraView> {
       onTap: () {
         Navigator.push(
           context,
-          PageRouteBuilder(
+          PageRouteBuilder<void>(
             barrierColor: Colors.black26,
             transitionsBuilder: (
               BuildContext context,
@@ -73,7 +59,7 @@ class _CameraViewState extends State<CameraView> {
             ) {
               return SlideTransition(
                 position: animation.drive(
-                  Tween(
+                  Tween<Offset>(
                     begin: const Offset(0.0, 1.0),
                     end: Offset.zero,
                   ),

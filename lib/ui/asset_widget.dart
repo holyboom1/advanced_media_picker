@@ -28,7 +28,6 @@ class AssetWidget extends StatelessWidget {
               child: AssetEntityImage(
                 asset,
                 fit: BoxFit.cover,
-                filterQuality: FilterQuality.low,
                 isOriginal: false,
                 thumbnailSize: const ThumbnailSize(150, 150),
                 loadingBuilder:

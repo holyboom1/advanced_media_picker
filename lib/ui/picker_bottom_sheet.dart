@@ -48,12 +48,6 @@ class _PickerBottomSheetState extends State<PickerBottomSheet> {
     }
   }
 
-  void _collapse() => _animateSheet(sheet.snapSizes!.first);
-
-  void _anchor() => _animateSheet(sheet.snapSizes!.last);
-
-  void _expand() => _animateSheet(sheet.maxChildSize);
-
   Future<void> _hide() async {
     await _animateSheet(sheet.minChildSize);
   }
@@ -72,7 +66,7 @@ class _PickerBottomSheetState extends State<PickerBottomSheet> {
     _controller.dispose();
   }
 
-  DraggableScrollableSheet get sheet => (_sheet.currentWidget as DraggableScrollableSheet);
+  DraggableScrollableSheet get sheet => _sheet.currentWidget! as DraggableScrollableSheet;
 
   @override
   Widget build(BuildContext context) {
@@ -80,10 +74,8 @@ class _PickerBottomSheetState extends State<PickerBottomSheet> {
       builder: (BuildContext context, BoxConstraints constraints) {
         return DraggableScrollableSheet(
           key: _sheet,
-          initialChildSize: 0.5,
           maxChildSize: 0.9,
           minChildSize: 0,
-          expand: true,
           snapSizes: <double>[
             60 / constraints.maxHeight,
             0.5,

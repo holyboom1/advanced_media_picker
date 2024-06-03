@@ -67,7 +67,7 @@ class _FlashModeButtonState extends State<FlashModeButton> {
                   },
                 ),
             ] else
-              SizedBox(),
+              const SizedBox(),
             IconButton(
               icon: AnimatedSwitcher(
                 duration: const Duration(milliseconds: 200),

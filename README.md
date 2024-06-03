@@ -6,6 +6,108 @@
 
 This plugin displays a gallery with user's Albums and Photos with ability to take photo and video.
 
+## Prepare for use
+
+### Configure native platforms
+
+Minimum platform versions:
+**Android 16, iOS 9.0, macOS 10.15**.
+
+- Android: [Android config preparation](#android-config-preparation).
+- iOS: [iOS config preparation](#ios-config-preparation).
+- macOS: Pretty much the same with iOS.
+
+#### Android config preparation
+
+##### Kotlin, Gradle, AGP
+
+We ship this plugin with **Kotlin `1.7.22`**.
+If your projects use a lower version of Kotlin/Gradle/AGP,
+please upgrade them to a newer version.
+
+More specifically:
+
+- Upgrade your Gradle version (`gradle-wrapper.properties`)
+  to `7.5.1` or the latest version.
+- Upgrade your Kotlin version (`ext.kotlin_version`)
+  to `1.7.22` or the latest version.
+- Upgrade your AGP version (`com.android.tools.build:gradle`)
+  to `7.2.2` or the latest version.
+
+##### Android 10 (Q, 29)
+
+_If you're not setting your `compileSdkVersion` or `targetSdkVersion` to 29,
+you can skip this section._
+
+On Android 10, **Scoped Storage** was introduced,
+which causes the origin resource file not directly
+inaccessible through it file path.
+
+If your `compileSdkVersion` or `targetSdkVersion` is `29`,
+you can consider adding `android:requestLegacyExternalStorage="true"`
+to your `AndroidManifest.xml` in order to obtain resources:
+
+```xml
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.example">
+
+    <application
+        android:label="example"
+        android:icon="@mipmap/ic_launcher"
+        android:requestLegacyExternalStorage="true">
+    </application>
+</manifest>
+```
+
+**Note: Apps that are using the flag will be rejected from the Google Play.**
+
+#### iOS config preparation
+
+Define the `NSPhotoLibraryUsageDescription` , `NSCameraUsageDescription` and `NSMicrophoneUsageDescription`
+key-value in the `ios/Runner/Info.plist`:
+
+```plist
+<key>NSPhotoLibraryUsageDescription</key>
+<string>In order to access your photo library</string>
+<key>NSCameraUsageDescription</key>
+<string>your usage description here</string>
+<key>NSMicrophoneUsageDescription</key>
+<string>your usage description here</string>
+```
+
+## Usage
+
+### Request for permission
+
+This plugin requires the user's permission to access the media library and camera .
+You should handle cases where the user denies the permission request.
+
+#### Limited entities access
+
+##### Limited entities access on iOS
+
+With iOS 14 released, Apple brought a "Limited Photos Library" permission
+(`PermissionState.limited`) to iOS.
+
+To suppress the automatic prompting from the system
+when each time you access the media after the app has restarted,
+you can set the `Prevent limited photos access alert` key to `YES`
+in your app's `Info.plist` (or manually writing as below):
+
+```plist
+<key>PHPhotoLibraryPreventAutomaticLimitedAccessAlert</key>
+<true/>
+```
+
+##### Limited entities access on Android
+
+Android 14 (API 34) has also introduced the concept of limited assets similar to iOS.
+
+However, there is a slight difference in behavior (based on the emulator):
+On Android, the access permission to a certain resource cannot be revoked once it is granted,
+even if it hasn't been selected when using `presentLimited` in future actions.
+
+
 ### Usage
 
 1. Add the plugin to your `pubspec.yaml` file:
@@ -25,22 +127,16 @@ import 'package:advanced_media_picker/advanced_media_picker.dart';
 
 ```dart
 
-final List<XFile> result = await
-AdvancedMediaPicker.openPicker
-(
-context: context,
-style: PickerStyle(),
-cameraStyle: CameraStyle(),
-allowedTypes: PickerAssetType.image,
-maxVideoDuration: 60,
-selectionLimit: 10,
-showCamera:
-true
-,
-videoCamera
-:
-true
-);
+final List<XFile> result = await AdvancedMediaPicker.openPicker(
+                                                              context: context,
+                                                              style: PickerStyle(),
+                                                              cameraStyle: CameraStyle(),
+                                                              allowedTypes: PickerAssetType.image,
+                                                              maxVideoDuration: 60,
+                                                              selectionLimit: 10,
+                                                              showCamera: true,
+                                                              videoCamera : true,
+                                                        );
 ```
 
 ### Parameters

@@ -85,7 +85,6 @@ class Shimmer extends StatefulWidget {
     this.enabled = true,
   }) : gradient = LinearGradient(
             begin: Alignment.topLeft,
-            end: Alignment.centerRight,
             colors: <Color>[baseColor, baseColor, highlightColor, baseColor, baseColor],
             stops: const <double>[0.0, 0.35, 0.5, 0.65, 1.0]);
 
@@ -143,10 +142,10 @@ class _ShimmerState extends State<Shimmer> with SingleTickerProviderStateMixin {
       animation: _controller,
       child: widget.child,
       builder: (BuildContext context, Widget? child) => _Shimmer(
-        child: child,
         direction: widget.direction,
         gradient: widget.gradient,
         percent: _controller.value,
+        child: child,
       ),
     );
   }
@@ -229,7 +228,8 @@ class _ShimmerFilter extends RenderProxyBox {
       final double width = child!.size.width;
       final double height = child!.size.height;
       Rect rect;
-      double dx, dy;
+      double dx;
+      double dy;
       if (_direction == ShimmerDirection.rtl) {
         dx = _offset(width, -width, _percent);
         dy = 0.0;
