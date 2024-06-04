@@ -16,8 +16,9 @@ class PickerBottomSheet extends StatefulWidget {
 
 class _PickerBottomSheetState extends State<PickerBottomSheet> {
   final GlobalKey<State<StatefulWidget>> _sheet = GlobalKey();
-  final DraggableScrollableController _controller =
-      DraggableScrollableController();
+  final DraggableScrollableController _controller = DraggableScrollableController();
+  bool _isAlertOpen = false;
+  final double _initialChildSize = 0.6;
 
   @override
   void initState() {
@@ -40,9 +41,11 @@ class _PickerBottomSheetState extends State<PickerBottomSheet> {
         isNeedToShowDirectories = false;
       });
     }
-    if (currentSize <= 0.2) {
+
+    if (currentSize < 0.3 && _selectedAssets.value.isNotEmpty) {
       _hide();
     }
+
     if (_controller.size <= 0.01 && !isPopped) {
       isPopped = true;
       Navigator.pop(context);
@@ -50,7 +53,16 @@ class _PickerBottomSheetState extends State<PickerBottomSheet> {
   }
 
   Future<void> _hide() async {
-    await _animateSheet(sheet.minChildSize);
+    if (_selectedAssets.value.isNotEmpty) {
+      if (!_isAlertOpen) {
+        _isAlertOpen = true;
+        _animateSheet(0.3);
+        await _showAlertDialog();
+        _isAlertOpen = false;
+      }
+    } else {
+      await _animateSheet(sheet.minChildSize);
+    }
   }
 
   Future<void> _animateSheet(double size) async {
@@ -61,20 +73,85 @@ class _PickerBottomSheetState extends State<PickerBottomSheet> {
     );
   }
 
+  Future<void> _showAlertDialog() async {
+    await showDialog(
+      barrierColor: Colors.black.withOpacity(0.4),
+      context: context,
+      builder: (BuildContext context) => AlertDialog(
+        backgroundColor: Colors.transparent,
+        content: Container(
+          height: 100,
+          decoration: const BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+          ),
+          padding: const EdgeInsets.only(top: 10, bottom: 6, left: 8, right: 8),
+          child: Column(
+            children: <Widget>[
+              Text(
+                'Сancel selection?',
+                style: TextStyle(
+                  color: widget.style.textColor,
+                  fontWeight: FontWeight.w700,
+                  fontSize: 18,
+                ),
+              ),
+              const SizedBox(height: 10),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 4),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    TextButton(
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                      child: const Text(
+                        'No',
+                        style: TextStyle(
+                          color: Colors.blueAccent,
+                          fontWeight: FontWeight.w500,
+                          fontSize: 16,
+                        ),
+                      ),
+                    ),
+                    TextButton(
+                      onPressed: () {
+                        Navigator.of(context).popUntil((Route route) => route.isFirst);
+                      },
+                      child: const Text(
+                        'Yes',
+                        style: TextStyle(
+                          color: Colors.blueAccent,
+                          fontWeight: FontWeight.w600,
+                          fontSize: 16,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
   @override
   void dispose() {
     super.dispose();
     _controller.dispose();
   }
 
-  DraggableScrollableSheet get sheet =>
-      _sheet.currentWidget! as DraggableScrollableSheet;
+  DraggableScrollableSheet get sheet => _sheet.currentWidget! as DraggableScrollableSheet;
 
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(
       builder: (BuildContext context, BoxConstraints constraints) {
         return DraggableScrollableSheet(
+          shouldCloseOnMinExtent: false,
           key: _sheet,
           maxChildSize: 0.9,
           minChildSize: 0,
@@ -109,8 +186,7 @@ class _PickerBottomSheetState extends State<PickerBottomSheet> {
                                   Container(
                                     width: 40,
                                     height: 4,
-                                    margin: const EdgeInsets.only(
-                                        top: 8, bottom: 8),
+                                    margin: const EdgeInsets.only(top: 8, bottom: 8),
                                     decoration: BoxDecoration(
                                       color: widget.style.dragIndicatorColor,
                                       borderRadius: BorderRadius.circular(2),
@@ -124,8 +200,7 @@ class _PickerBottomSheetState extends State<PickerBottomSheet> {
                               child: AnimatedSize(
                                 duration: kThemeAnimationDuration,
                                 child: Container(
-                                  padding:
-                                      const EdgeInsets.symmetric(vertical: 8),
+                                  padding: const EdgeInsets.symmetric(vertical: 8),
                                   margin: const EdgeInsets.only(bottom: 8),
                                   height: isNeedToShowDirectories ? 100 : 0,
                                   width: double.infinity,

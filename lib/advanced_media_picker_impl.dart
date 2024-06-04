@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:camera/camera.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_sticky_header/flutter_sticky_header.dart';
 import 'package:photo_manager/photo_manager.dart';
@@ -10,7 +11,10 @@ import 'package:photo_manager_image_provider/photo_manager_image_provider.dart';
 import 'advanced_media_picker.dart';
 import 'ui/camera/camera_preview.dart';
 import 'ui/camera/flash_mode_button.dart';
+import 'ui/media/media_preview.dart';
 import 'ui/shimmer.dart';
+import 'utils/extensions.dart';
+import 'utils/video_file_formatter.dart';
 
 part 'models/assets_type.dart';
 part 'ui/asset_widget.dart';
@@ -19,6 +23,9 @@ part 'ui/camera_screen.dart';
 part 'ui/camera_view.dart';
 part 'ui/content_view.dart';
 part 'ui/directory_widget.dart';
+part 'ui/media/media_preview_control_button.dart';
+part 'ui/media/media_preview_list.dart';
+part 'ui/media_screen.dart';
 part 'ui/picker_bottom_sheet.dart';
 
 final FilterOptionGroup _filterOptionGroup = FilterOptionGroup();
@@ -44,6 +51,8 @@ ValueNotifier<List<XFile>> _capturedImages =
     ValueNotifier<List<XFile>>(<XFile>[]);
 ValueNotifier<List<XFile>> _capturedVideos =
     ValueNotifier<List<XFile>>(<XFile>[]);
+ValueNotifier<List<XFile>> _capturedAssets = ValueNotifier<List<XFile>>(<XFile>[]);
+ValueNotifier<int> _capturedAssetsLength = ValueNotifier<int>(_capturedAssets.value.length);
 
 int limitToSelection = -1;
 int videoDuration = -1;
@@ -51,10 +60,14 @@ bool isNeedToShowCamera = true;
 bool isNeedToTakeVideo = true;
 
 Future<List<XFile>> onClose() async {
+  final Completer<List<XFile>> completer = Completer<List<XFile>>();
+
   final List<XFile> assets = <XFile>[
-    ..._capturedImages.value,
-    ..._capturedVideos.value
+    // ..._capturedImages.value,
+    // ..._capturedVideos.value,
+    ..._capturedAssets.value
   ];
+
   await Future.forEach(_selectedAssets.value, (AssetEntity element) async {
     final File? file = await element.file;
     if (file != null) {
@@ -65,8 +78,10 @@ Future<List<XFile>> onClose() async {
   _availablePath.value.clear();
   _capturedImages.value.clear();
   _capturedVideos.value.clear();
-
-  return assets;
+  _capturedAssets.value.clear();
+  _capturedAssetsLength.value = _capturedAssets.value.length;
+  completer.complete(assets);
+  return completer.future;
 }
 
 void onOnSelectAsset(AssetEntity asset) {
