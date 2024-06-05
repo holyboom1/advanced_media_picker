@@ -16,13 +16,12 @@ class _CameraPreviewWidgetState extends State<CameraPreviewWidget> {
   Future<void> onTapSetFocus(TapUpDetails details) async {
     showFocusCircle.value = false;
 
-    if (cameraController!.value.isInitialized) {
+    if (dataStore.cameraController!.value.isInitialized) {
       focusX = details.localPosition.dx;
       focusY = details.localPosition.dy;
 
       final double fullWidth = MediaQuery.of(context).size.width;
-      final double cameraHeight =
-          fullWidth * cameraController!.value.aspectRatio;
+      final double cameraHeight = fullWidth * dataStore.cameraController!.value.aspectRatio;
 
       final double xp = focusX / fullWidth;
       final double yp = focusY / cameraHeight;
@@ -30,10 +29,9 @@ class _CameraPreviewWidgetState extends State<CameraPreviewWidget> {
 
       final Offset point = Offset(xp, yp);
 
-      await cameraController!.setFocusPoint(point);
+      await dataStore.cameraController!.setFocusPoint(point);
 
-      unawaited(
-          Future<void>.delayed(const Duration(seconds: 2)).whenComplete(() {
+      unawaited(Future<void>.delayed(const Duration(seconds: 2)).whenComplete(() {
         showFocusCircle.value = false;
       }));
     }
@@ -48,7 +46,7 @@ class _CameraPreviewWidgetState extends State<CameraPreviewWidget> {
     return Positioned.fill(
       child: Center(
         child: ValueListenableBuilder<bool>(
-          valueListenable: isCameraReady,
+          valueListenable: dataStore.isCameraReady,
           builder: (BuildContext context, bool value, Widget? child) {
             if (!value) {
               return const CircularProgressIndicator.adaptive();
@@ -57,7 +55,7 @@ class _CameraPreviewWidgetState extends State<CameraPreviewWidget> {
               onTapUp: onTapSetFocus,
               child: Stack(
                 children: <Widget>[
-                  CameraPreview(cameraController!),
+                  CameraPreview(dataStore.cameraController!),
                   ValueListenableBuilder<bool>(
                     valueListenable: showFocusCircle,
                     builder: (BuildContext context, bool value, Widget? child) {
@@ -70,8 +68,7 @@ class _CameraPreviewWidgetState extends State<CameraPreviewWidget> {
                             width: 40,
                             decoration: BoxDecoration(
                               shape: BoxShape.circle,
-                              border:
-                                  Border.all(color: Colors.white, width: 1.5),
+                              border: Border.all(color: Colors.white, width: 1.5),
                             ),
                           ),
                         );

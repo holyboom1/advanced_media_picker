@@ -1,51 +1,42 @@
-part of '../advanced_media_picker_impl.dart';
+part of '../../advanced_media_picker_impl.dart';
 
 class CameraScreen extends StatefulWidget {
-  final CameraStyle style;
-
   const CameraScreen({
     super.key,
-    required this.style,
   });
 
   @override
   State<CameraScreen> createState() => _CameraScreenState();
 }
 
-ValueNotifier<FlashMode> flashModeNotifier = ValueNotifier<FlashMode>(FlashMode.off);
-CameraController? cameraController;
-ValueNotifier<bool> isCameraReady = ValueNotifier<bool>(false);
-ValueNotifier<bool> isRecording = ValueNotifier<bool>(false);
-ValueNotifier<bool> isPreviewOpen = ValueNotifier<bool>(false);
-
 class _CameraScreenState extends State<CameraScreen> {
   @override
   void initState() {
     super.initState();
-    flashModeNotifier.addListener(onChangeFlashMode);
-    isCameraReady.value = true;
+    dataStore.flashModeNotifier.addListener(onChangeFlashMode);
+    dataStore.isCameraReady.value = true;
   }
 
   @override
   void dispose() {
-    cameraController?.setFlashMode(FlashMode.off);
-    flashModeNotifier.removeListener(onChangeFlashMode);
+    dataStore.cameraController?.setFlashMode(FlashMode.off);
+    dataStore.flashModeNotifier.removeListener(onChangeFlashMode);
     super.dispose();
   }
 
   void onChangeFlashMode() {
-    switch (flashModeNotifier.value) {
+    switch (dataStore.flashModeNotifier.value) {
       case FlashMode.off:
-        cameraController!.setFlashMode(FlashMode.off);
+        dataStore.cameraController!.setFlashMode(FlashMode.off);
         break;
       case FlashMode.torch:
-        cameraController!.setFlashMode(FlashMode.torch);
+        dataStore.cameraController!.setFlashMode(FlashMode.torch);
         break;
       case FlashMode.auto:
-        cameraController!.setFlashMode(FlashMode.auto);
+        dataStore.cameraController!.setFlashMode(FlashMode.auto);
         break;
       case FlashMode.always:
-        cameraController!.setFlashMode(FlashMode.always);
+        dataStore.cameraController!.setFlashMode(FlashMode.always);
         break;
     }
   }
@@ -55,7 +46,7 @@ class _CameraScreenState extends State<CameraScreen> {
       context,
       MaterialPageRoute<void>(
         builder: (BuildContext context) => MediaScreen(
-          style: widget.style,
+          style: dataStore.cameraStyle,
           filePath: filePath,
           isLimitReached: isLimitReached ?? false,
         ),
@@ -64,103 +55,84 @@ class _CameraScreenState extends State<CameraScreen> {
   }
 
   Future<void> takePicture() async {
-    if (limitToSelection != -1 && _capturedImages.value.length >= limitToSelection) {
+    if (dataStore.limitToSelection != -1 &&
+        dataStore.capturedAssets.value.length >= dataStore.limitToSelection) {
       return;
     }
-    if (cameraController != null && !isRecording.value) {
-      final XFile file = await cameraController!.takePicture();
-      _capturedImages.value = <XFile>[
-        ..._capturedImages.value,
-        file,
-      ];
-      _capturedAssets.value = <XFile>[
-        ..._capturedAssets.value,
-        file,
-      ];
+    final XFile file;
+    if (dataStore.cameraController != null && !dataStore.isRecording.value) {
+      file = await dataStore.cameraController!.takePicture();
+    } else {
+      file = await dataStore.cameraController!.stopVideoRecording();
+      dataStore.isRecording.value = false;
+    }
 
-      if (_capturedAssets.value.length == 1) {
-        await navigateToMediaScreen(file.path);
-      }
+    dataStore.capturedAssets.value = <XFile>[
+      ...dataStore.capturedAssets.value,
+      file,
+    ];
 
-      _capturedAssetsLength.value = _capturedAssets.value.length;
+    if (dataStore.capturedAssets.value.length == 1) {
+      await navigateToMediaScreen(file.path);
+    }
 
-      if (_capturedAssets.value.length >= limitToSelection) {
-        await navigateToMediaScreen(file.path, true);
-      }
-    } else if (isRecording.value) {
-      final XFile file = await cameraController!.stopVideoRecording();
-      isRecording.value = false;
-      _capturedVideos.value = <XFile>[
-        ..._capturedVideos.value,
-        file,
-      ];
-      _capturedAssets.value = <XFile>[
-        ..._capturedAssets.value,
-        file,
-      ];
-      if (_capturedAssets.value.length == 1) {
-        await navigateToMediaScreen(file.path);
-      }
-      _capturedAssetsLength.value = _capturedAssets.value.length;
-
-      if (_capturedAssets.value.length >= limitToSelection) {
-        await navigateToMediaScreen(file.path, true);
-      }
+    if (dataStore.capturedAssets.value.length >= dataStore.limitToSelection) {
+      await navigateToMediaScreen(file.path, true);
     }
   }
 
   Future<void> takeVideo() async {
-    if (limitToSelection != -1 && _capturedVideos.value.length >= limitToSelection) {
+    if (dataStore.limitToSelection != -1 &&
+        dataStore.capturedAssets.value.length >= dataStore.limitToSelection) {
       return;
     }
-    if (cameraController != null) {
-      if (isRecording.value) {
-        final XFile file = await cameraController!.stopVideoRecording();
-        isRecording.value = false;
-        _capturedVideos.value = <XFile>[
-          ..._capturedVideos.value,
+    if (dataStore.cameraController != null) {
+      if (dataStore.isRecording.value) {
+        final XFile file = await dataStore.cameraController!.stopVideoRecording();
+        dataStore.isRecording.value = false;
+        dataStore.capturedAssets.value = <XFile>[
+          ...dataStore.capturedAssets.value,
           file,
         ];
-        _capturedAssets.value = <XFile>[
-          ..._capturedAssets.value,
+        dataStore.capturedAssets.value = <XFile>[
+          ...dataStore.capturedAssets.value,
           file,
         ];
-        _capturedAssetsLength.value = _capturedAssets.value.length;
       } else {
-        isRecording.value = true;
-        await cameraController!.startVideoRecording();
+        dataStore.isRecording.value = true;
+        await dataStore.cameraController!.startVideoRecording();
       }
     }
   }
 
   void flipCamera() {
-    if (cameraController != null) {
-      isCameraReady.value = false;
-      if (cameraController!.description.lensDirection == CameraLensDirection.front) {
-        cameraController = CameraController(
-          _cameras.firstWhere(
+    if (dataStore.cameraController != null) {
+      dataStore.isCameraReady.value = false;
+      if (dataStore.cameraController!.description.lensDirection == CameraLensDirection.front) {
+        dataStore.cameraController = CameraController(
+          dataStore.cameras.firstWhere(
             (CameraDescription element) => element.lensDirection == CameraLensDirection.back,
           ),
           ResolutionPreset.medium,
         )..initialize().then((_) {
-            isCameraReady.value = true;
+            dataStore.isCameraReady.value = true;
           });
       } else {
-        cameraController = CameraController(
-          _cameras.firstWhere(
+        dataStore.cameraController = CameraController(
+          dataStore.cameras.firstWhere(
             (CameraDescription element) => element.lensDirection == CameraLensDirection.front,
           ),
           ResolutionPreset.medium,
         )..initialize().then((_) {
-            isCameraReady.value = true;
+            dataStore.isCameraReady.value = true;
           });
       }
     }
   }
 
   void onZoom() {
-    if (cameraController != null) {
-      cameraController!.setZoomLevel(0.5);
+    if (dataStore.cameraController != null) {
+      dataStore.cameraController!.setZoomLevel(0.5);
     }
   }
 
@@ -172,35 +144,36 @@ class _CameraScreenState extends State<CameraScreen> {
         children: <Widget>[
           const CameraPreviewWidget(),
           MediaPreviewList(
-            style: widget.style,
+            style: dataStore.cameraStyle,
             onTap: () {
-              isPreviewOpen.value = !isPreviewOpen.value;
+              dataStore.isPreviewOpen.value = !dataStore.isPreviewOpen.value;
             },
           ),
           ValueListenableBuilder<bool>(
-            valueListenable: isCameraReady,
+            valueListenable: dataStore.isCameraReady,
             builder: (BuildContext context, bool value, Widget? child) {
-              if (cameraController!.description.lensDirection != CameraLensDirection.front &&
-                  _cameras.length > 2) return const SelectCameraLens();
+              if (dataStore.cameraController!.description.lensDirection !=
+                      CameraLensDirection.front &&
+                  dataStore.cameras.length > 2) return const SelectCameraLens();
               return Container();
             },
           ),
-          ValueListenableBuilder<int>(
-            valueListenable: _capturedAssetsLength,
-            builder: (BuildContext context, int value, Widget? child) {
+          ValueListenableBuilder<List<XFile>>(
+            valueListenable: dataStore.capturedAssets,
+            builder: (BuildContext context, List<XFile> value, Widget? child) {
               return GestureDetector(
                 onTap: () {
                   setState(() {});
-                  isPreviewOpen.value = !isPreviewOpen.value;
+                  dataStore.isPreviewOpen.value = dataStore.isPreviewOpen.value;
                 },
                 child: Align(
                   alignment: Alignment.bottomRight,
                   child: Padding(
                     padding: const EdgeInsets.only(bottom: 120, right: 20),
                     child: Visibility(
-                      visible: _capturedAssets.value.isNotEmpty,
+                      visible: dataStore.capturedAssets.value.isNotEmpty,
                       child: MediaPreviewControlButton(
-                        countValue: _capturedAssetsLength.value.toString(),
+                        countValue: dataStore.capturedAssets.value.length.toString(),
                       ),
                     ),
                   ),
@@ -228,7 +201,7 @@ class _CameraScreenState extends State<CameraScreen> {
                     ),
                   ),
                   child: ValueListenableBuilder<bool>(
-                    valueListenable: isRecording,
+                    valueListenable: dataStore.isRecording,
                     builder: (_, bool isRecordingValue, __) {
                       return GestureDetector(
                         onTap: takePicture,
@@ -242,14 +215,14 @@ class _CameraScreenState extends State<CameraScreen> {
                     },
                   ),
                 ),
-                ValueListenableBuilder<int>(
-                  valueListenable: _capturedAssetsLength,
-                  builder: (BuildContext context, int value, Widget? child) {
-                    return value >= 1
+                ValueListenableBuilder<List<XFile>>(
+                  valueListenable: dataStore.capturedAssets,
+                  builder: (BuildContext context, List<XFile> value, Widget? child) {
+                    return value.isNotEmpty
                         ? GestureDetector(
                             onTap: () {
-                              isPreviewOpen.value = false;
-                              onClose();
+                              dataStore.isPreviewOpen.value = false;
+                              assetsService.onClose();
                               Navigator.of(context).popUntil((Route route) => route.isFirst);
                             },
                             child: const Padding(
@@ -280,7 +253,7 @@ class _CameraScreenState extends State<CameraScreen> {
             top: 42,
             right: 22,
             child: IconButton(
-              icon: widget.style.cameraCloseIcon,
+              icon: dataStore.cameraStyle.cameraCloseIcon,
               onPressed: () {
                 Navigator.of(context).pop();
               },

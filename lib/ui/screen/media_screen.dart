@@ -1,4 +1,4 @@
-part of '../advanced_media_picker_impl.dart';
+part of '../../advanced_media_picker_impl.dart';
 
 class MediaScreen extends StatefulWidget {
   final String filePath;
@@ -70,7 +70,7 @@ class _MediaScreenState extends State<MediaScreen> {
               ),
             ),
             ValueListenableBuilder<bool>(
-              valueListenable: isPreviewOpen,
+              valueListenable: dataStore.isPreviewOpen,
               builder: (BuildContext context, bool value, Widget? child) {
                 return Positioned(
                   bottom: 190,
@@ -78,17 +78,17 @@ class _MediaScreenState extends State<MediaScreen> {
                   right: 0,
                   child: AnimatedOpacity(
                     duration: const Duration(milliseconds: 300),
-                    opacity: isPreviewOpen.value ? 1 : 0,
+                    opacity: dataStore.isPreviewOpen.value ? 1 : 0,
                     curve: Curves.easeInOut,
                     child: AnimatedContainer(
                       constraints: const BoxConstraints(maxHeight: 130),
                       duration: const Duration(milliseconds: 300),
                       curve: Curves.easeInOut,
-                      height: isPreviewOpen.value ? 130 : 0,
+                      height: dataStore.isPreviewOpen.value ? 130 : 0,
                       padding: const EdgeInsets.symmetric(horizontal: 6),
                       child: ListView.builder(
                         scrollDirection: Axis.horizontal,
-                        itemCount: _capturedAssets.value.length,
+                        itemCount: dataStore.capturedAssets.value.length,
                         itemBuilder: (BuildContext context, int index) {
                           return MediaPreview(
                             style: widget.style,
@@ -98,11 +98,11 @@ class _MediaScreenState extends State<MediaScreen> {
                             },
                             onTap: () {
                               _isPreviewTapped.value = true;
-                              _filePath = _capturedAssets.value[index].path;
+                              _filePath = dataStore.capturedAssets.value[index].path;
                               setState(() {});
                             },
-                            path: _capturedAssets.value.isNotEmpty
-                                ? _capturedAssets.value[index].path
+                            path: dataStore.capturedAssets.value.isNotEmpty
+                                ? dataStore.capturedAssets.value[index].path
                                 : '',
                           );
                         },
@@ -118,7 +118,8 @@ class _MediaScreenState extends State<MediaScreen> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  widget.isLimitReached || _capturedAssetsLength.value + 1 > limitToSelection
+                  widget.isLimitReached ||
+                          dataStore.capturedAssets.value.length + 1 > dataStore.limitToSelection
                       ? const SizedBox.shrink()
                       : GestureDetector(
                           onTap: () {
@@ -140,23 +141,23 @@ class _MediaScreenState extends State<MediaScreen> {
                           ),
                         ),
                   widget.isMediaFromPreview ||
-                          _capturedAssetsLength.value > 1 ||
+                          dataStore.capturedAssets.value.length > 1 ||
                           widget.isLimitReached
                       ? ValueListenableBuilder<bool>(
-                          valueListenable: isPreviewOpen,
+                          valueListenable: dataStore.isPreviewOpen,
                           builder: (BuildContext context, bool value, Widget? child) {
                             return GestureDetector(
                               onTap: () {
-                                isPreviewOpen.value = !isPreviewOpen.value;
+                                dataStore.isPreviewOpen.value = !dataStore.isPreviewOpen.value;
                               },
                               child: Align(
                                 alignment: Alignment.bottomRight,
                                 child: Padding(
                                   padding: const EdgeInsets.only(left: 8),
                                   child: Visibility(
-                                    visible: _capturedAssets.value.isNotEmpty,
+                                    visible: dataStore.capturedAssets.value.isNotEmpty,
                                     child: MediaPreviewControlButton(
-                                      countValue: _capturedAssetsLength.value.toString(),
+                                      countValue: dataStore.capturedAssets.value.length.toString(),
                                     ),
                                   ),
                                 ),
@@ -173,7 +174,7 @@ class _MediaScreenState extends State<MediaScreen> {
               left: 22,
               child: GestureDetector(
                 onTap: () {
-                  isPreviewOpen.value = false;
+                  dataStore.isPreviewOpen.value = false;
                   Navigator.of(context).pop();
                 },
                 child: Container(
@@ -197,8 +198,8 @@ class _MediaScreenState extends State<MediaScreen> {
               right: 22,
               child: GestureDetector(
                 onTap: () {
-                  isPreviewOpen.value = false;
-                  onClose();
+                  dataStore.isPreviewOpen.value = false;
+                  assetsService.onClose();
                   Navigator.of(context).popUntil((Route route) => route.isFirst);
                 },
                 child: const Padding(

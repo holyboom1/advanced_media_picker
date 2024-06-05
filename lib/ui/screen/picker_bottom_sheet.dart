@@ -1,14 +1,7 @@
-part of '../advanced_media_picker_impl.dart';
+part of '../../advanced_media_picker_impl.dart';
 
 class PickerBottomSheet extends StatefulWidget {
-  final PickerStyle style;
-  final CameraStyle cameraStyle;
-
-  const PickerBottomSheet({
-    super.key,
-    required this.style,
-    required this.cameraStyle,
-  });
+  const PickerBottomSheet({super.key});
 
   @override
   State<PickerBottomSheet> createState() => _PickerBottomSheetState();
@@ -17,8 +10,7 @@ class PickerBottomSheet extends StatefulWidget {
 class _PickerBottomSheetState extends State<PickerBottomSheet> {
   final GlobalKey<State<StatefulWidget>> _sheet = GlobalKey();
   final DraggableScrollableController _controller = DraggableScrollableController();
-  bool _isAlertOpen = false;
-  final double _initialChildSize = 0.6;
+  final double _initialChildSize = 0.5;
 
   @override
   void initState() {
@@ -27,8 +19,8 @@ class _PickerBottomSheetState extends State<PickerBottomSheet> {
   }
 
   bool isNeedToShowDirectories = false;
-
   bool isPopped = false;
+  bool _isAlertOpen = false;
 
   void _onChanged() {
     final double currentSize = _controller.size;
@@ -42,7 +34,7 @@ class _PickerBottomSheetState extends State<PickerBottomSheet> {
       });
     }
 
-    if (currentSize < 0.3 && _selectedAssets.value.isNotEmpty) {
+    if (currentSize < 0.3 && dataStore.selectedAssets.value.isNotEmpty) {
       _hide();
     }
 
@@ -53,11 +45,19 @@ class _PickerBottomSheetState extends State<PickerBottomSheet> {
   }
 
   Future<void> _hide() async {
-    if (_selectedAssets.value.isNotEmpty) {
+    if (dataStore.selectedAssets.value.isNotEmpty) {
       if (!_isAlertOpen) {
         _isAlertOpen = true;
-        _animateSheet(0.3);
-        await _showAlertDialog();
+        unawaited(_animateSheet(0.3));
+        final bool isClose = dataStore.style.showCustomAlert?.call() ??
+            await showCloseAlertDialog(
+              style: dataStore.style.closeAlertStyle,
+              context: context,
+            );
+        if (!isClose) {
+          unawaited(_animateSheet(_initialChildSize));
+        }
+
         _isAlertOpen = false;
       }
     } else {
@@ -70,71 +70,6 @@ class _PickerBottomSheetState extends State<PickerBottomSheet> {
       size,
       duration: const Duration(milliseconds: 50),
       curve: Curves.easeInOut,
-    );
-  }
-
-  Future<void> _showAlertDialog() async {
-    await showDialog(
-      barrierColor: Colors.black.withOpacity(0.4),
-      context: context,
-      builder: (BuildContext context) => AlertDialog(
-        backgroundColor: Colors.transparent,
-        content: Container(
-          height: 100,
-          decoration: const BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.all(Radius.circular(10)),
-          ),
-          padding: const EdgeInsets.only(top: 10, bottom: 6, left: 8, right: 8),
-          child: Column(
-            children: <Widget>[
-              Text(
-                'Сancel selection?',
-                style: TextStyle(
-                  color: widget.style.textColor,
-                  fontWeight: FontWeight.w700,
-                  fontSize: 18,
-                ),
-              ),
-              const SizedBox(height: 10),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 4),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    TextButton(
-                      onPressed: () {
-                        Navigator.of(context).pop();
-                      },
-                      child: const Text(
-                        'No',
-                        style: TextStyle(
-                          color: Colors.blueAccent,
-                          fontWeight: FontWeight.w500,
-                          fontSize: 16,
-                        ),
-                      ),
-                    ),
-                    TextButton(
-                      onPressed: () {
-                        Navigator.of(context).popUntil((Route route) => route.isFirst);
-                      },
-                      child: const Text(
-                        'Yes',
-                        style: TextStyle(
-                          color: Colors.blueAccent,
-                          fontWeight: FontWeight.w600,
-                          fontSize: 16,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
     );
   }
 
@@ -155,6 +90,7 @@ class _PickerBottomSheetState extends State<PickerBottomSheet> {
           key: _sheet,
           maxChildSize: 0.9,
           minChildSize: 0,
+          initialChildSize: _initialChildSize,
           snapSizes: <double>[
             60 / constraints.maxHeight,
             0.5,
@@ -165,10 +101,10 @@ class _PickerBottomSheetState extends State<PickerBottomSheet> {
               color: Colors.transparent,
               child: DecoratedBox(
                 decoration: BoxDecoration(
-                  color: widget.style.backgroundColor,
+                  color: dataStore.style.backgroundColor,
                   borderRadius: BorderRadius.only(
-                    topLeft: widget.style.borderRadius.topLeft,
-                    topRight: widget.style.borderRadius.topRight,
+                    topLeft: dataStore.style.borderRadius.topLeft,
+                    topRight: dataStore.style.borderRadius.topRight,
                   ),
                 ),
                 child: CustomScrollView(
@@ -176,10 +112,10 @@ class _PickerBottomSheetState extends State<PickerBottomSheet> {
                   slivers: <Widget>[
                     SliverStickyHeader(
                       header: Container(
-                        color: widget.style.backgroundColor,
+                        color: dataStore.style.backgroundColor,
                         child: Column(
                           children: <Widget>[
-                            if (widget.style.isNeedDragIndicator)
+                            if (dataStore.style.isNeedDragIndicator)
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: <Widget>[
@@ -188,7 +124,7 @@ class _PickerBottomSheetState extends State<PickerBottomSheet> {
                                     height: 4,
                                     margin: const EdgeInsets.only(top: 8, bottom: 8),
                                     decoration: BoxDecoration(
-                                      color: widget.style.dragIndicatorColor,
+                                      color: dataStore.style.dragIndicatorColor,
                                       borderRadius: BorderRadius.circular(2),
                                     ),
                                   ),
@@ -205,11 +141,11 @@ class _PickerBottomSheetState extends State<PickerBottomSheet> {
                                   height: isNeedToShowDirectories ? 100 : 0,
                                   width: double.infinity,
                                   decoration: BoxDecoration(
-                                    color: widget.style.backgroundColor,
+                                    color: dataStore.style.backgroundColor,
                                     border: isNeedToShowDirectories
                                         ? Border(
                                             bottom: BorderSide(
-                                              color: widget.style.dividerColor,
+                                              color: dataStore.style.dividerColor,
                                               width: 0.5,
                                             ),
                                           )
@@ -218,12 +154,11 @@ class _PickerBottomSheetState extends State<PickerBottomSheet> {
                                   child: ListView(
                                     padding: EdgeInsets.zero,
                                     scrollDirection: Axis.horizontal,
-                                    children: _availablePath.value.map(
+                                    children: dataStore.availablePath.value.map(
                                       (AssetPathEntity e) {
                                         return DirectoryWidget(
                                           key: ValueKey<String>(e.id),
                                           path: e,
-                                          theme: widget.style,
                                         );
                                       },
                                     ).toList(),
@@ -235,11 +170,8 @@ class _PickerBottomSheetState extends State<PickerBottomSheet> {
                         ),
                       ),
                       sliver: SliverPadding(
-                        padding: widget.style.mainPadding,
-                        sliver: ContentView(
-                          style: widget.style,
-                          cameraStyle: widget.cameraStyle,
-                        ),
+                        padding: dataStore.style.mainPadding,
+                        sliver: const ContentView(),
                       ),
                     ),
                   ],
@@ -251,4 +183,65 @@ class _PickerBottomSheetState extends State<PickerBottomSheet> {
       },
     );
   }
+}
+
+Future<bool> showCloseAlertDialog({
+  required CloseAlertStyle style,
+  required BuildContext context,
+}) async {
+  bool isClose = false;
+  await showDialog(
+    barrierColor: Colors.black.withOpacity(0.4),
+    context: context,
+    builder: (BuildContext context) => AlertDialog(
+      backgroundColor: Colors.transparent,
+      content: Container(
+        decoration: style.containerDecoration,
+        padding: const EdgeInsets.only(top: 10, bottom: 6, left: 8, right: 8),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            Text(
+              style.title,
+              style: style.titleTextStyle,
+            ),
+            const SizedBox(height: 10),
+            Text(
+              style.message,
+              style: style.messageTextStyle,
+            ),
+            const SizedBox(height: 10),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 4),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  TextButton(
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                    child: Text(
+                      style.negativeButtonText,
+                      style: style.negativeButtonTextStyle,
+                    ),
+                  ),
+                  TextButton(
+                    onPressed: () {
+                      Navigator.of(context).popUntil((Route route) => route.isFirst);
+                      isClose = true;
+                    },
+                    child: Text(
+                      style.positiveButtonText,
+                      style: style.positiveButtonTextStyle,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    ),
+  );
+  return isClose;
 }

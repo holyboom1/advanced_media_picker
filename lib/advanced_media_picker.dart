@@ -13,7 +13,11 @@ export 'package:cross_file/cross_file.dart' show XFile;
 
 export 'advanced_media_picker_impl.dart' show PickerAssetType;
 export 'models/camera_style.dart';
+export 'models/close_alert_style.dart';
 export 'models/picker_style.dart';
+
+final DataStore dataStore = DataStore();
+final AssetsService assetsService = AssetsService();
 
 class AdvancedMediaPicker {
   static Future<List<XFile>> openPicker({
@@ -29,20 +33,23 @@ class AdvancedMediaPicker {
     PickerStyle? style,
     CameraStyle? cameraStyle,
   }) async {
-    limitToSelection = selectionLimit;
-    videoDuration = maxVideoDuration;
-    isNeedToShowCamera = showCamera;
-    isNeedToTakeVideo = videoCamera;
-    if (!await requestPermissions()) {
+    dataStore.limitToSelection = selectionLimit;
+    dataStore.maxVideoDuration = maxVideoDuration;
+    dataStore.isNeedToShowCamera = showCamera;
+    dataStore.isNeedToTakeVideo = videoCamera;
+    dataStore.style = style ?? PickerStyle();
+    dataStore.cameraStyle = cameraStyle ?? CameraStyle();
+
+    if (!await assetsService.requestPermissions()) {
       throw Exception('Permission denied');
     }
-    await getAssetsPath(
+    await assetsService.getAssetsPath(
       allowedTypes: allowedTypes ?? PickerAssetType.all,
     );
+    final Completer<List<XFile>> completer = Completer<List<XFile>>();
 
-    // List<MediaFile>? media;
     try {
-      await Navigator.push(
+      unawaited(Navigator.push(
         context,
         PageRouteBuilder<void>(
           barrierColor: Colors.black26,
@@ -59,23 +66,19 @@ class AdvancedMediaPicker {
                   end: Offset.zero,
                 ),
               ),
-              child: PickerBottomSheet(
-                style: style ?? PickerStyle(),
-                cameraStyle: cameraStyle ?? CameraStyle(),
-              ),
+              child: const PickerBottomSheet(),
             );
           },
           opaque: false,
           fullscreenDialog: true,
           barrierDismissible: true,
-          pageBuilder: (_, __, ___) => PickerBottomSheet(
-            style: style ?? PickerStyle(),
-            cameraStyle: cameraStyle ?? CameraStyle(),
-          ),
+          pageBuilder: (_, __, ___) {
+            return const PickerBottomSheet();
+          },
         ),
-      );
+      ));
     } catch (_) {}
 
-    return onClose();
+    return completer.future;
   }
 }

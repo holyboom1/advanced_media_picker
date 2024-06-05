@@ -1,13 +1,11 @@
-part of '../advanced_media_picker_impl.dart';
+part of '../../advanced_media_picker_impl.dart';
 
 class DirectoryWidget extends StatefulWidget {
   final AssetPathEntity path;
-  final PickerStyle theme;
 
   const DirectoryWidget({
     super.key,
     required this.path,
-    required this.theme,
   });
 
   @override
@@ -18,21 +16,33 @@ class _DirectoryWidgetState extends State<DirectoryWidget> {
   @override
   void initState() {
     super.initState();
+    if (dataStore.pathData[widget.path.id] == null) {
+      loadPath();
+    } else {
+      isLoaded = true;
+    }
   }
+
+  Future<void> loadPath() async {
+    await assetsService.loadAssetPath(widget.path);
+    isLoaded = true;
+  }
+
+  bool isLoaded = false;
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        _selectedPath.value = widget.path;
+        dataStore.selectedPath.value = widget.path;
       },
       child: ValueListenableBuilder<AssetPathEntity?>(
-        valueListenable: _selectedPath,
+        valueListenable: dataStore.selectedPath,
         builder: (BuildContext context, AssetPathEntity? value, Widget? child) {
           if (value == null ||
-              pathData[widget.path.id] == null ||
-              pathData[widget.path.id]!.value.isEmpty) {
-            return Container();
+              dataStore.pathData[widget.path.id] == null ||
+              dataStore.pathData[widget.path.id]!.value.isEmpty) {
+            return const SizedBox.shrink();
           }
 
           return Padding(
@@ -43,37 +53,36 @@ class _DirectoryWidgetState extends State<DirectoryWidget> {
                   width: 100,
                   height: 100,
                   clipBehavior: Clip.hardEdge,
-                  decoration: _selectedPath.value!.id == widget.path.id
-                      ? widget.theme.selectedFolderDecoration
-                      : widget.theme.unselectedFolderDecoration,
+                  decoration: dataStore.selectedPath.value!.id == widget.path.id
+                      ? dataStore.style.selectedFolderDecoration
+                      : dataStore.style.unselectedFolderDecoration,
                   child: AssetEntityImage(
-                    pathData[widget.path.id]!.value.first,
+                    dataStore.pathData[widget.path.id]!.value.first,
                     fit: BoxFit.cover,
-                    loadingBuilder: (BuildContext context, Widget child,
-                        ImageChunkEvent? loadingProgress) {
+                    loadingBuilder:
+                        (BuildContext context, Widget child, ImageChunkEvent? loadingProgress) {
                       return loadingProgress == null
                           ? child
                           : Shimmer.fromColors(
-                              baseColor: widget.theme.shimmerBaseColor,
-                              highlightColor:
-                                  widget.theme.shimmerHighlightColor,
+                              baseColor: dataStore.style.shimmerBaseColor,
+                              highlightColor: dataStore.style.shimmerHighlightColor,
                               child: child,
                             );
                     },
                   ),
                 ),
                 Align(
-                  alignment: widget.theme.selectIconAlignment,
+                  alignment: dataStore.style.selectIconAlignment,
                   child: Padding(
                     padding: const EdgeInsets.all(4),
                     child: Container(
                       decoration: BoxDecoration(
-                        color: widget.theme.selectIconBackgroundColor,
-                        border: widget.theme.selectIconBorder,
+                        color: dataStore.style.selectIconBackgroundColor,
+                        border: dataStore.style.selectIconBorder,
                         shape: BoxShape.circle,
                       ),
                       child: value.id == widget.path.id
-                          ? widget.theme.selectIcon
+                          ? dataStore.style.selectIcon
                           : const SizedBox(),
                     ),
                   ),
@@ -86,9 +95,9 @@ class _DirectoryWidgetState extends State<DirectoryWidget> {
                       widget.path.name,
                       textAlign: TextAlign.center,
                       style: TextStyle(
-                        color: _selectedPath.value!.id == widget.path.id
-                            ? widget.theme.selectedFolderTextColor
-                            : widget.theme.unselectedFolderTextColor,
+                        color: dataStore.selectedPath.value!.id == widget.path.id
+                            ? dataStore.style.selectedFolderTextColor
+                            : dataStore.style.unselectedFolderTextColor,
                       ),
                     ),
                   ),

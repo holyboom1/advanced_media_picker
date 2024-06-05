@@ -30,38 +30,38 @@ class _FlashModeButtonState extends State<FlashModeButton> {
           mainAxisAlignment: MainAxisAlignment.end,
           children: <Widget>[
             if (isOpen) ...<Widget>[
-              if (flashModeNotifier.value != FlashMode.off)
+              if (dataStore.flashModeNotifier.value != FlashMode.off)
                 IconButton(
                   icon: const Icon(
                     Icons.flash_off,
                     color: Colors.white,
                   ),
                   onPressed: () {
-                    flashModeNotifier.value = FlashMode.off;
+                    dataStore.flashModeNotifier.value = FlashMode.off;
                     isOpen = false;
                     setState(() {});
                   },
                 ),
-              if (flashModeNotifier.value != FlashMode.torch)
+              if (dataStore.flashModeNotifier.value != FlashMode.torch)
                 IconButton(
                   icon: const Icon(
                     Icons.flash_on,
                     color: Colors.white,
                   ),
                   onPressed: () {
-                    flashModeNotifier.value = FlashMode.torch;
+                    dataStore.flashModeNotifier.value = FlashMode.torch;
                     isOpen = false;
                     setState(() {});
                   },
                 ),
-              if (flashModeNotifier.value != FlashMode.auto)
+              if (dataStore.flashModeNotifier.value != FlashMode.auto)
                 IconButton(
                   icon: const Icon(
                     Icons.flash_auto,
                     color: Colors.white,
                   ),
                   onPressed: () {
-                    flashModeNotifier.value = FlashMode.auto;
+                    dataStore.flashModeNotifier.value = FlashMode.auto;
                     isOpen = false;
                     setState(() {});
                   },
@@ -71,17 +71,17 @@ class _FlashModeButtonState extends State<FlashModeButton> {
             IconButton(
               icon: AnimatedSwitcher(
                 duration: const Duration(milliseconds: 200),
-                child: flashModeNotifier.value == FlashMode.off
+                child: dataStore.flashModeNotifier.value == FlashMode.off
                     ? const Icon(
                         Icons.flash_off,
                         color: Colors.white,
                       )
-                    : flashModeNotifier.value == FlashMode.torch
+                    : dataStore.flashModeNotifier.value == FlashMode.torch
                         ? const Icon(
                             Icons.flash_on,
                             color: Colors.white,
                           )
-                        : flashModeNotifier.value == FlashMode.auto
+                        : dataStore.flashModeNotifier.value == FlashMode.auto
                             ? const Icon(
                                 Icons.flash_auto,
                                 color: Colors.white,

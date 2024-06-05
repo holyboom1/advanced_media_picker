@@ -12,36 +12,36 @@ class MediaPreviewList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ValueListenableBuilder<int>(
-      valueListenable: _capturedAssetsLength,
-      builder: (BuildContext context, int value, Widget? child) {
+    return ValueListenableBuilder<List<XFile>>(
+      valueListenable: dataStore.capturedAssets,
+      builder: (BuildContext context, List<XFile> value, Widget? child) {
         return Positioned(
           bottom: 225,
           left: 0,
           right: 0,
           child: AnimatedOpacity(
             duration: const Duration(milliseconds: 300),
-            opacity: isPreviewOpen.value ? 1 : 0,
+            opacity: dataStore.isPreviewOpen.value ? 1 : 0,
             curve: Curves.easeInOut,
             child: AnimatedContainer(
               duration: const Duration(milliseconds: 300),
               curve: Curves.easeInOut,
-              height: isPreviewOpen.value ? 130 : 0,
+              height: dataStore.isPreviewOpen.value ? 130 : 0,
               child: ListView.builder(
                 scrollDirection: Axis.horizontal,
-                itemCount: value,
+                itemCount: value.length,
                 itemBuilder: (BuildContext context, int index) {
                   return MediaPreview(
                     style: style,
                     onTap: () {
-                      isPreviewOpen.value = false;
+                      dataStore.isPreviewOpen.value = false;
                       Navigator.push(
                         context,
                         MaterialPageRoute<void>(
                           builder: (BuildContext context) {
                             return MediaScreen(
                               style: style,
-                              filePath: _capturedAssets.value[index].path,
+                              filePath: dataStore.capturedAssets.value[index].path,
                               isMediaFromPreview: true,
                               onTapFromPreview: onTap,
                             );
@@ -50,10 +50,11 @@ class MediaPreviewList extends StatelessWidget {
                       );
                     },
                     onDelete: () {
-                      _capturedAssets.value.removeAt(index);
-                      _capturedAssetsLength.value = _capturedAssets.value.length;
+                      dataStore.capturedAssets.value.removeAt(index);
                     },
-                    path: _capturedAssets.value.isNotEmpty ? _capturedAssets.value[index].path : '',
+                    path: dataStore.capturedAssets.value.isNotEmpty
+                        ? dataStore.capturedAssets.value[index].path
+                        : '',
                   );
                 },
               ),

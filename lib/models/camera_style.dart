@@ -34,22 +34,18 @@ class CameraStyle {
       Icons.arrow_back_ios_new,
       color: Colors.white,
     ),
-
     this.cameraAddMediaButton = const Icon(
       Icons.add,
       color: Colors.white,
     ),
-
     this.cameraDeleteMediaButton = const Icon(
       Icons.delete,
       color: Colors.white,
     ),
-
     this.cameraSelectedMediaButton = const Icon(
       Icons.done,
       color: Colors.white,
     ),
-
     this.cameraIcon = const Icon(
       Icons.video_call_rounded,
       color: Colors.white,

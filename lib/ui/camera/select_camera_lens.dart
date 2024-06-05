@@ -46,57 +46,59 @@ class _SelectCameraLensState extends State<SelectCameraLens> with SingleTickerPr
             child: Row(
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
-                ..._cameras.map((CameraDescription camera) {
-                  if (camera.lensDirection == CameraLensDirection.front) {
-                    return Container();
-                  }
-                  final int cameraIndex = _cameras.indexOf(camera);
-                  final bool isSelected = cameraIndex == selectedCameraIndex;
-                  return GestureDetector(
-                    onTap: () {
-                      setState(() {
-                        selectedCameraIndex = cameraIndex;
-                        _animationController.forward();
-                      });
-                      isCameraReady.value = false;
-                      cameraController = CameraController(
-                        camera,
-                        ResolutionPreset.medium,
-                      )..initialize().then((_) {
-                          isCameraReady.value = true;
+                ...dataStore.cameras.map(
+                  (CameraDescription camera) {
+                    if (camera.lensDirection == CameraLensDirection.front) {
+                      return Container();
+                    }
+                    final int cameraIndex = dataStore.cameras.indexOf(camera);
+                    final bool isSelected = cameraIndex == selectedCameraIndex;
+                    return GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          selectedCameraIndex = cameraIndex;
+                          _animationController.forward();
                         });
-                    },
-                    child: AnimatedBuilder(
-                      animation: _animation,
-                      builder: (BuildContext context, Widget? child) {
-                        return Transform.scale(
-                          scale: isSelected ? _animation.value : 1.0,
-                          child: child,
-                        );
+                        dataStore.isCameraReady.value = false;
+                        dataStore.cameraController = CameraController(
+                          camera,
+                          ResolutionPreset.medium,
+                        )..initialize().then((_) {
+                            dataStore.isCameraReady.value = true;
+                          });
                       },
-                      child: Column(
-                        children: <Widget>[
-                          Container(
-                            width: 40,
-                            height: 32,
-                            margin: const EdgeInsets.symmetric(horizontal: 4),
-                            padding: const EdgeInsets.all(6),
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              color:
-                                  isSelected ? Colors.white.withOpacity(0.5) : Colors.transparent,
+                      child: AnimatedBuilder(
+                        animation: _animation,
+                        builder: (BuildContext context, Widget? child) {
+                          return Transform.scale(
+                            scale: isSelected ? _animation.value : 1.0,
+                            child: child,
+                          );
+                        },
+                        child: Column(
+                          children: <Widget>[
+                            Container(
+                              width: 40,
+                              height: 32,
+                              margin: const EdgeInsets.symmetric(horizontal: 4),
+                              padding: const EdgeInsets.all(6),
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                color:
+                                    isSelected ? Colors.white.withOpacity(0.5) : Colors.transparent,
+                              ),
+                              child: const Icon(
+                                Icons.camera_alt,
+                                color: Colors.white,
+                                size: 20,
+                              ),
                             ),
-                            child: const Icon(
-                              Icons.camera_alt,
-                              color: Colors.white,
-                              size: 20,
-                            ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
-                    ),
-                  );
-                }).toList()
+                    );
+                  },
+                ).toList()
               ],
             ),
           ),

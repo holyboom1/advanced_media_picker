@@ -27,7 +27,7 @@ class MediaPreviewControlButton extends StatelessWidget {
           scale: animation,
           child: child,
         ),
-        child: isPreviewOpen.value
+        child: dataStore.isPreviewOpen.value
             ? const Icon(Icons.clear, color: Colors.white, size: 20)
             : Text(
                 countValue,
