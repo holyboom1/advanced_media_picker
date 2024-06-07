@@ -4,7 +4,6 @@ import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 
 import '../../advanced_media_picker.dart';
-import '../../advanced_media_picker_impl.dart';
 
 class CameraPreviewWidget extends StatefulWidget {
   const CameraPreviewWidget({super.key});
@@ -42,45 +41,70 @@ class _CameraPreviewWidgetState extends State<CameraPreviewWidget> {
   double focusX = 0;
   double focusY = 0;
 
+  Future<void> onZoom(double scale) async {
+    if (dataStore.cameraController != null) {
+      final double maxZoom = await dataStore.cameraController!.getMaxZoomLevel();
+      final double minZoom = await dataStore.cameraController!.getMinZoomLevel();
+      if (scale > maxZoom) {
+        scale = maxZoom;
+      } else if (scale < minZoom) {
+        scale = minZoom;
+      }
+      await dataStore.cameraController!.setZoomLevel(scale);
+    }
+  }
+
+  double _scaleFactor = 1.0;
+  double _baseScaleFactor = 1.0;
+
   @override
   Widget build(BuildContext context) {
     return Positioned.fill(
       child: Center(
-        child: ValueListenableBuilder<bool>(
-          valueListenable: dataStore.isCameraReady,
-          builder: (BuildContext context, bool value, Widget? child) {
-            if (!value) {
-              return const CircularProgressIndicator.adaptive();
-            }
-            return GestureDetector(
-              onTapUp: onTapSetFocus,
-              child: Stack(
-                children: <Widget>[
-                  CameraPreview(dataStore.cameraController!),
-                  ValueListenableBuilder<bool>(
-                    valueListenable: showFocusCircle,
-                    builder: (BuildContext context, bool value, Widget? child) {
-                      if (value) {
-                        return Positioned(
-                          top: focusY - 20,
-                          left: focusX - 20,
-                          child: Container(
-                            height: 40,
-                            width: 40,
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              border: Border.all(color: Colors.white, width: 1.5),
-                            ),
-                          ),
-                        );
-                      }
-                      return const SizedBox.shrink();
-                    },
-                  ),
-                ],
-              ),
-            );
+        child: GestureDetector(
+          onScaleStart: (ScaleStartDetails details) {
+            _baseScaleFactor = _scaleFactor;
           },
+          onScaleUpdate: (ScaleUpdateDetails details) {
+            _scaleFactor = _baseScaleFactor * details.scale;
+            onZoom(_scaleFactor);
+          },
+          child: ValueListenableBuilder<bool>(
+            valueListenable: dataStore.isCameraReady,
+            builder: (BuildContext context, bool value, Widget? child) {
+              if (!value) {
+                return const CircularProgressIndicator.adaptive();
+              }
+              return GestureDetector(
+                onTapUp: onTapSetFocus,
+                child: Stack(
+                  children: <Widget>[
+                    CameraPreview(dataStore.cameraController!),
+                    ValueListenableBuilder<bool>(
+                      valueListenable: showFocusCircle,
+                      builder: (BuildContext context, bool value, Widget? child) {
+                        if (value) {
+                          return Positioned(
+                            top: focusY - 20,
+                            left: focusX - 20,
+                            child: Container(
+                              height: 40,
+                              width: 40,
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                border: Border.all(color: Colors.white, width: 1.5),
+                              ),
+                            ),
+                          );
+                        }
+                        return const SizedBox.shrink();
+                      },
+                    ),
+                  ],
+                ),
+              );
+            },
+          ),
         ),
       ),
     );
