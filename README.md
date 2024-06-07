@@ -192,10 +192,11 @@ enum PickerAssetType {
 - `videoCamera`: A boolean to allow the user to take videos.
 
 ## Screenshots / Demo
-[RPReplay_Final1717790903.mp4](doc%2FRPReplay_Final1717790903.mp4)
-<video width="320" height="240" controls>
-  <source src="doc%2FRPReplay_Final1717790903.mp4" type="video/mp4">
-</video>
+
+
+https://github.com/holyboom1/flutter_tg_picker/assets/65105446/a2b25520-d176-40ec-8d13-ef2c20cdb760
+
+
 ______________________________________________
 
 ## Plugins
