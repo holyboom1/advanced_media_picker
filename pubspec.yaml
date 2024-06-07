@@ -1,6 +1,6 @@
 name: advanced_media_picker
 description: "This plugin displays a gallery with user's Albums and Photos with ability to take photo and video."
-version: 0.0.3
+version: 0.0.4
 homepage: https://github.com/holyboom1/flutter_tg_picker
 
 environment:
@@ -17,6 +17,7 @@ dependencies:
   cross_file: ^0.3.4+1
   video_thumbnail: ^0.5.3
   file_picker: ^8.0.3
+  collection: ^1.18.0
 
 dev_dependencies:
   flutter_test:

@@ -1,4 +1,3 @@
-import 'dart:io';
 
 import 'package:advanced_media_picker/advanced_media_picker.dart';
 import 'package:flutter/material.dart';
@@ -67,7 +66,7 @@ class MyButton extends StatelessWidget {
             maxVideoDuration: 60,
             selectionLimit: 10,
           );
-          print('#result# : ${result}');
+          print('#result# : $result');
           selectedFiles.value = result;
         },
       ),

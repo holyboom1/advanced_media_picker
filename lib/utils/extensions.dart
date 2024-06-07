@@ -1,8 +1,8 @@
+import 'package:collection/collection.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:photo_manager/photo_manager.dart';
 
 import '../models/asset_model.dart';
-import 'package:collection/collection.dart';
 
 extension FileTypeExtension on String {
   bool isPicture() =>

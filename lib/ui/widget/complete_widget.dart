@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 import '../../advanced_media_picker.dart';
-import '../../advanced_media_picker_impl.dart';
 import '../../models/asset_model.dart';
 import 'type_selection_widget.dart';
 

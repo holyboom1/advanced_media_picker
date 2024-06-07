@@ -1,3 +1,10 @@
+## 0.0.4
+* Fix camera issue.
+* Added new features.
+
+## 0.0.3
+* Update README file.
+
 ## 0.0.2
 * Update README file.
 
