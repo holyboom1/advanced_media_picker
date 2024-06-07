@@ -192,9 +192,9 @@ enum PickerAssetType {
 - `videoCamera`: A boolean to allow the user to take videos.
 
 ## Screenshots / Demo
-
-[RPReplay_Final1717790903 copy.mp4](doc%2FRPReplay_Final1717790903%20copy.mp4)
-![RPReplay_Final1717790903-ezgif.com-video-to-webp-converter.webp](doc%2FRPReplay_Final1717790903-ezgif.com-video-to-webp-converter.webp)
+<video width="320" height="240" controls>
+  <source src="doc%2FRPReplay_Final1717790903%20copy.mp4" type="video/mp4">
+</video>
 ______________________________________________
 
 ## Plugins
