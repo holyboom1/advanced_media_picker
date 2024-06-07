@@ -117,12 +117,6 @@ class _CameraScreenState extends State<CameraScreen> {
     }
   }
 
-  void onZoom() {
-    if (dataStore.cameraController != null) {
-      dataStore.cameraController!.setZoomLevel(0.5);
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return Material(
@@ -130,7 +124,7 @@ class _CameraScreenState extends State<CameraScreen> {
       child: Stack(
         children: <Widget>[
           const CameraPreviewWidget(),
-          MediaPreviewList(),
+          const MediaPreviewList(),
           ValueListenableBuilder<bool>(
             valueListenable: dataStore.isCameraReady,
             builder: (BuildContext context, bool value, Widget? child) {
@@ -145,8 +139,8 @@ class _CameraScreenState extends State<CameraScreen> {
             builder: (BuildContext context, List<AssetModel> value, Widget? child) {
               return GestureDetector(
                 onTap: () {
-                  setState(() {});
                   dataStore.isPreviewOpen.value = !dataStore.isPreviewOpen.value;
+                  setState(() {});
                 },
                 child: Align(
                   alignment: Alignment.bottomRight,
@@ -203,9 +197,8 @@ class _CameraScreenState extends State<CameraScreen> {
                     return value.isNotEmpty
                         ? GestureDetector(
                             onTap: () {
-                              dataStore.isPreviewOpen.value = false;
                               assetsService.onClose();
-                              Navigator.of(context).popUntil((Route route) => route.isFirst);
+                              Navigator.of(context).pop();
                             },
                             child: Padding(
                               padding: dataStore.cameraStyle.finishButtonPadding,

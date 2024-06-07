@@ -30,80 +30,89 @@ class _SelectCameraLensState extends State<SelectCameraLens> with SingleTickerPr
 
   @override
   Widget build(BuildContext context) {
-    return Positioned(
-      bottom: 170,
-      left: 0,
-      right: 0,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          Container(
-            padding: const EdgeInsets.all(8),
-            decoration: BoxDecoration(
-              color: Colors.black.withOpacity(0.3),
-              borderRadius: BorderRadius.circular(25),
-            ),
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: <Widget>[
-                ...dataStore.cameras.map(
-                  (CameraDescription camera) {
-                    if (camera.lensDirection == CameraLensDirection.front) {
-                      return Container();
-                    }
-                    final int cameraIndex = dataStore.cameras.indexOf(camera);
-                    final bool isSelected = cameraIndex == selectedCameraIndex;
-                    return GestureDetector(
-                      onTap: () {
-                        setState(() {
-                          selectedCameraIndex = cameraIndex;
-                          _animationController.forward();
-                        });
-                        dataStore.isCameraReady.value = false;
-                        dataStore.cameraController = CameraController(
-                          camera,
-                          ResolutionPreset.medium,
-                        )..initialize().then((_) {
-                            dataStore.isCameraReady.value = true;
-                          });
-                      },
-                      child: AnimatedBuilder(
-                        animation: _animation,
-                        builder: (BuildContext context, Widget? child) {
-                          return Transform.scale(
-                            scale: isSelected ? _animation.value : 1.0,
-                            child: child,
-                          );
-                        },
-                        child: Column(
-                          children: <Widget>[
-                            Container(
-                              width: 40,
-                              height: 32,
-                              margin: const EdgeInsets.symmetric(horizontal: 4),
-                              padding: const EdgeInsets.all(6),
-                              decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                color:
-                                    isSelected ? Colors.white.withOpacity(0.5) : Colors.transparent,
-                              ),
-                              child: const Icon(
-                                Icons.camera_alt,
-                                color: Colors.white,
-                                size: 20,
-                              ),
+    return ValueListenableBuilder<bool>(
+      valueListenable: dataStore.isRecording,
+      builder: (BuildContext context, bool value, Widget? child) {
+        if (value) {
+          return const SizedBox();
+        }
+        return Positioned(
+          bottom: 170,
+          left: 0,
+          right: 0,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Container(
+                padding: const EdgeInsets.all(8),
+                decoration: BoxDecoration(
+                  color: Colors.black.withOpacity(0.3),
+                  borderRadius: BorderRadius.circular(25),
+                ),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: <Widget>[
+                    ...dataStore.cameras.map(
+                      (CameraDescription camera) {
+                        if (camera.lensDirection == CameraLensDirection.front) {
+                          return Container();
+                        }
+                        final int cameraIndex = dataStore.cameras.indexOf(camera);
+                        final bool isSelected = cameraIndex == selectedCameraIndex;
+                        return GestureDetector(
+                          onTap: () {
+                            setState(() {
+                              selectedCameraIndex = cameraIndex;
+                              _animationController.forward();
+                            });
+                            dataStore.isCameraReady.value = false;
+                            dataStore.cameraController = CameraController(
+                              camera,
+                              ResolutionPreset.medium,
+                            )..initialize().then((_) {
+                                dataStore.isCameraReady.value = true;
+                              });
+                          },
+                          child: AnimatedBuilder(
+                            animation: _animation,
+                            builder: (BuildContext context, Widget? child) {
+                              return Transform.scale(
+                                scale: isSelected ? _animation.value : 1.0,
+                                child: child,
+                              );
+                            },
+                            child: Column(
+                              children: <Widget>[
+                                Container(
+                                  width: 40,
+                                  height: 32,
+                                  margin: const EdgeInsets.symmetric(horizontal: 4),
+                                  padding: const EdgeInsets.all(6),
+                                  decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    color: isSelected
+                                        ? Colors.white.withOpacity(0.5)
+                                        : Colors.transparent,
+                                  ),
+                                  child: const Icon(
+                                    Icons.camera_alt,
+                                    color: Colors.white,
+                                    size: 20,
+                                  ),
+                                ),
+                              ],
                             ),
-                          ],
-                        ),
-                      ),
-                    );
-                  },
-                ).toList()
-              ],
-            ),
+                          ),
+                        );
+                      },
+                    ).toList()
+                  ],
+                ),
+              ),
+            ],
           ),
-        ],
-      ),
+        );
+      },
     );
   }
 }

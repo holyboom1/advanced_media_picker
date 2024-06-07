@@ -40,6 +40,7 @@ class _PickerBottomSheetState extends State<PickerBottomSheet> {
     if (dataStore.pickerController.size <= 0.01 && !isPopped) {
       isPopped = true;
       Navigator.pop(context);
+      dataStore.cameraController?.dispose();
     }
   }
 

@@ -39,6 +39,7 @@ class PickerController extends DraggableScrollableController {
               style: dataStore.style.closeAlertStyle,
               context: sheet.currentContext!,
             );
+
         if (!isClose) {
           unawaited(animateSheet(initialChildSize));
         }
@@ -51,5 +52,6 @@ class PickerController extends DraggableScrollableController {
 
   Future<void> hide() async {
     await animateSheet(0);
+    unawaited(dataStore.cameraController?.dispose());
   }
 }
