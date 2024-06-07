@@ -23,7 +23,8 @@ class _CameraPreviewWidgetState extends State<CameraPreviewWidget> {
       focusY = details.localPosition.dy;
 
       final double fullWidth = MediaQuery.of(context).size.width;
-      final double cameraHeight = fullWidth * dataStore.cameraController!.value.aspectRatio;
+      final double cameraHeight =
+          fullWidth * dataStore.cameraController!.value.aspectRatio;
 
       final double xp = focusX / fullWidth;
       final double yp = focusY / cameraHeight;
@@ -33,7 +34,8 @@ class _CameraPreviewWidgetState extends State<CameraPreviewWidget> {
 
       await dataStore.cameraController!.setFocusPoint(point);
 
-      unawaited(Future<void>.delayed(const Duration(seconds: 2)).whenComplete(() {
+      unawaited(
+          Future<void>.delayed(const Duration(seconds: 2)).whenComplete(() {
         showFocusCircle.value = false;
       }));
     }
@@ -46,8 +48,10 @@ class _CameraPreviewWidgetState extends State<CameraPreviewWidget> {
   Future<void> onZoom(double newScale) async {
     double scale = newScale;
     if (dataStore.cameraController != null) {
-      final double maxZoom = await dataStore.cameraController!.getMaxZoomLevel();
-      final double minZoom = await dataStore.cameraController!.getMinZoomLevel();
+      final double maxZoom =
+          await dataStore.cameraController!.getMaxZoomLevel();
+      final double minZoom =
+          await dataStore.cameraController!.getMinZoomLevel();
       if (scale > maxZoom) {
         scale = maxZoom;
       } else if (scale < minZoom) {
@@ -85,7 +89,8 @@ class _CameraPreviewWidgetState extends State<CameraPreviewWidget> {
                     CameraPreview(dataStore.cameraController!),
                     ValueListenableBuilder<bool>(
                       valueListenable: showFocusCircle,
-                      builder: (BuildContext context, bool value, Widget? child) {
+                      builder:
+                          (BuildContext context, bool value, Widget? child) {
                         if (value) {
                           return Positioned(
                             top: focusY - 20,
@@ -95,7 +100,8 @@ class _CameraPreviewWidgetState extends State<CameraPreviewWidget> {
                               width: 40,
                               decoration: BoxDecoration(
                                 shape: BoxShape.circle,
-                                border: Border.all(color: Colors.white, width: 1.5),
+                                border:
+                                    Border.all(color: Colors.white, width: 1.5),
                               ),
                             ),
                           );

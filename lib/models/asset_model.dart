@@ -37,7 +37,8 @@ class AssetModel {
   }
 
   /// Create asset model list from asset entity list
-  static Future<List<AssetModel>> fromAssetEntities(List<AssetEntity> entities) async {
+  static Future<List<AssetModel>> fromAssetEntities(
+      List<AssetEntity> entities) async {
     final List<AssetModel> assets = <AssetModel>[];
     await Future.forEach(entities, (AssetEntity entity) async {
       final AssetModel asset = await fromAssetEntity(entity);

@@ -22,13 +22,15 @@ class AssetsService {
     final bool isContain = dataStore.selectedAssets.value.containsAsset(asset);
 
     if (isContain) {
-      dataStore.selectedAssets.removeAsset(await AssetModel.fromAssetEntity(asset));
+      dataStore.selectedAssets
+          .removeAsset(await AssetModel.fromAssetEntity(asset));
     } else {
       if (dataStore.limitToSelection != -1 &&
           dataStore.selectedAssets.value.length >= dataStore.limitToSelection) {
         return;
       }
-      dataStore.selectedAssets.addAsset(await AssetModel.fromAssetEntity(asset));
+      dataStore.selectedAssets
+          .addAsset(await AssetModel.fromAssetEntity(asset));
     }
   }
 
@@ -46,7 +48,8 @@ class AssetsService {
       ...entities
     ];
     dataStore.pages[path.id] = page;
-    dataStore.hasMoreToLoad[path.id] = entities.length < dataStore.totalEntitiesCount[path.id]!;
+    dataStore.hasMoreToLoad[path.id] =
+        entities.length < dataStore.totalEntitiesCount[path.id]!;
   }
 
   /// Get assets path
@@ -67,13 +70,16 @@ class AssetsService {
       dataStore.pathData[dataStore.availablePath.value.first.id] =
           ValueNotifier<List<AssetEntity>>(<AssetEntity>[]);
 
-      dataStore.pathData[dataStore.availablePath.value.first.id]!.value = entities;
+      dataStore.pathData[dataStore.availablePath.value.first.id]!.value =
+          entities;
       dataStore.totalEntitiesCount[dataStore.availablePath.value.first.id] =
           await dataStore.availablePath.value.first.assetCountAsync;
       dataStore.pages[dataStore.availablePath.value.first.id] = 0;
-      dataStore.hasMoreToLoad[dataStore.availablePath.value.first.id] =
-          entities.length < dataStore.totalEntitiesCount[dataStore.availablePath.value.first.id]!;
-      if (dataStore.availablePath.value.first == dataStore.availablePath.value.first) {
+      dataStore.hasMoreToLoad[dataStore.availablePath.value.first.id] = entities
+              .length <
+          dataStore.totalEntitiesCount[dataStore.availablePath.value.first.id]!;
+      if (dataStore.availablePath.value.first ==
+          dataStore.availablePath.value.first) {
         dataStore.selectedPath.value = dataStore.availablePath.value.first;
       }
     }
@@ -85,10 +91,12 @@ class AssetsService {
       page: 0,
       size: dataStore.sizePerPage,
     );
-    dataStore.pathData[assetPath.id] = ValueNotifier<List<AssetEntity>>(<AssetEntity>[]);
+    dataStore.pathData[assetPath.id] =
+        ValueNotifier<List<AssetEntity>>(<AssetEntity>[]);
 
     dataStore.pathData[assetPath.id]!.value = entities;
-    dataStore.totalEntitiesCount[assetPath.id] = await assetPath.assetCountAsync;
+    dataStore.totalEntitiesCount[assetPath.id] =
+        await assetPath.assetCountAsync;
     dataStore.pages[assetPath.id] = 0;
     dataStore.hasMoreToLoad[assetPath.id] =
         entities.length < dataStore.totalEntitiesCount[assetPath.id]!;
