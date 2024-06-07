@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
-import '../../advanced_media_picker.dart';
+import '../../advanced_media_picker_impl.dart';
 import '../../utils/extensions.dart';
 import '../../utils/video_file_formatter.dart';
 

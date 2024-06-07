@@ -7,7 +7,8 @@ class SelectCameraLens extends StatefulWidget {
   State<SelectCameraLens> createState() => _SelectCameraLensState();
 }
 
-class _SelectCameraLensState extends State<SelectCameraLens> with SingleTickerProviderStateMixin {
+class _SelectCameraLensState extends State<SelectCameraLens>
+    with SingleTickerProviderStateMixin {
   int selectedCameraIndex = 0;
   late AnimationController _animationController;
   late Animation<double> _animation;
@@ -19,7 +20,8 @@ class _SelectCameraLensState extends State<SelectCameraLens> with SingleTickerPr
       vsync: this,
       duration: const Duration(milliseconds: 200),
     );
-    _animation = Tween<double>(begin: 1.0, end: 1.2).animate(_animationController);
+    _animation =
+        Tween<double>(begin: 1.0, end: 1.2).animate(_animationController);
   }
 
   @override
@@ -57,8 +59,10 @@ class _SelectCameraLensState extends State<SelectCameraLens> with SingleTickerPr
                         if (camera.lensDirection == CameraLensDirection.front) {
                           return Container();
                         }
-                        final int cameraIndex = dataStore.cameras.indexOf(camera);
-                        final bool isSelected = cameraIndex == selectedCameraIndex;
+                        final int cameraIndex =
+                            dataStore.cameras.indexOf(camera);
+                        final bool isSelected =
+                            cameraIndex == selectedCameraIndex;
                         return GestureDetector(
                           onTap: () {
                             setState(() {
@@ -86,7 +90,8 @@ class _SelectCameraLensState extends State<SelectCameraLens> with SingleTickerPr
                                 Container(
                                   width: 40,
                                   height: 32,
-                                  margin: const EdgeInsets.symmetric(horizontal: 4),
+                                  margin:
+                                      const EdgeInsets.symmetric(horizontal: 4),
                                   padding: const EdgeInsets.all(6),
                                   decoration: BoxDecoration(
                                     shape: BoxShape.circle,

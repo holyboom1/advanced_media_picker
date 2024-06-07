@@ -1,19 +1,44 @@
 import 'package:flutter/material.dart';
 
+/// Camera style
 class CameraStyle {
+  /// Camera close icon
   final Widget cameraCloseIcon;
+
+  /// Take picture icon
   final Widget takePictureIcon;
+
+  /// Choose camera icon
   final Widget chooseCameraIcon;
+
+  /// Camera back button
   final Widget cameraBackButton;
+
+  /// Camera add media button
   final Widget cameraAddMediaButton;
+
+  /// Camera delete media button
   final Widget cameraDeleteMediaButton;
+
+  /// Camera selected media button
   final Widget cameraSelectedMediaButton;
+
+  /// Video icon
   final Widget videoIcon;
+
+  /// Flip camera icon
   final Widget flipCameraIcon;
+
+  /// Finish button title
   final String finishButtonTitle;
+
+  /// Finish button style
   final TextStyle finishButtonStyle;
+
+  /// Finish button padding
   final EdgeInsets finishButtonPadding;
 
+  /// Camera style
   CameraStyle({
     this.cameraCloseIcon = const Icon(
       Icons.close,

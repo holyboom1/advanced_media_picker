@@ -59,13 +59,14 @@ class _DirectoryWidgetState extends State<DirectoryWidget> {
                   child: AssetEntityImage(
                     dataStore.pathData[widget.path.id]!.value.first,
                     fit: BoxFit.cover,
-                    loadingBuilder:
-                        (BuildContext context, Widget child, ImageChunkEvent? loadingProgress) {
+                    loadingBuilder: (BuildContext context, Widget child,
+                        ImageChunkEvent? loadingProgress) {
                       return loadingProgress == null
                           ? child
                           : Shimmer.fromColors(
                               baseColor: dataStore.style.shimmerBaseColor,
-                              highlightColor: dataStore.style.shimmerHighlightColor,
+                              highlightColor:
+                                  dataStore.style.shimmerHighlightColor,
                               child: child,
                             );
                     },
@@ -95,9 +96,10 @@ class _DirectoryWidgetState extends State<DirectoryWidget> {
                       widget.path.name,
                       textAlign: TextAlign.center,
                       style: TextStyle(
-                        color: dataStore.selectedPath.value!.id == widget.path.id
-                            ? dataStore.style.selectedFolderTextColor
-                            : dataStore.style.unselectedFolderTextColor,
+                        color:
+                            dataStore.selectedPath.value!.id == widget.path.id
+                                ? dataStore.style.selectedFolderTextColor
+                                : dataStore.style.unselectedFolderTextColor,
                       ),
                     ),
                   ),

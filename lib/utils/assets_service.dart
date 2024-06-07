@@ -1,8 +1,10 @@
 part of '../advanced_media_picker_impl.dart';
 
+/// Assets service
 class AssetsService {
   final FilterOptionGroup _filterOptionGroup = FilterOptionGroup();
 
+  /// close picker and return selected assets to the caller
   Future<void> onClose() async {
     final List<XFile> assets = <XFile>[];
     unawaited(dataStore.pickerController.hide());
@@ -15,6 +17,7 @@ class AssetsService {
     dataStore.mainCompleter.complete(assets);
   }
 
+  /// Select asset
   Future<void> onOnSelectAsset(AssetEntity asset) async {
     final bool isContain = dataStore.selectedAssets.value.containsAsset(asset);
 
@@ -29,6 +32,7 @@ class AssetsService {
     }
   }
 
+  /// Load more assets
   Future<void> loadMoreAsset({
     required AssetPathEntity path,
   }) async {
@@ -45,6 +49,7 @@ class AssetsService {
     dataStore.hasMoreToLoad[path.id] = entities.length < dataStore.totalEntitiesCount[path.id]!;
   }
 
+  /// Get assets path
   Future<void> getAssetsPath({
     required PickerAssetType allowedTypes,
   }) async {
@@ -74,6 +79,7 @@ class AssetsService {
     }
   }
 
+  /// Load asset path
   Future<void> loadAssetPath(AssetPathEntity assetPath) async {
     final List<AssetEntity> entities = await assetPath.getAssetListPaged(
       page: 0,
@@ -88,6 +94,7 @@ class AssetsService {
         entities.length < dataStore.totalEntitiesCount[assetPath.id]!;
   }
 
+  /// Request permissions
   Future<bool> requestPermissions() async {
     final PermissionState ps = await PhotoManager.requestPermissionExtend();
     if (!ps.hasAccess) {

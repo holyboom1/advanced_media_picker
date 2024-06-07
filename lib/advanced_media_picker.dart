@@ -20,10 +20,9 @@ export 'models/close_alert_style.dart';
 export 'models/picker_controller.dart';
 export 'models/picker_style.dart';
 
-late DataStore dataStore;
-late AssetsService assetsService;
-
+/// A Flutter plugin for selecting images and videos from the Android and iOS image library, and taking new pictures with the camera.
 class AdvancedMediaPicker {
+  /// Opens the picker to select images and videos from the Android and iOS image library.
   static Future<List<XFile>> openPicker({
     required BuildContext context,
     bool isNeedToShowCamera = true,
@@ -93,6 +92,7 @@ class AdvancedMediaPicker {
     return dataStore.mainCompleter.future;
   }
 
+  /// Opens file picker to select files from the device, use this in case when you use custom bottom widget
   static Future<List<AssetModel>> selectFilesFromDevice() async {
     final FilePickerResult? result = await FilePicker.platform.pickFiles(
       type: FileType.custom,

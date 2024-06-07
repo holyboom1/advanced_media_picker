@@ -28,13 +28,15 @@ extension AssetContains on List<AssetModel> {
 
 extension ValueAssetsList on ValueNotifier<List<AssetModel>> {
   bool containsAsset(AssetEntity asset) =>
-      value.firstWhereOrNull((AssetModel element) => element.id == asset.id) != null;
+      value.firstWhereOrNull((AssetModel element) => element.id == asset.id) !=
+      null;
 
   void addAsset(AssetModel asset) {
     value = <AssetModel>[...value, asset];
   }
 
   void removeAsset(AssetModel asset) {
-    value = <AssetModel>[...value]..removeWhere((AssetModel element) => element.id == asset.id);
+    value = <AssetModel>[...value]
+      ..removeWhere((AssetModel element) => element.id == asset.id);
   }
 }

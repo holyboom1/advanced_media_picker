@@ -51,7 +51,8 @@ class _PickerBottomSheetState extends State<PickerBottomSheet> {
   }
 
   DraggableScrollableSheet get sheet =>
-      dataStore.pickerController.sheet.currentWidget! as DraggableScrollableSheet;
+      dataStore.pickerController.sheet.currentWidget!
+          as DraggableScrollableSheet;
 
   @override
   Widget build(BuildContext context) {
@@ -96,15 +97,19 @@ class _PickerBottomSheetState extends State<PickerBottomSheet> {
                                 children: <Widget>[
                                   if (dataStore.style.isNeedDragIndicator)
                                     Row(
-                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
                                       children: <Widget>[
                                         Container(
                                           width: 40,
                                           height: 4,
-                                          margin: const EdgeInsets.only(top: 8, bottom: 8),
+                                          margin: const EdgeInsets.only(
+                                              top: 8, bottom: 8),
                                           decoration: BoxDecoration(
-                                            color: dataStore.style.dragIndicatorColor,
-                                            borderRadius: BorderRadius.circular(2),
+                                            color: dataStore
+                                                .style.dragIndicatorColor,
+                                            borderRadius:
+                                                BorderRadius.circular(2),
                                           ),
                                         ),
                                       ],
@@ -115,16 +120,21 @@ class _PickerBottomSheetState extends State<PickerBottomSheet> {
                                     child: AnimatedSize(
                                       duration: kThemeAnimationDuration,
                                       child: Container(
-                                        padding: const EdgeInsets.symmetric(vertical: 8),
-                                        margin: const EdgeInsets.only(bottom: 8),
-                                        height: isNeedToShowDirectories ? 100 : 0,
+                                        padding: const EdgeInsets.symmetric(
+                                            vertical: 8),
+                                        margin:
+                                            const EdgeInsets.only(bottom: 8),
+                                        height:
+                                            isNeedToShowDirectories ? 100 : 0,
                                         width: double.infinity,
                                         decoration: BoxDecoration(
-                                          color: dataStore.style.backgroundColor,
+                                          color:
+                                              dataStore.style.backgroundColor,
                                           border: isNeedToShowDirectories
                                               ? Border(
                                                   bottom: BorderSide(
-                                                    color: dataStore.style.dividerColor,
+                                                    color: dataStore
+                                                        .style.dividerColor,
                                                     width: 0.5,
                                                   ),
                                                 )
@@ -133,7 +143,8 @@ class _PickerBottomSheetState extends State<PickerBottomSheet> {
                                         child: ListView(
                                           padding: EdgeInsets.zero,
                                           scrollDirection: Axis.horizontal,
-                                          children: dataStore.availablePath.value.map(
+                                          children:
+                                              dataStore.availablePath.value.map(
                                             (AssetPathEntity e) {
                                               return DirectoryWidget(
                                                 key: ValueKey<String>(e.id),
@@ -213,7 +224,8 @@ Future<bool> showCloseAlertDialog({
                   ),
                   TextButton(
                     onPressed: () {
-                      Navigator.of(context).popUntil((Route route) => route.isFirst);
+                      Navigator.of(context)
+                          .popUntil((Route route) => route.isFirst);
                       isClose = true;
                     },
                     child: Text(

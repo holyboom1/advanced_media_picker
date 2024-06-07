@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../advanced_media_picker.dart';
+import '../../advanced_media_picker_impl.dart';
 
 class TypeSelectionWidget extends StatelessWidget {
   const TypeSelectionWidget({super.key});
@@ -10,7 +11,8 @@ class TypeSelectionWidget extends StatelessWidget {
     return dataStore.style.typeSelectionWidget ??
         Container(
           width: MediaQuery.of(context).size.width,
-          padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewPadding.bottom),
+          padding: EdgeInsets.only(
+              bottom: MediaQuery.of(context).viewPadding.bottom),
           decoration: BoxDecoration(
             color: Colors.white.withOpacity(0.8),
             borderRadius: BorderRadius.circular(50),

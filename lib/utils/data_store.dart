@@ -1,15 +1,24 @@
 part of '../advanced_media_picker_impl.dart';
 
+/// Plugin data store
 final class DataStore {
+  /// Data store
   DataStore({
     required this.style,
     required this.cameraStyle,
     required this.pickerController,
   });
 
+  /// Main completer
   final Completer<List<XFile>> mainCompleter = Completer<List<XFile>>();
+
+  /// Picker controller
   final PickerController pickerController;
+
+  /// Picker style
   final PickerStyle style;
+
+  /// Camera style
   final CameraStyle cameraStyle;
 
   List<String> allowedTypes = <String>[];

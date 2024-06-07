@@ -31,3 +31,9 @@ part 'ui/widget/asset_widget.dart';
 part 'ui/widget/directory_widget.dart';
 part 'utils/assets_service.dart';
 part 'utils/data_store.dart';
+
+/// plugin data store
+late DataStore dataStore;
+
+/// plugin assets service
+late AssetsService assetsService;

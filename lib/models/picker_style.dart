@@ -2,39 +2,87 @@ import 'package:flutter/material.dart';
 
 import 'close_alert_style.dart';
 
+/// Picker style
 class PickerStyle {
+  /// Sheet Border radius
   final BorderRadius borderRadius;
+
+  /// Items border radius
   final BorderRadius itemsBorderRadius;
+
+  /// Background color
   final Color backgroundColor;
+
+  /// Text color
   final Color textColor;
+
+  /// Select icon background color
   final Color selectIconBackgroundColor;
+
+  /// Select icon border
   final Border selectIconBorder;
+
+  /// Select icon
   final Widget selectIcon;
 
+  /// Camera icon
   final Widget cameraIcon;
+
+  /// Is need drag indicator
   final bool isNeedDragIndicator;
+
+  /// Drag indicator color
   final Color dragIndicatorColor;
+
+  /// Main padding
   final EdgeInsets mainPadding;
+
+  /// Shimmer base color
   final Color shimmerBaseColor;
+
+  /// Shimmer highlight color
   final Color shimmerHighlightColor;
+
+  /// Divider color
   final Color dividerColor;
+
+  /// Select icon alignment
   final Alignment selectIconAlignment;
 
+  /// Selected folder decoration
   final BoxDecoration selectedFolderDecoration;
+
+  ///  Unselected folder decoration
   final BoxDecoration unselectedFolderDecoration;
+
+  /// Camera container decoration
   final BoxDecoration cameraContainerDecoration;
+
+  ///  Selected folder text color
   final Color selectedFolderTextColor;
+
+  /// Unselected folder text color
   final Color unselectedFolderTextColor;
+
+  /// Close alert style
   final CloseAlertStyle _closeAlertStyle;
 
+  /// Close alert style
   CloseAlertStyle get closeAlertStyle => _closeAlertStyle;
 
   /// A function that returns a boolean value from your custom alert dialog.
   final bool Function()? showCustomAlert;
+
+  /// Complete widget for the picker (shown at the bottom of the picker when the user has selected media)
   final Widget? completeWidget;
+
+  /// Type selection widget for the picker (shown at the bottom of the picker when the user dont selected media)
   final Widget? typeSelectionWidget;
+
+  /// Bottom padding
   final double bottomPadding;
 
+  /// Picker style
   PickerStyle({
     this.borderRadius = const BorderRadius.all(Radius.circular(10)),
     this.backgroundColor = Colors.white,

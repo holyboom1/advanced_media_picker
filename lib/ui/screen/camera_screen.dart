@@ -41,7 +41,8 @@ class _CameraScreenState extends State<CameraScreen> {
     }
   }
 
-  Future<void> navigateToMediaScreen(String filePath, [bool? isLimitReached]) async {
+  Future<void> navigateToMediaScreen(String filePath,
+      [bool? isLimitReached]) async {
     await Navigator.push(
       context,
       MaterialPageRoute<void>(
@@ -82,7 +83,8 @@ class _CameraScreenState extends State<CameraScreen> {
     }
     if (dataStore.cameraController != null) {
       if (dataStore.isRecording.value) {
-        final XFile file = await dataStore.cameraController!.stopVideoRecording();
+        final XFile file =
+            await dataStore.cameraController!.stopVideoRecording();
         dataStore.isRecording.value = false;
         dataStore.selectedAssets.addAsset(AssetModel.fromXFile(file));
       } else {
@@ -95,10 +97,12 @@ class _CameraScreenState extends State<CameraScreen> {
   void flipCamera() {
     if (dataStore.cameraController != null) {
       dataStore.isCameraReady.value = false;
-      if (dataStore.cameraController!.description.lensDirection == CameraLensDirection.front) {
+      if (dataStore.cameraController!.description.lensDirection ==
+          CameraLensDirection.front) {
         dataStore.cameraController = CameraController(
           dataStore.cameras.firstWhere(
-            (CameraDescription element) => element.lensDirection == CameraLensDirection.back,
+            (CameraDescription element) =>
+                element.lensDirection == CameraLensDirection.back,
           ),
           ResolutionPreset.medium,
         )..initialize().then((_) {
@@ -107,7 +111,8 @@ class _CameraScreenState extends State<CameraScreen> {
       } else {
         dataStore.cameraController = CameraController(
           dataStore.cameras.firstWhere(
-            (CameraDescription element) => element.lensDirection == CameraLensDirection.front,
+            (CameraDescription element) =>
+                element.lensDirection == CameraLensDirection.front,
           ),
           ResolutionPreset.medium,
         )..initialize().then((_) {
@@ -136,10 +141,12 @@ class _CameraScreenState extends State<CameraScreen> {
           ),
           ValueListenableBuilder<List<AssetModel>>(
             valueListenable: dataStore.selectedAssets,
-            builder: (BuildContext context, List<AssetModel> value, Widget? child) {
+            builder:
+                (BuildContext context, List<AssetModel> value, Widget? child) {
               return GestureDetector(
                 onTap: () {
-                  dataStore.isPreviewOpen.value = !dataStore.isPreviewOpen.value;
+                  dataStore.isPreviewOpen.value =
+                      !dataStore.isPreviewOpen.value;
                   setState(() {});
                 },
                 child: Align(
@@ -149,7 +156,8 @@ class _CameraScreenState extends State<CameraScreen> {
                     child: Visibility(
                       visible: dataStore.selectedAssets.value.isNotEmpty,
                       child: MediaPreviewControlButton(
-                        countValue: dataStore.selectedAssets.value.length.toString(),
+                        countValue:
+                            dataStore.selectedAssets.value.length.toString(),
                       ),
                     ),
                   ),
@@ -183,7 +191,9 @@ class _CameraScreenState extends State<CameraScreen> {
                         onTap: takePicture,
                         onLongPress: takeVideo,
                         child: Icon(
-                          isRecordingValue ? Icons.stop : Icons.fiber_manual_record,
+                          isRecordingValue
+                              ? Icons.stop
+                              : Icons.fiber_manual_record,
                           color: isRecordingValue ? Colors.red : Colors.white,
                           size: 90,
                         ),
@@ -193,7 +203,8 @@ class _CameraScreenState extends State<CameraScreen> {
                 ),
                 ValueListenableBuilder<List<AssetModel>>(
                   valueListenable: dataStore.selectedAssets,
-                  builder: (BuildContext context, List<AssetModel> value, Widget? child) {
+                  builder: (BuildContext context, List<AssetModel> value,
+                      Widget? child) {
                     return value.isNotEmpty
                         ? GestureDetector(
                             onTap: () {
@@ -201,7 +212,8 @@ class _CameraScreenState extends State<CameraScreen> {
                               Navigator.of(context).pop();
                             },
                             child: Padding(
-                              padding: dataStore.cameraStyle.finishButtonPadding,
+                              padding:
+                                  dataStore.cameraStyle.finishButtonPadding,
                               child: Text(
                                 dataStore.cameraStyle.finishButtonTitle,
                                 style: dataStore.cameraStyle.finishButtonStyle,

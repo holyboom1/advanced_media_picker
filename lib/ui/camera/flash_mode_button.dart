@@ -1,9 +1,11 @@
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 
-import '../../advanced_media_picker.dart';
+import '../../advanced_media_picker_impl.dart';
 
+/// Flash mode button
 class FlashModeButton extends StatefulWidget {
+  /// Constructor
   const FlashModeButton({super.key});
 
   @override

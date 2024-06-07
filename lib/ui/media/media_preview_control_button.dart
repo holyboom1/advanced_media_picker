@@ -23,7 +23,8 @@ class MediaPreviewControlButton extends StatelessWidget {
       ),
       child: AnimatedSwitcher(
         duration: const Duration(milliseconds: 300),
-        transitionBuilder: (Widget child, Animation<double> animation) => ScaleTransition(
+        transitionBuilder: (Widget child, Animation<double> animation) =>
+            ScaleTransition(
           scale: animation,
           child: child,
         ),

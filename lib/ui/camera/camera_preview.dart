@@ -3,9 +3,11 @@ import 'dart:async';
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 
-import '../../advanced_media_picker.dart';
+import '../../advanced_media_picker_impl.dart';
 
+/// Camera preview widget
 class CameraPreviewWidget extends StatefulWidget {
+  /// Constructor
   const CameraPreviewWidget({super.key});
 
   @override
@@ -41,7 +43,8 @@ class _CameraPreviewWidgetState extends State<CameraPreviewWidget> {
   double focusX = 0;
   double focusY = 0;
 
-  Future<void> onZoom(double scale) async {
+  Future<void> onZoom(double newScale) async {
+    double scale = newScale;
     if (dataStore.cameraController != null) {
       final double maxZoom = await dataStore.cameraController!.getMaxZoomLevel();
       final double minZoom = await dataStore.cameraController!.getMinZoomLevel();

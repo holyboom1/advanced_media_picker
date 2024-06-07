@@ -1,13 +1,26 @@
 part of '../advanced_media_picker_impl.dart';
 
+/// Picker asset type
 enum PickerAssetType {
+  /// All assets
   other,
+
+  /// All assets
   all,
+
+  /// Image assets
   image,
+
+  /// Video assets
   imageAndVideo,
+
+  /// Audio assets
   video,
+
+  /// Audio assets
   audio;
 
+  /// Create picker asset type from request type
   static PickerAssetType fromRequestType(RequestType value) {
     switch (value) {
       case RequestType.image:
@@ -23,6 +36,7 @@ enum PickerAssetType {
     }
   }
 
+  /// Get request type
   RequestType get toRequestType {
     switch (this) {
       case PickerAssetType.image:

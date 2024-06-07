@@ -9,7 +9,8 @@ class MediaPreviewList extends StatelessWidget {
   Widget build(BuildContext context) {
     return ValueListenableBuilder<List<AssetModel>>(
       valueListenable: dataStore.selectedAssets,
-      builder: (BuildContext context, List<AssetModel> assetsValue, Widget? child) {
+      builder:
+          (BuildContext context, List<AssetModel> assetsValue, Widget? child) {
         return ValueListenableBuilder<bool>(
           valueListenable: dataStore.isPreviewOpen,
           builder: (BuildContext context, bool isShow, Widget? child) {
@@ -37,7 +38,8 @@ class MediaPreviewList extends StatelessWidget {
                             MaterialPageRoute<void>(
                               builder: (BuildContext context) {
                                 return MediaScreen(
-                                  filePath: dataStore.selectedAssets.value[index].file.path,
+                                  filePath: dataStore
+                                      .selectedAssets.value[index].file.path,
                                   isMediaFromPreview: true,
                                 );
                               },
@@ -45,8 +47,8 @@ class MediaPreviewList extends StatelessWidget {
                           );
                         },
                         onDelete: () {
-                          dataStore.selectedAssets
-                              .removeAsset(dataStore.selectedAssets.value[index]);
+                          dataStore.selectedAssets.removeAsset(
+                              dataStore.selectedAssets.value[index]);
                         },
                         path: dataStore.selectedAssets.value.isNotEmpty
                             ? dataStore.selectedAssets.value[index].file.path
