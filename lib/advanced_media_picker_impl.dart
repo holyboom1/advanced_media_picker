@@ -2,16 +2,21 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:camera/camera.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_sticky_header/flutter_sticky_header.dart';
 import 'package:photo_manager/photo_manager.dart';
 import 'package:photo_manager_image_provider/photo_manager_image_provider.dart';
+import 'package:collection/collection.dart';
 
 import 'advanced_media_picker.dart';
+import 'models/asset_model.dart';
+import 'models/picker_controller.dart';
 import 'ui/camera/camera_preview.dart';
 import 'ui/camera/flash_mode_button.dart';
 import 'ui/media/media_preview.dart';
+import 'ui/widget/complete_widget.dart';
 import 'ui/widget/shimmer.dart';
 import 'utils/extensions.dart';
 import 'utils/video_file_formatter.dart';
@@ -30,6 +35,3 @@ part 'ui/screen/picker_bottom_sheet.dart';
 part 'utils/data_store.dart';
 
 part 'utils/assets_service.dart';
-
-final DataStore dataStore = DataStore();
-final AssetsService assetsService = AssetsService();

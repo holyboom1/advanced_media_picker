@@ -31,6 +31,9 @@ class PickerStyle {
 
   /// A function that returns a boolean value from your custom alert dialog.
   final bool Function()? showCustomAlert;
+  final Widget? completeWidget;
+  final Widget? typeSelectionWidget;
+  final double bottomPadding;
 
   PickerStyle({
     this.borderRadius = const BorderRadius.all(Radius.circular(10)),
@@ -71,8 +74,11 @@ class PickerStyle {
       Icons.camera_alt,
       color: Colors.white,
     ),
+    this.completeWidget,
     CloseAlertStyle? closeAlertStyle,
     this.showCustomAlert,
+    this.typeSelectionWidget,
+    this.bottomPadding = 0,
   }) : _closeAlertStyle = closeAlertStyle ??
             CloseAlertStyle(
               title: 'Close',

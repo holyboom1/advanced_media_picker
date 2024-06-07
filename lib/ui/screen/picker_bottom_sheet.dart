@@ -1,30 +1,29 @@
 part of '../../advanced_media_picker_impl.dart';
 
 class PickerBottomSheet extends StatefulWidget {
-  const PickerBottomSheet({super.key});
+  final PickerController? controller;
+  const PickerBottomSheet({
+    super.key,
+    this.controller,
+  });
 
   @override
   State<PickerBottomSheet> createState() => _PickerBottomSheetState();
 }
 
 class _PickerBottomSheetState extends State<PickerBottomSheet> {
-  final GlobalKey<State<StatefulWidget>> _sheet = GlobalKey();
-  final DraggableScrollableController _controller = DraggableScrollableController();
-  final double _initialChildSize = 0.5;
-
   @override
   void initState() {
     super.initState();
-    _controller.addListener(_onChanged);
+    dataStore.pickerController.addListener(_onChanged);
   }
 
   bool isNeedToShowDirectories = false;
   bool isPopped = false;
-  bool _isAlertOpen = false;
 
   void _onChanged() {
-    final double currentSize = _controller.size;
-    if (_controller.size > 0.7) {
+    final double currentSize = dataStore.pickerController.size;
+    if (dataStore.pickerController.size > 0.7) {
       setState(() {
         isNeedToShowDirectories = true;
       });
@@ -35,51 +34,23 @@ class _PickerBottomSheetState extends State<PickerBottomSheet> {
     }
 
     if (currentSize < 0.3 && dataStore.selectedAssets.value.isNotEmpty) {
-      _hide();
+      dataStore.pickerController.tryToHide();
     }
 
-    if (_controller.size <= 0.01 && !isPopped) {
+    if (dataStore.pickerController.size <= 0.01 && !isPopped) {
       isPopped = true;
       Navigator.pop(context);
     }
   }
 
-  Future<void> _hide() async {
-    if (dataStore.selectedAssets.value.isNotEmpty) {
-      if (!_isAlertOpen) {
-        _isAlertOpen = true;
-        unawaited(_animateSheet(0.3));
-        final bool isClose = dataStore.style.showCustomAlert?.call() ??
-            await showCloseAlertDialog(
-              style: dataStore.style.closeAlertStyle,
-              context: context,
-            );
-        if (!isClose) {
-          unawaited(_animateSheet(_initialChildSize));
-        }
-
-        _isAlertOpen = false;
-      }
-    } else {
-      await _animateSheet(sheet.minChildSize);
-    }
-  }
-
-  Future<void> _animateSheet(double size) async {
-    await _controller.animateTo(
-      size,
-      duration: const Duration(milliseconds: 50),
-      curve: Curves.easeInOut,
-    );
-  }
-
   @override
   void dispose() {
     super.dispose();
-    _controller.dispose();
+    dataStore.pickerController.dispose();
   }
 
-  DraggableScrollableSheet get sheet => _sheet.currentWidget! as DraggableScrollableSheet;
+  DraggableScrollableSheet get sheet =>
+      dataStore.pickerController.sheet.currentWidget! as DraggableScrollableSheet;
 
   @override
   Widget build(BuildContext context) {
@@ -87,15 +58,16 @@ class _PickerBottomSheetState extends State<PickerBottomSheet> {
       builder: (BuildContext context, BoxConstraints constraints) {
         return DraggableScrollableSheet(
           shouldCloseOnMinExtent: false,
-          key: _sheet,
-          maxChildSize: 0.9,
-          minChildSize: 0,
-          initialChildSize: _initialChildSize,
+          key: dataStore.pickerController.sheet,
+          maxChildSize: dataStore.pickerController.maxChildSize,
+          minChildSize: dataStore.pickerController.minChildSize,
+          initialChildSize: dataStore.pickerController.initialChildSize,
           snapSizes: <double>[
             60 / constraints.maxHeight,
             0.5,
+            ...dataStore.pickerController.snap,
           ],
-          controller: _controller,
+          controller: dataStore.pickerController,
           builder: (BuildContext context, ScrollController scrollController) {
             return Material(
               color: Colors.transparent,
@@ -107,72 +79,85 @@ class _PickerBottomSheetState extends State<PickerBottomSheet> {
                     topRight: dataStore.style.borderRadius.topRight,
                   ),
                 ),
-                child: CustomScrollView(
-                  controller: scrollController,
-                  slivers: <Widget>[
-                    SliverStickyHeader(
-                      header: Container(
-                        color: dataStore.style.backgroundColor,
-                        child: Column(
-                          children: <Widget>[
-                            if (dataStore.style.isNeedDragIndicator)
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
+                child: Stack(
+                  children: <Widget>[
+                    Padding(
+                      padding: EdgeInsets.only(
+                        bottom: dataStore.style.bottomPadding,
+                      ),
+                      child: CustomScrollView(
+                        controller: scrollController,
+                        slivers: <Widget>[
+                          SliverStickyHeader(
+                            header: Container(
+                              color: dataStore.style.backgroundColor,
+                              child: Column(
                                 children: <Widget>[
-                                  Container(
-                                    width: 40,
-                                    height: 4,
-                                    margin: const EdgeInsets.only(top: 8, bottom: 8),
-                                    decoration: BoxDecoration(
-                                      color: dataStore.style.dragIndicatorColor,
-                                      borderRadius: BorderRadius.circular(2),
+                                  if (dataStore.style.isNeedDragIndicator)
+                                    Row(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: <Widget>[
+                                        Container(
+                                          width: 40,
+                                          height: 4,
+                                          margin: const EdgeInsets.only(top: 8, bottom: 8),
+                                          decoration: BoxDecoration(
+                                            color: dataStore.style.dragIndicatorColor,
+                                            borderRadius: BorderRadius.circular(2),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  AnimatedOpacity(
+                                    duration: kThemeAnimationDuration,
+                                    opacity: isNeedToShowDirectories ? 1 : 0,
+                                    child: AnimatedSize(
+                                      duration: kThemeAnimationDuration,
+                                      child: Container(
+                                        padding: const EdgeInsets.symmetric(vertical: 8),
+                                        margin: const EdgeInsets.only(bottom: 8),
+                                        height: isNeedToShowDirectories ? 100 : 0,
+                                        width: double.infinity,
+                                        decoration: BoxDecoration(
+                                          color: dataStore.style.backgroundColor,
+                                          border: isNeedToShowDirectories
+                                              ? Border(
+                                                  bottom: BorderSide(
+                                                    color: dataStore.style.dividerColor,
+                                                    width: 0.5,
+                                                  ),
+                                                )
+                                              : null,
+                                        ),
+                                        child: ListView(
+                                          padding: EdgeInsets.zero,
+                                          scrollDirection: Axis.horizontal,
+                                          children: dataStore.availablePath.value.map(
+                                            (AssetPathEntity e) {
+                                              return DirectoryWidget(
+                                                key: ValueKey<String>(e.id),
+                                                path: e,
+                                              );
+                                            },
+                                          ).toList(),
+                                        ),
+                                      ),
                                     ),
                                   ),
                                 ],
                               ),
-                            AnimatedOpacity(
-                              duration: kThemeAnimationDuration,
-                              opacity: isNeedToShowDirectories ? 1 : 0,
-                              child: AnimatedSize(
-                                duration: kThemeAnimationDuration,
-                                child: Container(
-                                  padding: const EdgeInsets.symmetric(vertical: 8),
-                                  margin: const EdgeInsets.only(bottom: 8),
-                                  height: isNeedToShowDirectories ? 100 : 0,
-                                  width: double.infinity,
-                                  decoration: BoxDecoration(
-                                    color: dataStore.style.backgroundColor,
-                                    border: isNeedToShowDirectories
-                                        ? Border(
-                                            bottom: BorderSide(
-                                              color: dataStore.style.dividerColor,
-                                              width: 0.5,
-                                            ),
-                                          )
-                                        : null,
-                                  ),
-                                  child: ListView(
-                                    padding: EdgeInsets.zero,
-                                    scrollDirection: Axis.horizontal,
-                                    children: dataStore.availablePath.value.map(
-                                      (AssetPathEntity e) {
-                                        return DirectoryWidget(
-                                          key: ValueKey<String>(e.id),
-                                          path: e,
-                                        );
-                                      },
-                                    ).toList(),
-                                  ),
-                                ),
-                              ),
                             ),
-                          ],
-                        ),
+                            sliver: SliverPadding(
+                              padding: dataStore.style.mainPadding,
+                              sliver: const ContentView(),
+                            ),
+                          ),
+                        ],
                       ),
-                      sliver: SliverPadding(
-                        padding: dataStore.style.mainPadding,
-                        sliver: const ContentView(),
-                      ),
+                    ),
+                    const Positioned(
+                      bottom: 0,
+                      child: CompleteWidget(),
                     ),
                   ],
                 ),

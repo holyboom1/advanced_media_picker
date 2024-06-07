@@ -3,12 +3,11 @@ import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
-import '../../models/camera_style.dart';
+import '../../advanced_media_picker.dart';
 import '../../utils/extensions.dart';
 import '../../utils/video_file_formatter.dart';
 
 class MediaPreview extends StatefulWidget {
-  final CameraStyle style;
   final String path;
   final VoidCallback onTap;
   final VoidCallback? onDelete;
@@ -16,7 +15,6 @@ class MediaPreview extends StatefulWidget {
   final bool isSelected;
 
   const MediaPreview({
-    required this.style,
     required this.path,
     required this.onTap,
     this.onDelete,
@@ -85,8 +83,8 @@ class _MediaPreviewState extends State<MediaPreview> {
                   border: Border.all(color: Colors.white, width: 2),
                 ),
                 child: widget.isSelected
-                    ? widget.style.cameraSelectedMediaButton
-                    : widget.style.cameraDeleteMediaButton,
+                    ? dataStore.cameraStyle.cameraSelectedMediaButton
+                    : dataStore.cameraStyle.cameraDeleteMediaButton,
               ),
             ),
           ),
@@ -94,7 +92,7 @@ class _MediaPreviewState extends State<MediaPreview> {
             Positioned(
               bottom: 4,
               left: 6,
-              child: widget.style.cameraIcon,
+              child: dataStore.cameraStyle.videoIcon,
             ),
         ],
       ),

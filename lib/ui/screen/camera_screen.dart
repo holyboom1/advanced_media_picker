@@ -46,7 +46,6 @@ class _CameraScreenState extends State<CameraScreen> {
       context,
       MaterialPageRoute<void>(
         builder: (BuildContext context) => MediaScreen(
-          style: dataStore.cameraStyle,
           filePath: filePath,
           isLimitReached: isLimitReached ?? false,
         ),
@@ -56,7 +55,7 @@ class _CameraScreenState extends State<CameraScreen> {
 
   Future<void> takePicture() async {
     if (dataStore.limitToSelection != -1 &&
-        dataStore.capturedAssets.value.length >= dataStore.limitToSelection) {
+        dataStore.selectedAssets.value.length >= dataStore.limitToSelection) {
       return;
     }
     final XFile file;
@@ -66,38 +65,26 @@ class _CameraScreenState extends State<CameraScreen> {
       file = await dataStore.cameraController!.stopVideoRecording();
       dataStore.isRecording.value = false;
     }
-
-    dataStore.capturedAssets.value = <XFile>[
-      ...dataStore.capturedAssets.value,
-      file,
-    ];
-
-    if (dataStore.capturedAssets.value.length == 1) {
+    dataStore.selectedAssets.addAsset(AssetModel.fromXFile(file));
+    if (dataStore.selectedAssets.value.length == 1) {
       await navigateToMediaScreen(file.path);
     }
 
-    if (dataStore.capturedAssets.value.length >= dataStore.limitToSelection) {
+    if (dataStore.selectedAssets.value.length >= dataStore.limitToSelection) {
       await navigateToMediaScreen(file.path, true);
     }
   }
 
   Future<void> takeVideo() async {
     if (dataStore.limitToSelection != -1 &&
-        dataStore.capturedAssets.value.length >= dataStore.limitToSelection) {
+        dataStore.selectedAssets.value.length >= dataStore.limitToSelection) {
       return;
     }
     if (dataStore.cameraController != null) {
       if (dataStore.isRecording.value) {
         final XFile file = await dataStore.cameraController!.stopVideoRecording();
         dataStore.isRecording.value = false;
-        dataStore.capturedAssets.value = <XFile>[
-          ...dataStore.capturedAssets.value,
-          file,
-        ];
-        dataStore.capturedAssets.value = <XFile>[
-          ...dataStore.capturedAssets.value,
-          file,
-        ];
+        dataStore.selectedAssets.addAsset(AssetModel.fromXFile(file));
       } else {
         dataStore.isRecording.value = true;
         await dataStore.cameraController!.startVideoRecording();
@@ -143,12 +130,7 @@ class _CameraScreenState extends State<CameraScreen> {
       child: Stack(
         children: <Widget>[
           const CameraPreviewWidget(),
-          MediaPreviewList(
-            style: dataStore.cameraStyle,
-            onTap: () {
-              dataStore.isPreviewOpen.value = !dataStore.isPreviewOpen.value;
-            },
-          ),
+          MediaPreviewList(),
           ValueListenableBuilder<bool>(
             valueListenable: dataStore.isCameraReady,
             builder: (BuildContext context, bool value, Widget? child) {
@@ -158,22 +140,22 @@ class _CameraScreenState extends State<CameraScreen> {
               return Container();
             },
           ),
-          ValueListenableBuilder<List<XFile>>(
-            valueListenable: dataStore.capturedAssets,
-            builder: (BuildContext context, List<XFile> value, Widget? child) {
+          ValueListenableBuilder<List<AssetModel>>(
+            valueListenable: dataStore.selectedAssets,
+            builder: (BuildContext context, List<AssetModel> value, Widget? child) {
               return GestureDetector(
                 onTap: () {
                   setState(() {});
-                  dataStore.isPreviewOpen.value = dataStore.isPreviewOpen.value;
+                  dataStore.isPreviewOpen.value = !dataStore.isPreviewOpen.value;
                 },
                 child: Align(
                   alignment: Alignment.bottomRight,
                   child: Padding(
                     padding: const EdgeInsets.only(bottom: 120, right: 20),
                     child: Visibility(
-                      visible: dataStore.capturedAssets.value.isNotEmpty,
+                      visible: dataStore.selectedAssets.value.isNotEmpty,
                       child: MediaPreviewControlButton(
-                        countValue: dataStore.capturedAssets.value.length.toString(),
+                        countValue: dataStore.selectedAssets.value.length.toString(),
                       ),
                     ),
                   ),
@@ -215,9 +197,9 @@ class _CameraScreenState extends State<CameraScreen> {
                     },
                   ),
                 ),
-                ValueListenableBuilder<List<XFile>>(
-                  valueListenable: dataStore.capturedAssets,
-                  builder: (BuildContext context, List<XFile> value, Widget? child) {
+                ValueListenableBuilder<List<AssetModel>>(
+                  valueListenable: dataStore.selectedAssets,
+                  builder: (BuildContext context, List<AssetModel> value, Widget? child) {
                     return value.isNotEmpty
                         ? GestureDetector(
                             onTap: () {
@@ -225,23 +207,16 @@ class _CameraScreenState extends State<CameraScreen> {
                               assetsService.onClose();
                               Navigator.of(context).popUntil((Route route) => route.isFirst);
                             },
-                            child: const Padding(
-                              padding: EdgeInsets.only(bottom: 8.0),
+                            child: Padding(
+                              padding: dataStore.cameraStyle.finishButtonPadding,
                               child: Text(
-                                'Done',
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 16.0,
-                                  fontWeight: FontWeight.w700,
-                                ),
+                                dataStore.cameraStyle.finishButtonTitle,
+                                style: dataStore.cameraStyle.finishButtonStyle,
                               ),
                             ),
                           )
                         : IconButton(
-                            icon: const Icon(
-                              Icons.flip_camera_ios,
-                              color: Colors.white,
-                            ),
+                            icon: dataStore.cameraStyle.flipCameraIcon,
                             onPressed: flipCamera,
                           );
                   },

@@ -2,20 +2,17 @@ import 'package:flutter/material.dart';
 
 class CameraStyle {
   final Widget cameraCloseIcon;
-
   final Widget takePictureIcon;
-
   final Widget chooseCameraIcon;
-
   final Widget cameraBackButton;
-
   final Widget cameraAddMediaButton;
-
   final Widget cameraDeleteMediaButton;
-
   final Widget cameraSelectedMediaButton;
-
-  final Widget cameraIcon;
+  final Widget videoIcon;
+  final Widget flipCameraIcon;
+  final String finishButtonTitle;
+  final TextStyle finishButtonStyle;
+  final EdgeInsets finishButtonPadding;
 
   CameraStyle({
     this.cameraCloseIcon = const Icon(
@@ -46,9 +43,20 @@ class CameraStyle {
       Icons.done,
       color: Colors.white,
     ),
-    this.cameraIcon = const Icon(
+    this.videoIcon = const Icon(
       Icons.video_call_rounded,
       color: Colors.white,
     ),
+    this.flipCameraIcon = const Icon(
+      Icons.flip_camera_ios,
+      color: Colors.white,
+    ),
+    this.finishButtonTitle = 'Done',
+    this.finishButtonStyle = const TextStyle(
+      color: Colors.white,
+      fontSize: 16.0,
+      fontWeight: FontWeight.w700,
+    ),
+    this.finishButtonPadding = const EdgeInsets.only(bottom: 8.0),
   });
 }

@@ -1,9 +1,18 @@
 part of '../advanced_media_picker_impl.dart';
 
-class DataStore {
-  PickerStyle style = PickerStyle();
-  CameraStyle cameraStyle = CameraStyle();
+final class DataStore {
+  DataStore({
+    required this.style,
+    required this.cameraStyle,
+    required this.pickerController,
+  });
 
+  final Completer<List<XFile>> mainCompleter = Completer<List<XFile>>();
+  final PickerController pickerController;
+  final PickerStyle style;
+  final CameraStyle cameraStyle;
+
+  List<String> allowedTypes = <String>[];
   final int sizePerPage = 20;
 
   Map<String, int> totalEntitiesCount = <String, int>{};
@@ -15,13 +24,13 @@ class DataStore {
       ValueNotifier<List<AssetPathEntity>>(<AssetPathEntity>[]);
   Map<String, ValueNotifier<List<AssetEntity>>> pathData =
       <String, ValueNotifier<List<AssetEntity>>>{};
-  ValueNotifier<List<AssetEntity>> selectedAssets =
-      ValueNotifier<List<AssetEntity>>(<AssetEntity>[]);
+  ValueNotifier<List<AssetModel>> selectedAssets = ValueNotifier<List<AssetModel>>(<AssetModel>[]);
 
   int limitToSelection = -1;
   int maxVideoDuration = -1;
   bool isNeedToShowCamera = true;
   bool isNeedToTakeVideo = true;
+  bool isNeedToShowFolders = true;
 
   ValueNotifier<FlashMode> flashModeNotifier = ValueNotifier<FlashMode>(FlashMode.off);
   CameraController? cameraController;
@@ -30,5 +39,4 @@ class DataStore {
   ValueNotifier<bool> isPreviewOpen = ValueNotifier<bool>(false);
 
   List<CameraDescription> cameras = <CameraDescription>[];
-  ValueNotifier<List<XFile>> capturedAssets = ValueNotifier<List<XFile>>(<XFile>[]);
 }

@@ -3,36 +3,29 @@ part of '../advanced_media_picker_impl.dart';
 class AssetsService {
   final FilterOptionGroup _filterOptionGroup = FilterOptionGroup();
 
-  Future<List<XFile>> onClose() async {
-    final Completer<List<XFile>> completer = Completer<List<XFile>>();
-
-    final List<XFile> assets = <XFile>[
-      ...dataStore.capturedAssets.value,
-    ];
-
-    await Future.forEach(dataStore.selectedAssets.value, (AssetEntity element) async {
-      final File? file = await element.file;
-      if (file != null) {
-        assets.add(XFile(file.path));
-      }
+  Future<void> onClose() async {
+    final List<XFile> assets = <XFile>[];
+    unawaited(dataStore.pickerController.hide());
+    dataStore.selectedAssets.value.forEach((AssetModel element) {
+      assets.add(element.file);
     });
     dataStore.selectedAssets.value.clear();
     dataStore.availablePath.value.clear();
-    dataStore.capturedAssets.value.clear();
-    completer.complete(assets);
-    return completer.future;
+
+    dataStore.mainCompleter.complete(assets);
   }
 
-  void onOnSelectAsset(AssetEntity asset) {
-    if (dataStore.selectedAssets.value.contains(asset)) {
-      dataStore.selectedAssets.value = <AssetEntity>[...dataStore.selectedAssets.value]
-        ..remove(asset);
+  Future<void> onOnSelectAsset(AssetEntity asset) async {
+    final bool isContain = dataStore.selectedAssets.value.containsAsset(asset);
+
+    if (isContain) {
+      dataStore.selectedAssets.removeAsset(await AssetModel.fromAssetEntity(asset));
     } else {
       if (dataStore.limitToSelection != -1 &&
           dataStore.selectedAssets.value.length >= dataStore.limitToSelection) {
         return;
       }
-      dataStore.selectedAssets.value = <AssetEntity>[...dataStore.selectedAssets.value, asset];
+      dataStore.selectedAssets.addAsset(await AssetModel.fromAssetEntity(asset));
     }
   }
 

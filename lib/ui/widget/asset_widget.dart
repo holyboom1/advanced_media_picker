@@ -16,7 +16,7 @@ class AssetWidget extends StatelessWidget {
         clipBehavior: Clip.hardEdge,
         decoration: BoxDecoration(
           borderRadius: dataStore.style.itemsBorderRadius,
-          color: dataStore.selectedAssets.value.contains(asset)
+          color: dataStore.selectedAssets.value.containsAsset(asset)
               ? Colors.blue.withOpacity(0.5)
               : Colors.transparent,
         ),
@@ -40,9 +40,9 @@ class AssetWidget extends StatelessWidget {
                 },
               ),
             ),
-            ValueListenableBuilder<List<AssetEntity>>(
+            ValueListenableBuilder<List<AssetModel>>(
               valueListenable: dataStore.selectedAssets,
-              builder: (BuildContext context, List<AssetEntity> value, Widget? child) {
+              builder: (BuildContext context, List<AssetModel> value, Widget? child) {
                 return Align(
                   alignment: dataStore.style.selectIconAlignment,
                   child: Padding(
@@ -53,7 +53,7 @@ class AssetWidget extends StatelessWidget {
                         border: dataStore.style.selectIconBorder,
                         shape: BoxShape.circle,
                       ),
-                      child: dataStore.selectedAssets.value.contains(asset)
+                      child: dataStore.selectedAssets.value.containsAsset(asset)
                           ? dataStore.style.selectIcon
                           : const SizedBox(),
                     ),

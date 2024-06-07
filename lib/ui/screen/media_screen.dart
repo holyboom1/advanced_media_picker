@@ -3,15 +3,11 @@ part of '../../advanced_media_picker_impl.dart';
 class MediaScreen extends StatefulWidget {
   final String filePath;
   final bool isMediaFromPreview;
-  final CameraStyle style;
-  final VoidCallback? onTapFromPreview;
   final bool isLimitReached;
 
   const MediaScreen({
     required this.filePath,
     this.isMediaFromPreview = false,
-    required this.style,
-    this.onTapFromPreview,
     this.isLimitReached = false,
     super.key,
   });
@@ -88,21 +84,20 @@ class _MediaScreenState extends State<MediaScreen> {
                       padding: const EdgeInsets.symmetric(horizontal: 6),
                       child: ListView.builder(
                         scrollDirection: Axis.horizontal,
-                        itemCount: dataStore.capturedAssets.value.length,
+                        itemCount: dataStore.selectedAssets.value.length,
                         itemBuilder: (BuildContext context, int index) {
                           return MediaPreview(
-                            style: widget.style,
                             isSelected: true,
                             onSelect: () {
                               //select - deselect
                             },
                             onTap: () {
                               _isPreviewTapped.value = true;
-                              _filePath = dataStore.capturedAssets.value[index].path;
+                              _filePath = dataStore.selectedAssets.value[index].file.path;
                               setState(() {});
                             },
-                            path: dataStore.capturedAssets.value.isNotEmpty
-                                ? dataStore.capturedAssets.value[index].path
+                            path: dataStore.selectedAssets.value.isNotEmpty
+                                ? dataStore.selectedAssets.value[index].file.path
                                 : '',
                           );
                         },
@@ -119,7 +114,7 @@ class _MediaScreenState extends State<MediaScreen> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
                   widget.isLimitReached ||
-                          dataStore.capturedAssets.value.length + 1 > dataStore.limitToSelection
+                          dataStore.selectedAssets.value.length + 1 > dataStore.limitToSelection
                       ? const SizedBox.shrink()
                       : GestureDetector(
                           onTap: () {
@@ -141,7 +136,7 @@ class _MediaScreenState extends State<MediaScreen> {
                           ),
                         ),
                   widget.isMediaFromPreview ||
-                          dataStore.capturedAssets.value.length > 1 ||
+                          dataStore.selectedAssets.value.length > 1 ||
                           widget.isLimitReached
                       ? ValueListenableBuilder<bool>(
                           valueListenable: dataStore.isPreviewOpen,
@@ -155,9 +150,9 @@ class _MediaScreenState extends State<MediaScreen> {
                                 child: Padding(
                                   padding: const EdgeInsets.only(left: 8),
                                   child: Visibility(
-                                    visible: dataStore.capturedAssets.value.isNotEmpty,
+                                    visible: dataStore.selectedAssets.value.isNotEmpty,
                                     child: MediaPreviewControlButton(
-                                      countValue: dataStore.capturedAssets.value.length.toString(),
+                                      countValue: dataStore.selectedAssets.value.length.toString(),
                                     ),
                                   ),
                                 ),
@@ -198,19 +193,15 @@ class _MediaScreenState extends State<MediaScreen> {
               right: 22,
               child: GestureDetector(
                 onTap: () {
-                  dataStore.isPreviewOpen.value = false;
                   assetsService.onClose();
-                  Navigator.of(context).popUntil((Route route) => route.isFirst);
+                  Navigator.of(context).pop();
+                  Navigator.of(context).pop();
                 },
-                child: const Padding(
-                  padding: EdgeInsets.only(bottom: 8.0),
+                child: Padding(
+                  padding: dataStore.cameraStyle.finishButtonPadding,
                   child: Text(
-                    'Done',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 16.0,
-                      fontWeight: FontWeight.w700,
-                    ),
+                    dataStore.cameraStyle.finishButtonTitle,
+                    style: dataStore.cameraStyle.finishButtonStyle,
                   ),
                 ),
               ),
