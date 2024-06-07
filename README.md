@@ -144,25 +144,30 @@ final List<XFile> result =
 
 ```dart
  BorderRadius borderRadius;
-BorderRadius itemsBorderRadius;
-Color backgroundColor;
-Color textColor;
-Color selectIconBackgroundColor;
-Border selectIconBorder;
-Widget selectIcon;
-Widget cameraIcon;
-bool isNeedDragIndicator;
-Color dragIndicatorColor;
-EdgeInsets mainPadding;
-Color shimmerBaseColor;
-Color shimmerHighlightColor;
-Color dividerColor;
-Alignment selectIconAlignment;
-BoxDecoration selectedFolderDecoration;
-BoxDecoration unselectedFolderDecoration;
-BoxDecoration cameraContainerDecoration;
-Color selectedFolderTextColor;
-Color unselectedFolderTextColor;
+ BorderRadius itemsBorderRadius;
+ Color backgroundColor;
+ Color textColor;
+ Color selectIconBackgroundColor;
+ Border selectIconBorder;
+ Widget selectIcon;
+ Widget cameraIcon;
+ bool isNeedDragIndicator;
+ Color dragIndicatorColor;
+ EdgeInsets mainPadding;
+ Color shimmerBaseColor;
+ Color shimmerHighlightColor;
+ Color dividerColor;
+ Alignment selectIconAlignment;
+ BoxDecoration selectedFolderDecoration;
+ BoxDecoration unselectedFolderDecoration;
+ BoxDecoration cameraContainerDecoration;
+ Color selectedFolderTextColor;
+ Color unselectedFolderTextColor;
+/// A function that returns a boolean value from your custom alert dialog.
+ bool Function()? showCustomAlert;
+ Widget? completeWidget;
+ Widget? typeSelectionWidget;
+ double bottomPadding;
 ```
 
 - `cameraStyle`: The `CameraStyle` object to customize the camera.
@@ -171,6 +176,15 @@ Color unselectedFolderTextColor;
 Widget cameraCloseIcon;
 Widget takePictureIcon;
 Widget chooseCameraIcon;
+Widget cameraBackButton;
+Widget cameraAddMediaButton;
+Widget cameraDeleteMediaButton;
+Widget cameraSelectedMediaButton;
+Widget videoIcon;
+Widget flipCameraIcon;
+String finishButtonTitle;
+TextStyle finishButtonStyle;
+EdgeInsets finishButtonPadding;
 ```
 
 - `allowedTypes`: The `PickerAssetType` enum to allow the user to select.
@@ -186,14 +200,21 @@ enum PickerAssetType {
 }
 ```
 
-- `maxVideoDuration`: The maximum duration in seconds of the video.
-- `selectionLimit`: The maximum number of items that the user can select.
-- `showCamera`: A boolean to show the camera button.
-- `videoCamera`: A boolean to allow the user to take videos.
-
+```dart
+bool isNeedToShowCamera = true,
+bool isNeedVideoCamera = true,
+int maxVideoDuration = -1,
+List<String> fileSelectorAllowedTypes = const <String>['pdf', 'doc'],
+/// The maximum number of files that can be selected in the picker.
+/// If the value is -1, it means that there is no limit to the number of files that can be selected.
+int selectionLimit = 3,
+PickerController? controller,
+```
 ## Screenshots / Demo
 
-*
+
+https://github.com/holyboom1/flutter_tg_picker/assets/65105446/a2b25520-d176-40ec-8d13-ef2c20cdb760
+
 
 ______________________________________________
 

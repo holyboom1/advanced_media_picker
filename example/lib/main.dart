@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:advanced_media_picker/advanced_media_picker.dart';
 import 'package:flutter/material.dart';
 
@@ -25,11 +27,28 @@ class _MyAppState extends State<MyApp> {
         appBar: AppBar(
           title: const Text('Plugin example app'),
         ),
-        body: const MyButton(),
+        body: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            ValueListenableBuilder<List<XFile>>(
+              valueListenable: selectedFiles,
+              builder: (BuildContext context, List<XFile> value, Widget? child) {
+                return Column(
+                  children: value.map((XFile file) {
+                    return Text(file.path);
+                  }).toList(),
+                );
+              },
+            ),
+            const MyButton(),
+          ],
+        ),
       ),
     );
   }
 }
+
+final ValueNotifier<List<XFile>> selectedFiles = ValueNotifier<List<XFile>>(<XFile>[]);
 
 class MyButton extends StatelessWidget {
   const MyButton({super.key});
@@ -41,14 +60,15 @@ class MyButton extends StatelessWidget {
         child: const Text('Open Picker'),
         onPressed: () async {
           final List<XFile> result = await AdvancedMediaPicker.openPicker(
-              context: context,
-              style: PickerStyle(),
-              cameraStyle: CameraStyle(),
-              allowedTypes: PickerAssetType.image,
-              maxVideoDuration: 60,
-              selectionLimit: 10,
-              showCamera: true,
-              videoCamera: true);
+            context: context,
+            style: PickerStyle(),
+            cameraStyle: CameraStyle(),
+            allowedTypes: PickerAssetType.image,
+            maxVideoDuration: 60,
+            selectionLimit: 10,
+          );
+          print('#result# : ${result}');
+          selectedFiles.value = result;
         },
       ),
     );

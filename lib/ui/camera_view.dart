@@ -1,13 +1,8 @@
 part of '../advanced_media_picker_impl.dart';
 
 class CameraView extends StatefulWidget {
-  final PickerStyle style;
-  final CameraStyle? cameraStyle;
-
   const CameraView({
     super.key,
-    required this.style,
-    required this.cameraStyle,
   });
 
   @override
@@ -22,13 +17,13 @@ class _CameraViewState extends State<CameraView> {
   }
 
   Future<void> initCamera() async {
-    _cameras = await availableCameras();
-    cameraController = CameraController(
-      _cameras.first,
+    dataStore.cameras = await availableCameras();
+    dataStore.cameraController = CameraController(
+      dataStore.cameras.first,
       ResolutionPreset.medium,
     );
-    await cameraController?.initialize();
-    await cameraController?.setFocusMode(FocusMode.auto);
+    await dataStore.cameraController?.initialize();
+    await dataStore.cameraController?.setFocusMode(FocusMode.auto);
     setState(() {});
   }
 
@@ -39,10 +34,10 @@ class _CameraViewState extends State<CameraView> {
 
   @override
   Widget build(BuildContext context) {
-    if (cameraController == null) {
+    if (dataStore.cameraController == null) {
       return Container();
     }
-    if (!cameraController!.value.isInitialized) {
+    if (!dataStore.cameraController!.value.isInitialized) {
       return Container();
     }
     return GestureDetector(
@@ -64,31 +59,27 @@ class _CameraViewState extends State<CameraView> {
                     end: Offset.zero,
                   ),
                 ),
-                child: CameraScreen(
-                  style: widget.cameraStyle ?? CameraStyle(),
-                ),
+                child: const CameraScreen(),
               );
             },
             opaque: false,
             fullscreenDialog: true,
             barrierDismissible: true,
-            pageBuilder: (_, __, ___) => CameraScreen(
-              style: widget.cameraStyle ?? CameraStyle(),
-            ),
+            pageBuilder: (_, __, ___) => const CameraScreen(),
           ),
         );
       },
       child: Container(
-        decoration: widget.style.cameraContainerDecoration,
+        decoration: dataStore.style.cameraContainerDecoration,
         clipBehavior: Clip.hardEdge,
         child: Stack(
           children: <Widget>[
             Positioned.fill(
-              child: CameraPreview(cameraController!),
+              child: CameraPreview(dataStore.cameraController!),
             ),
             Positioned.fill(
               child: Center(
-                child: widget.style.cameraIcon,
+                child: dataStore.style.cameraIcon,
               ),
             ),
           ],

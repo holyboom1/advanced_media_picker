@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'close_alert_style.dart';
+
 class PickerStyle {
   final BorderRadius borderRadius;
   final BorderRadius itemsBorderRadius;
@@ -23,6 +25,15 @@ class PickerStyle {
   final BoxDecoration cameraContainerDecoration;
   final Color selectedFolderTextColor;
   final Color unselectedFolderTextColor;
+  final CloseAlertStyle _closeAlertStyle;
+
+  CloseAlertStyle get closeAlertStyle => _closeAlertStyle;
+
+  /// A function that returns a boolean value from your custom alert dialog.
+  final bool Function()? showCustomAlert;
+  final Widget? completeWidget;
+  final Widget? typeSelectionWidget;
+  final double bottomPadding;
 
   PickerStyle({
     this.borderRadius = const BorderRadius.all(Radius.circular(10)),
@@ -48,7 +59,7 @@ class PickerStyle {
       ),
     ),
     this.unselectedFolderDecoration = const BoxDecoration(
-      color: Colors.red,
+      color: Colors.grey,
       borderRadius: BorderRadius.all(
         Radius.circular(10),
       ),
@@ -63,5 +74,16 @@ class PickerStyle {
       Icons.camera_alt,
       color: Colors.white,
     ),
-  });
+    this.completeWidget,
+    CloseAlertStyle? closeAlertStyle,
+    this.showCustomAlert,
+    this.typeSelectionWidget,
+    this.bottomPadding = 0,
+  }) : _closeAlertStyle = closeAlertStyle ??
+            CloseAlertStyle(
+              title: 'Close',
+              message: 'Are you sure you want to close?',
+              positiveButtonText: 'Yes',
+              negativeButtonText: 'No',
+            );
 }
