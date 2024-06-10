@@ -139,32 +139,7 @@ class _CameraScreenState extends State<CameraScreen> {
               return Container();
             },
           ),
-          ValueListenableBuilder<List<AssetModel>>(
-            valueListenable: dataStore.selectedAssets,
-            builder:
-                (BuildContext context, List<AssetModel> value, Widget? child) {
-              return GestureDetector(
-                onTap: () {
-                  dataStore.isPreviewOpen.value =
-                      !dataStore.isPreviewOpen.value;
-                  setState(() {});
-                },
-                child: Align(
-                  alignment: Alignment.bottomRight,
-                  child: Padding(
-                    padding: const EdgeInsets.only(bottom: 120, right: 20),
-                    child: Visibility(
-                      visible: dataStore.selectedAssets.value.isNotEmpty,
-                      child: MediaPreviewControlButton(
-                        countValue:
-                            dataStore.selectedAssets.value.length.toString(),
-                      ),
-                    ),
-                  ),
-                ),
-              );
-            },
-          ),
+          const SelectedAssetsCount(),
           Positioned(
             bottom: 42,
             left: 0,
@@ -201,30 +176,9 @@ class _CameraScreenState extends State<CameraScreen> {
                     },
                   ),
                 ),
-                ValueListenableBuilder<List<AssetModel>>(
-                  valueListenable: dataStore.selectedAssets,
-                  builder: (BuildContext context, List<AssetModel> value,
-                      Widget? child) {
-                    return value.isNotEmpty
-                        ? GestureDetector(
-                            onTap: () {
-                              assetsService.onClose();
-                              Navigator.of(context).pop();
-                            },
-                            child: Padding(
-                              padding:
-                                  dataStore.cameraStyle.finishButtonPadding,
-                              child: Text(
-                                dataStore.cameraStyle.finishButtonTitle,
-                                style: dataStore.cameraStyle.finishButtonStyle,
-                              ),
-                            ),
-                          )
-                        : IconButton(
-                            icon: dataStore.cameraStyle.flipCameraIcon,
-                            onPressed: flipCamera,
-                          );
-                  },
+                IconButton(
+                  icon: dataStore.cameraStyle.flipCameraIcon,
+                  onPressed: flipCamera,
                 ),
               ],
             ),

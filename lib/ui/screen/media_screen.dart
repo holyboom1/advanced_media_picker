@@ -147,33 +147,9 @@ class _MediaScreenState extends State<MediaScreen> {
                   widget.isMediaFromPreview ||
                           dataStore.selectedAssets.value.length > 1 ||
                           widget.isLimitReached
-                      ? ValueListenableBuilder<bool>(
-                          valueListenable: dataStore.isPreviewOpen,
-                          builder: (BuildContext context, bool value,
-                              Widget? child) {
-                            return GestureDetector(
-                              onTap: () {
-                                dataStore.isPreviewOpen.value =
-                                    !dataStore.isPreviewOpen.value;
-                              },
-                              child: Align(
-                                alignment: Alignment.bottomRight,
-                                child: Padding(
-                                  padding: const EdgeInsets.only(left: 8),
-                                  child: Visibility(
-                                    visible: dataStore
-                                        .selectedAssets.value.isNotEmpty,
-                                    child: MediaPreviewControlButton(
-                                      countValue: dataStore
-                                          .selectedAssets.value.length
-                                          .toString(),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            );
-                          },
-                        )
+                      ?  const SelectedAssetsCount(
+                          padding: EdgeInsets.only(left: 8),
+                  )
                       : const SizedBox.shrink()
                 ],
               ),

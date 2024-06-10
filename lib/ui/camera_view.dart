@@ -17,11 +17,6 @@ class _CameraViewState extends State<CameraView> {
   }
 
   Future<void> initCamera() async {
-    dataStore.cameras = await availableCameras();
-    dataStore.cameraController = CameraController(
-      dataStore.cameras.first,
-      ResolutionPreset.medium,
-    );
     await dataStore.cameraController?.initialize();
     await dataStore.cameraController?.setFocusMode(FocusMode.auto);
     setState(() {});

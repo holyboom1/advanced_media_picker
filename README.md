@@ -1,3 +1,33 @@
+
+<p align="center">
+  <a href="https://flutter.dev">
+    <img src="https://img.shields.io/badge/Platform-Flutter-02569B?logo=flutter"
+      alt="Platform" />
+  </a>
+  <a href="https://pub.dartlang.org/packages/advanced_media_picker">
+    <img src="https://img.shields.io/pub/v/advanced_media_picker.svg"
+      alt="Pub Package" />
+  </a>
+  <a href="https://github.com/holyboom1/advanced_media_picker/issues">
+    <img src="https://img.shields.io/github/workflow/status/holyboom1/advanced_media_picker/CI?logo=github"
+      alt="Build Status" />
+  </a>
+  <br>
+  <a href="https://codecov.io/gh/holyboom1/advanced_media_picker">
+    <img src="https://codecov.io/gh/holyboom1/advanced_media_picker/branch/master/graph/badge.svg"
+      alt="Codecov Coverage" />
+  </a>
+  <a href="https://opensource.org/licenses/MIT">
+    <img src="https://img.shields.io/github/license/holyboom1/advanced_media_picker?color=red"
+      alt="License: MIT" />
+  </a>
+
+</p><br>
+
+[![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/C0C8Z5SA5)
+
+<script type='text/javascript' src='https://storage.ko-fi.com/cdn/widget/Widget_2.js'></script><script type='text/javascript'>kofiwidget2.init('Support Me on Ko-fi', '#e02828', 'C0C8Z5SA5');kofiwidget2.draw();</script> 
+
 # Advanced Media Picker
 
 #### _Advanced Media Picker Package for Flutter_
@@ -212,10 +242,7 @@ PickerController? controller,
 ```
 ## Screenshots / Demo
 
-
-https://github.com/holyboom1/flutter_tg_picker/assets/65105446/a2b25520-d176-40ec-8d13-ef2c20cdb760
-
-
+<video src="https://github.com/holyboom1/advanced_media_picker/assets/65105446/a2b25520-d176-40ec-8d13-ef2c20cdb760.mp4"></video>
 ______________________________________________
 
 ## Plugins
