@@ -239,7 +239,7 @@ PickerController? controller,
 ```
 ## Screenshots / Demo
 
-<video src="https://github.com/holyboom1/advanced_media_picker/blob/main/doc/demo.mp4"></video>
+<video width="460" height="320" controls src="https://github.com/holyboom1/advanced_media_picker/blob/main/doc/demo.mp4"></video>
 ______________________________________________
 
 ## Plugins
