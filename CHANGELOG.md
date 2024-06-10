@@ -1,3 +1,9 @@
+
+## 0.0.6
+* fix selected assets in camera mode.
+* fix camera dispose issue.
+* update Readme file.
+
 ## 0.0.5
 * fix files format
 

@@ -1,11 +1,13 @@
 import 'dart:io';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import '../../advanced_media_picker_impl.dart';
 import '../../utils/extensions.dart';
 import '../../utils/video_file_formatter.dart';
+import '../widget/shimmer.dart';
 
 class MediaPreview extends StatefulWidget {
   final String path;
@@ -27,8 +29,10 @@ class MediaPreview extends StatefulWidget {
   State<MediaPreview> createState() => _MediaPreviewState();
 }
 
+final Map<String , Widget> _bytesData = <String, Widget>{};
+
 class _MediaPreviewState extends State<MediaPreview> {
-  Uint8List? bytes;
+
   @override
   void initState() {
     super.initState();
@@ -37,9 +41,27 @@ class _MediaPreviewState extends State<MediaPreview> {
 
   Future<void> _loadAsset() async {
     if (widget.path.isVideo()) {
-      bytes = await VideoFileFormatter.getUint8List(File(widget.path));
+      final Uint8List? bytes = await VideoFileFormatter.getUint8List(File(widget.path));
+      _bytesData[widget.path] = Image.memory(
+        bytes ?? Uint8List(0),
+        fit: BoxFit.cover,
+        frameBuilder: (BuildContext context, Widget child, int? frame,
+            bool wasSynchronouslyLoaded) {
+          if(wasSynchronouslyLoaded) {
+            return child;
+          }
+          return AnimatedOpacity(
+            opacity: frame == null ? 0 : 1,
+            duration: const Duration(milliseconds: 300),
+            curve: Curves.easeOut,
+            child: child,
+          );
+        },
+      );
+      setState(() {
+
+      });
     }
-    setState(() {});
   }
 
   @override
@@ -64,9 +86,7 @@ class _MediaPreviewState extends State<MediaPreview> {
                       File(widget.path),
                       fit: BoxFit.cover,
                     )
-                  : bytes != null
-                      ? Image.memory(bytes!, fit: BoxFit.cover)
-                      : const SizedBox.shrink(),
+                  : _bytesData[widget.path] ?? const SizedBox.shrink(),
             ),
           ),
           Positioned(

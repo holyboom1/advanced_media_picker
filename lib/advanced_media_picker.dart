@@ -58,8 +58,8 @@ class AdvancedMediaPicker {
       allowedTypes: allowedTypes ?? PickerAssetType.all,
     );
 
-    try {
-      unawaited(Navigator.push(
+    unawaited(
+      Navigator.push(
         context,
         PageRouteBuilder<void>(
           barrierColor: Colors.black26,
@@ -86,8 +86,14 @@ class AdvancedMediaPicker {
             return const PickerBottomSheet();
           },
         ),
-      ));
-    } catch (_) {}
+      ).then(
+        (void _) {
+          Future<void>.delayed(const Duration(milliseconds: 300), () {
+            dataStore.cameraController?.dispose();
+          });
+        },
+      ),
+    );
 
     return dataStore.mainCompleter.future;
   }

@@ -3,7 +3,6 @@ part of '../../advanced_media_picker_impl.dart';
 class PickerBottomSheet extends StatefulWidget {
   final PickerController? controller;
 
-
   const PickerBottomSheet({
     super.key,
     this.controller,
@@ -42,7 +41,6 @@ class _PickerBottomSheetState extends State<PickerBottomSheet> {
     if (dataStore.pickerController.size <= 0.01 && !isPopped) {
       isPopped = true;
       Navigator.pop(context);
-      dataStore.cameraController?.dispose();
     }
   }
 

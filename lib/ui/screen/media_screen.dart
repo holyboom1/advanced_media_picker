@@ -147,9 +147,9 @@ class _MediaScreenState extends State<MediaScreen> {
                   widget.isMediaFromPreview ||
                           dataStore.selectedAssets.value.length > 1 ||
                           widget.isLimitReached
-                      ?  const SelectedAssetsCount(
+                      ? const SelectedAssetsCount(
                           padding: EdgeInsets.only(left: 8),
-                  )
+                        )
                       : const SizedBox.shrink()
                 ],
               ),

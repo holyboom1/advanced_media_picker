@@ -7,17 +7,7 @@ final class DataStore {
     required this.style,
     required this.cameraStyle,
     required this.pickerController,
-  }) {
-    _init();
-  }
-
-  Future<void> _init() async{
-    cameras = await availableCameras();
-    cameraController = CameraController(
-      cameras.first,
-      ResolutionPreset.medium,
-    );
-  }
+  });
 
   /// Main completer
   final Completer<List<XFile>> mainCompleter = Completer<List<XFile>>();

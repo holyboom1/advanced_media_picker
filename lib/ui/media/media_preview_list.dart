@@ -31,6 +31,9 @@ class MediaPreviewList extends StatelessWidget {
                     itemCount: assetsValue.length,
                     itemBuilder: (BuildContext context, int index) {
                       return MediaPreview(
+
+                        key: ValueKey<String>(
+                            assetsValue[index].file.path),
                         onTap: () {
                           dataStore.isPreviewOpen.value = false;
                           Navigator.push(

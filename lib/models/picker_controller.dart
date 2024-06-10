@@ -54,7 +54,7 @@ class PickerController extends DraggableScrollableController {
 
         if (!isClose) {
           unawaited(animateSheet(initialChildSize));
-        }
+        } else {}
         _isAlertOpen = false;
       }
     } else {
@@ -65,6 +65,5 @@ class PickerController extends DraggableScrollableController {
   /// Hide the sheet
   Future<void> hide() async {
     await animateSheet(0);
-    unawaited(dataStore.cameraController?.dispose());
   }
 }

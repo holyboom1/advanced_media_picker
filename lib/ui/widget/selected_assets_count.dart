@@ -5,7 +5,8 @@ import '../../models/asset_model.dart';
 
 class SelectedAssetsCount extends StatelessWidget {
   final EdgeInsets padding;
-  const SelectedAssetsCount({super.key,
+  const SelectedAssetsCount({
+    super.key,
     this.padding = const EdgeInsets.only(bottom: 120, right: 20),
   });
 
@@ -37,18 +38,22 @@ class SelectedAssetsCount extends StatelessWidget {
                   ),
                   child: ValueListenableBuilder<bool>(
                     valueListenable: dataStore.isPreviewOpen,
-                    builder: (BuildContext context, bool isPreviewOpen, Widget? child) {
+                    builder: (BuildContext context, bool isPreviewOpen,
+                        Widget? child) {
                       return AnimatedSwitcher(
                         duration: const Duration(milliseconds: 300),
-                        transitionBuilder: (Widget child, Animation<double> animation) =>
-                            ScaleTransition(
+                        transitionBuilder:
+                            (Widget child, Animation<double> animation) =>
+                                ScaleTransition(
                           scale: animation,
                           child: child,
                         ),
                         child: isPreviewOpen
-                            ? const Icon(Icons.clear, color: Colors.white, size: 20)
+                            ? const Icon(Icons.clear,
+                                color: Colors.white, size: 20)
                             : Text(
-                                dataStore.selectedAssets.value.length.toString(),
+                                dataStore.selectedAssets.value.length
+                                    .toString(),
                                 style: const TextStyle(
                                   color: Colors.white,
                                   fontSize: 16.0,

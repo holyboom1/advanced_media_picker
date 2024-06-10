@@ -22,15 +22,12 @@
       alt="License: MIT" />
   </a>
 
-</p><br>
-
-[![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/C0C8Z5SA5)
-
-<script type='text/javascript' src='https://storage.ko-fi.com/cdn/widget/Widget_2.js'></script><script type='text/javascript'>kofiwidget2.init('Support Me on Ko-fi', '#e02828', 'C0C8Z5SA5');kofiwidget2.draw();</script> 
+</p>
 
 # Advanced Media Picker
 
 #### _Advanced Media Picker Package for Flutter_
+###### [![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/C0C8Z5SA5)
 
 ## Getting Started
 
@@ -242,7 +239,7 @@ PickerController? controller,
 ```
 ## Screenshots / Demo
 
-<video src="https://github.com/holyboom1/advanced_media_picker/assets/65105446/a2b25520-d176-40ec-8d13-ef2c20cdb760.mp4"></video>
+<video src="https://github.com/holyboom1/advanced_media_picker/blob/main/doc/demo.mp4"></video>
 ______________________________________________
 
 ## Plugins
