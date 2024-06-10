@@ -239,6 +239,9 @@ PickerController? controller,
 ```
 ## Screenshots / Demo
 
+[![Now in Android: 55]          // Title
+(https://i.ytimg.com/vi/Hc79sDi3f0U/maxresdefault.jpg)] // Thumbnail
+(https://www.youtube.com/watch?v=E6lGKX7U2SQ "Now in Android: 55")    // Video Link
 <video width="460" height="320" controls src="https://github.com/holyboom1/advanced_media_picker/blob/main/doc/demo.mp4"></video>
 ______________________________________________
 
