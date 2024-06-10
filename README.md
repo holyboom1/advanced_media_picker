@@ -239,7 +239,7 @@ PickerController? controller,
 ```
 ## Screenshots / Demo
 
-[<img src="https://i.ytimg.com/vi/Hc79sDi3f0U/maxresdefault.jpg" width="50%">](https://youtu.be/E6lGKX7U2SQ "Now in Android: 55")
+[<img src="https://github.com/holyboom1/advanced_media_picker/blob/main/doc/screenshot.jpeg" width="50%">](https://youtu.be/E6lGKX7U2SQ "Now in Android: 55")
 
 ______________________________________________
 
