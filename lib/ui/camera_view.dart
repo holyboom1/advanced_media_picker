@@ -1,90 +1,64 @@
 part of '../advanced_media_picker_impl.dart';
 
-class CameraView extends StatefulWidget {
-  const CameraView({
-    super.key,
-  });
-
-  @override
-  State<CameraView> createState() => _CameraViewState();
-}
-
-class _CameraViewState extends State<CameraView> {
-  @override
-  void initState() {
-    super.initState();
-    initCamera();
-  }
-
-  Future<void> initCamera() async {
-    dataStore.cameras = await availableCameras();
-    dataStore.cameraController = CameraController(
-      dataStore.cameras.first,
-      ResolutionPreset.medium,
-    );
-    await dataStore.cameraController?.initialize();
-    await dataStore.cameraController?.setFocusMode(FocusMode.auto);
-    setState(() {});
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-  }
+class CameraView extends StatelessWidget{
 
   @override
   Widget build(BuildContext context) {
-    if (dataStore.cameraController == null) {
+    if (dataStore.cameraControllers.isEmpty) {
       return Container();
     }
-    if (!dataStore.cameraController!.value.isInitialized) {
-      return Container();
-    }
-    return GestureDetector(
-      onTap: () {
-        Navigator.push(
-          context,
-          PageRouteBuilder<void>(
-            barrierColor: Colors.black26,
-            transitionsBuilder: (
-              BuildContext context,
-              Animation<double> animation,
-              Animation<double> secondaryAnimation,
-              Widget child,
-            ) {
-              return SlideTransition(
-                position: animation.drive(
-                  Tween<Offset>(
-                    begin: const Offset(0.0, 1.0),
-                    end: Offset.zero,
+
+    return ValueListenableBuilder(valueListenable: dataStore.cameraControllers.first, builder: (BuildContext context, CameraValue controller, Widget? child) {
+      if (!controller.isInitialized) {
+        return Container();
+      }
+      return GestureDetector(
+        onTap: () {
+          Navigator.push(
+            context,
+            PageRouteBuilder<void>(
+              barrierColor: Colors.black26,
+              transitionsBuilder: (
+                  BuildContext context,
+                  Animation<double> animation,
+                  Animation<double> secondaryAnimation,
+                  Widget child,
+                  ) {
+                return SlideTransition(
+                  position: animation.drive(
+                    Tween<Offset>(
+                      begin: const Offset(0.0, 1.0),
+                      end: Offset.zero,
+                    ),
                   ),
-                ),
-                child: const CameraScreen(),
-              );
-            },
-            opaque: false,
-            fullscreenDialog: true,
-            barrierDismissible: true,
-            pageBuilder: (_, __, ___) => const CameraScreen(),
-          ),
-        );
-      },
-      child: Container(
-        decoration: dataStore.style.cameraContainerDecoration,
-        clipBehavior: Clip.hardEdge,
-        child: Stack(
-          children: <Widget>[
-            Positioned.fill(
-              child: CameraPreview(dataStore.cameraController!),
+                  child: const CameraScreen(),
+                );
+              },
+              opaque: false,
+              fullscreenDialog: true,
+              barrierDismissible: true,
+              pageBuilder: (_, __, ___) => const CameraScreen(),
             ),
-            Positioned.fill(
-              child: Center(
-                child: dataStore.style.cameraIcon,
+          );
+        },
+        child: Container(
+          decoration: dataStore.style.cameraContainerDecoration,
+          clipBehavior: Clip.hardEdge,
+          child: Stack(
+            children: <Widget>[
+              Positioned.fill(
+                child: CameraPreview(dataStore.cameraControllers.first),
               ),
-            ),
-          ],
+              Positioned.fill(
+                child: Center(
+                  child: dataStore.style.cameraIcon,
+                ),
+              ),
+            ],
+          ),
         ),
-      ),
-    );
+      );
+    },);
+
   }
 }

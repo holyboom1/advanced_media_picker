@@ -114,47 +114,56 @@ class _PickerBottomSheetState extends State<PickerBottomSheet> {
                                         ),
                                       ],
                                     ),
-                                  AnimatedOpacity(
-                                    duration: kThemeAnimationDuration,
-                                    opacity: isNeedToShowDirectories ? 1 : 0,
-                                    child: AnimatedSize(
+                                  ValueListenableBuilder<List<AssetPathEntity>>(
+                                    valueListenable: dataStore.availablePath,
+                                  builder: (BuildContext context, List<AssetPathEntity> value, Widget? child) {
+                                      if(value.isEmpty) {
+                                        return const SizedBox.shrink();
+                                      }
+                                    return AnimatedOpacity(
                                       duration: kThemeAnimationDuration,
-                                      child: Container(
-                                        padding: const EdgeInsets.symmetric(
-                                            vertical: 8),
-                                        margin:
-                                            const EdgeInsets.only(bottom: 8),
-                                        height:
-                                            isNeedToShowDirectories ? 100 : 0,
-                                        width: double.infinity,
-                                        decoration: BoxDecoration(
-                                          color:
-                                              dataStore.style.backgroundColor,
-                                          border: isNeedToShowDirectories
-                                              ? Border(
-                                                  bottom: BorderSide(
-                                                    color: dataStore
-                                                        .style.dividerColor,
-                                                    width: 0.5,
-                                                  ),
-                                                )
-                                              : null,
-                                        ),
-                                        child: ListView(
-                                          padding: EdgeInsets.zero,
-                                          scrollDirection: Axis.horizontal,
-                                          children:
-                                              dataStore.availablePath.value.map(
-                                            (AssetPathEntity e) {
-                                              return DirectoryWidget(
-                                                key: ValueKey<String>(e.id),
-                                                path: e,
-                                              );
-                                            },
-                                          ).toList(),
+                                      opacity: isNeedToShowDirectories ? 1 : 0,
+                                      child: AnimatedSize(
+                                        duration: kThemeAnimationDuration,
+                                        child: Container(
+                                          padding: const EdgeInsets.symmetric(
+                                              vertical: 8),
+                                          margin:
+                                          const EdgeInsets.only(bottom: 8),
+                                          height:
+                                          isNeedToShowDirectories ? 100 : 0,
+                                          width: double.infinity,
+                                          decoration: BoxDecoration(
+                                            color:
+                                            dataStore.style.backgroundColor,
+                                            border: isNeedToShowDirectories
+                                                ? Border(
+                                              bottom: BorderSide(
+                                                color: dataStore
+                                                    .style.dividerColor,
+                                                width: 0.5,
+                                              ),
+                                            )
+                                                : null,
+                                          ),
+                                          child: ListView(
+                                            padding: EdgeInsets.zero,
+                                            scrollDirection: Axis.horizontal,
+                                            children:
+                                            dataStore.availablePath.value.map(
+                                                  (AssetPathEntity e) {
+                                                return DirectoryWidget(
+                                                  key: ValueKey<String>(e.id),
+                                                  path: e,
+                                                );
+                                              },
+                                            ).toList(),
+                                          ),
                                         ),
                                       ),
-                                    ),
+                                    );
+
+                                  },
                                   ),
                                 ],
                               ),

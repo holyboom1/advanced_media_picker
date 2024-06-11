@@ -9,7 +9,6 @@ class SelectCameraLens extends StatefulWidget {
 
 class _SelectCameraLensState extends State<SelectCameraLens>
     with SingleTickerProviderStateMixin {
-  int selectedCameraIndex = 0;
   late AnimationController _animationController;
   late Animation<double> _animation;
 
@@ -62,20 +61,11 @@ class _SelectCameraLensState extends State<SelectCameraLens>
                         final int cameraIndex =
                             dataStore.cameras.indexOf(camera);
                         final bool isSelected =
-                            cameraIndex == selectedCameraIndex;
+                            cameraIndex == dataStore.selectedCameraIndex.value;
                         return GestureDetector(
                           onTap: () {
-                            setState(() {
-                              selectedCameraIndex = cameraIndex;
-                              _animationController.forward();
-                            });
-                            dataStore.isCameraReady.value = false;
-                            dataStore.cameraController = CameraController(
-                              camera,
-                              ResolutionPreset.medium,
-                            )..initialize().then((_) {
-                                dataStore.isCameraReady.value = true;
-                              });
+                            assetsService.changeCamera(cameraIndex);
+                            _animationController.forward();
                           },
                           child: AnimatedBuilder(
                             animation: _animation,

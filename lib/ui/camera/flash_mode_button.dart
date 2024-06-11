@@ -39,7 +39,7 @@ class _FlashModeButtonState extends State<FlashModeButton> {
                     color: Colors.white,
                   ),
                   onPressed: () {
-                    dataStore.flashModeNotifier.value = FlashMode.off;
+                    assetsService.changeFlashMode( FlashMode.off);
                     isOpen = false;
                     setState(() {});
                   },
@@ -51,7 +51,7 @@ class _FlashModeButtonState extends State<FlashModeButton> {
                     color: Colors.white,
                   ),
                   onPressed: () {
-                    dataStore.flashModeNotifier.value = FlashMode.torch;
+                    assetsService.changeFlashMode( FlashMode.torch);
                     isOpen = false;
                     setState(() {});
                   },
@@ -63,7 +63,7 @@ class _FlashModeButtonState extends State<FlashModeButton> {
                     color: Colors.white,
                   ),
                   onPressed: () {
-                    dataStore.flashModeNotifier.value = FlashMode.auto;
+                    assetsService.changeFlashMode( FlashMode.auto);
                     isOpen = false;
                     setState(() {});
                   },
@@ -71,28 +71,35 @@ class _FlashModeButtonState extends State<FlashModeButton> {
             ] else
               const SizedBox(),
             IconButton(
-              icon: AnimatedSwitcher(
-                duration: const Duration(milliseconds: 200),
-                child: dataStore.flashModeNotifier.value == FlashMode.off
-                    ? const Icon(
-                        Icons.flash_off,
-                        color: Colors.white,
-                      )
-                    : dataStore.flashModeNotifier.value == FlashMode.torch
+              icon: ValueListenableBuilder<FlashMode>(
+                valueListenable: dataStore.flashModeNotifier,
+                builder: (BuildContext context, FlashMode value, Widget? child) {
+
+                  return AnimatedSwitcher(
+                    duration: const Duration(milliseconds: 200),
+                    child: value == FlashMode.off
                         ? const Icon(
-                            Icons.flash_on,
+                            Icons.flash_off,
                             color: Colors.white,
                           )
-                        : dataStore.flashModeNotifier.value == FlashMode.auto
+                        : value == FlashMode.torch
                             ? const Icon(
-                                Icons.flash_auto,
+                                Icons.flash_on,
                                 color: Colors.white,
                               )
-                            : const Icon(
-                                Icons.flash_on_rounded,
-                                color: Colors.white,
-                              ),
-              ),
+                            : value == FlashMode.auto
+                                ? const Icon(
+                                    Icons.flash_auto,
+                                    color: Colors.white,
+                                  )
+                                : const Icon(
+                                    Icons.flash_on_rounded,
+                                    color: Colors.white,
+                                  ),
+                  );
+                },
+                ),
+
               onPressed: () {
                 isOpen = !isOpen;
                 setState(() {});

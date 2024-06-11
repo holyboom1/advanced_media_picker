@@ -18,13 +18,13 @@ class _CameraPreviewWidgetState extends State<CameraPreviewWidget> {
   Future<void> onTapSetFocus(TapUpDetails details) async {
     showFocusCircle.value = false;
 
-    if (dataStore.cameraController!.value.isInitialized) {
+    if (dataStore.cameraControllers[dataStore.selectedCameraIndex.value].value.isInitialized) {
       focusX = details.localPosition.dx;
       focusY = details.localPosition.dy;
 
       final double fullWidth = MediaQuery.of(context).size.width;
       final double cameraHeight =
-          fullWidth * dataStore.cameraController!.value.aspectRatio;
+          fullWidth * dataStore.cameraControllers[dataStore.selectedCameraIndex.value].value.aspectRatio;
 
       final double xp = focusX / fullWidth;
       final double yp = focusY / cameraHeight;
@@ -32,7 +32,7 @@ class _CameraPreviewWidgetState extends State<CameraPreviewWidget> {
 
       final Offset point = Offset(xp, yp);
 
-      await dataStore.cameraController!.setFocusPoint(point);
+      await dataStore.cameraControllers[dataStore.selectedCameraIndex.value].setFocusPoint(point);
 
       unawaited(
           Future<void>.delayed(const Duration(seconds: 2)).whenComplete(() {
@@ -47,19 +47,17 @@ class _CameraPreviewWidgetState extends State<CameraPreviewWidget> {
 
   Future<void> onZoom(double newScale) async {
     double scale = newScale;
-    if (dataStore.cameraController != null) {
-      final double maxZoom =
-          await dataStore.cameraController!.getMaxZoomLevel();
-      final double minZoom =
-          await dataStore.cameraController!.getMinZoomLevel();
-      if (scale > maxZoom) {
-        scale = maxZoom;
-      } else if (scale < minZoom) {
-        scale = minZoom;
-      }
-      await dataStore.cameraController!.setZoomLevel(scale);
+    final double maxZoom =
+        await dataStore.cameraControllers[dataStore.selectedCameraIndex.value].getMaxZoomLevel();
+    final double minZoom =
+        await dataStore.cameraControllers[dataStore.selectedCameraIndex.value].getMinZoomLevel();
+    if (scale > maxZoom) {
+      scale = maxZoom;
+    } else if (scale < minZoom) {
+      scale = minZoom;
     }
-  }
+    await dataStore.cameraControllers[dataStore.selectedCameraIndex.value].setZoomLevel(scale);
+    }
 
   double _scaleFactor = 1.0;
   double _baseScaleFactor = 1.0;
@@ -76,43 +74,35 @@ class _CameraPreviewWidgetState extends State<CameraPreviewWidget> {
             _scaleFactor = _baseScaleFactor * details.scale;
             onZoom(_scaleFactor);
           },
-          child: ValueListenableBuilder<bool>(
-            valueListenable: dataStore.isCameraReady,
-            builder: (BuildContext context, bool value, Widget? child) {
-              if (!value) {
-                return const CircularProgressIndicator.adaptive();
-              }
-              return GestureDetector(
-                onTapUp: onTapSetFocus,
-                child: Stack(
-                  children: <Widget>[
-                    CameraPreview(dataStore.cameraController!),
-                    ValueListenableBuilder<bool>(
-                      valueListenable: showFocusCircle,
-                      builder:
-                          (BuildContext context, bool value, Widget? child) {
-                        if (value) {
-                          return Positioned(
-                            top: focusY - 20,
-                            left: focusX - 20,
-                            child: Container(
-                              height: 40,
-                              width: 40,
-                              decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                border:
-                                    Border.all(color: Colors.white, width: 1.5),
-                              ),
-                            ),
-                          );
-                        }
-                        return const SizedBox.shrink();
-                      },
-                    ),
-                  ],
+          child: GestureDetector(
+            onTapUp: onTapSetFocus,
+            child: Stack(
+              children: <Widget>[
+                CameraPreview(dataStore.cameraControllers[dataStore.selectedCameraIndex.value]),
+                ValueListenableBuilder<bool>(
+                  valueListenable: showFocusCircle,
+                  builder:
+                      (BuildContext context, bool value, Widget? child) {
+                    if (value) {
+                      return Positioned(
+                        top: focusY - 20,
+                        left: focusX - 20,
+                        child: Container(
+                          height: 40,
+                          width: 40,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            border:
+                            Border.all(color: Colors.white, width: 1.5),
+                          ),
+                        ),
+                      );
+                    }
+                    return const SizedBox.shrink();
+                  },
                 ),
-              );
-            },
+              ],
+            ),
           ),
         ),
       ),

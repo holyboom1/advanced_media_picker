@@ -113,7 +113,7 @@ class PickerStyle {
       ),
     ),
     this.cameraContainerDecoration = const BoxDecoration(
-      color: Colors.green,
+      color: Colors.white,
       borderRadius: BorderRadius.all(Radius.circular(
         10,
       )),

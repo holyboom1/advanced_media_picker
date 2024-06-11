@@ -1,13 +1,11 @@
 import 'dart:io';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import '../../advanced_media_picker_impl.dart';
 import '../../utils/extensions.dart';
 import '../../utils/video_file_formatter.dart';
-import '../widget/shimmer.dart';
 
 class MediaPreview extends StatefulWidget {
   final String path;
@@ -29,10 +27,9 @@ class MediaPreview extends StatefulWidget {
   State<MediaPreview> createState() => _MediaPreviewState();
 }
 
-final Map<String , Widget> _bytesData = <String, Widget>{};
+final Map<String, Widget> _bytesData = <String, Widget>{};
 
 class _MediaPreviewState extends State<MediaPreview> {
-
   @override
   void initState() {
     super.initState();
@@ -41,13 +38,14 @@ class _MediaPreviewState extends State<MediaPreview> {
 
   Future<void> _loadAsset() async {
     if (widget.path.isVideo()) {
-      final Uint8List? bytes = await VideoFileFormatter.getUint8List(File(widget.path));
+      final Uint8List? bytes =
+          await VideoFileFormatter.getUint8List(File(widget.path));
       _bytesData[widget.path] = Image.memory(
         bytes ?? Uint8List(0),
         fit: BoxFit.cover,
         frameBuilder: (BuildContext context, Widget child, int? frame,
             bool wasSynchronouslyLoaded) {
-          if(wasSynchronouslyLoaded) {
+          if (wasSynchronouslyLoaded) {
             return child;
           }
           return AnimatedOpacity(
@@ -58,9 +56,7 @@ class _MediaPreviewState extends State<MediaPreview> {
           );
         },
       );
-      setState(() {
-
-      });
+      setState(() {});
     }
   }
 

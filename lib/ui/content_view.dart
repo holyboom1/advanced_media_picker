@@ -10,16 +10,16 @@ class ContentView extends StatelessWidget {
     return ValueListenableBuilder<AssetPathEntity?>(
       valueListenable: dataStore.selectedPath,
       key: const ValueKey<String>('content_view_selected_path'),
-      builder:
-          (BuildContext context, AssetPathEntity? pathValue, Widget? child) {
+      builder: (BuildContext context, AssetPathEntity? pathValue, Widget? child) {
         if (pathValue == null) {
-          return const SizedBox();
+          return const SliverToBoxAdapter(
+            child: SizedBox.shrink(),
+          );
         }
         return ValueListenableBuilder<List<AssetEntity>>(
           valueListenable: dataStore.pathData[pathValue.id]!,
           key: const ValueKey<String>('content_view_assets'),
-          builder: (BuildContext context, List<AssetEntity> assetValue,
-              Widget? child) {
+          builder: (BuildContext context, List<AssetEntity> assetValue, Widget? child) {
             return SliverGrid(
               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 4,
@@ -29,13 +29,10 @@ class ContentView extends StatelessWidget {
               delegate: SliverChildBuilderDelegate(
                 (BuildContext context, int index) {
                   if (index == 0) {
-                    return const CameraView(
-                      key: ValueKey<String>('camera'),
-                    );
+                    return  CameraView();
                   }
                   final AssetEntity asset = assetValue[index - 1];
-                  if (index == assetValue.length - 1 &&
-                      dataStore.hasMoreToLoad[pathValue.id]!) {
+                  if (index == assetValue.length - 1 && dataStore.hasMoreToLoad[pathValue.id]!) {
                     assetsService.loadMoreAsset(path: pathValue);
                   }
                   return AssetWidget(

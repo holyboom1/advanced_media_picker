@@ -54,9 +54,12 @@ class AdvancedMediaPicker {
     if (!await assetsService.requestPermissions()) {
       throw Exception('Permission denied');
     }
-    await assetsService.getAssetsPath(
+
+    unawaited(assetsService.getAssetsPath(
       allowedTypes: allowedTypes ?? PickerAssetType.all,
-    );
+    ));
+    unawaited(assetsService.initCameras());
+
 
     unawaited(
       Navigator.push(
@@ -88,9 +91,14 @@ class AdvancedMediaPicker {
         ),
       ).then(
         (void _) {
-          Future<void>.delayed(const Duration(milliseconds: 300), () {
-            dataStore.cameraController?.dispose();
-          });
+          Future<void>.delayed(
+            const Duration(milliseconds: 300),
+            () {
+              dataStore.cameraControllers.forEach((CameraController controller) {
+                controller.dispose();
+              });
+            },
+          );
         },
       ),
     );

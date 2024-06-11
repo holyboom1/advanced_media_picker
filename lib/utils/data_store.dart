@@ -45,8 +45,10 @@ final class DataStore {
 
   ValueNotifier<FlashMode> flashModeNotifier =
       ValueNotifier<FlashMode>(FlashMode.off);
-  CameraController? cameraController;
-  ValueNotifier<bool> isCameraReady = ValueNotifier<bool>(false);
+
+  List<CameraController> cameraControllers = <CameraController>[];
+  ValueNotifier<int> selectedCameraIndex = ValueNotifier<int>(0);
+
   ValueNotifier<bool> isRecording = ValueNotifier<bool>(false);
   ValueNotifier<bool> isPreviewOpen = ValueNotifier<bool>(false);
 
