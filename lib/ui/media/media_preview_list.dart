@@ -15,7 +15,7 @@ class MediaPreviewList extends StatelessWidget {
           valueListenable: dataStore.isPreviewOpen,
           builder: (BuildContext context, bool isShow, Widget? child) {
             return Positioned(
-              bottom: 225,
+              bottom: 230,
               left: 0,
               right: 0,
               child: AnimatedOpacity(

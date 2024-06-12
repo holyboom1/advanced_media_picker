@@ -5,9 +5,12 @@ import '../../models/asset_model.dart';
 
 class SelectedAssetsCount extends StatelessWidget {
   final EdgeInsets padding;
+  final Size size;
+
   const SelectedAssetsCount({
     super.key,
-    this.padding = const EdgeInsets.only(bottom: 120, right: 20),
+    this.padding = const EdgeInsets.only(right: 16, bottom: 16),
+        this.size = const Size(35, 35),
   });
 
   @override
@@ -26,8 +29,8 @@ class SelectedAssetsCount extends StatelessWidget {
               child: Visibility(
                 visible: dataStore.selectedAssets.value.isNotEmpty,
                 child: Container(
-                  width: 35,
-                  height: 35,
+                  width: size.width,
+                  height: size.height,
                   decoration: BoxDecoration(
                     color: Colors.transparent,
                     border: Border.all(

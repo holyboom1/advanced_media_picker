@@ -27,7 +27,6 @@
 # Advanced Media Picker
 
 #### _Advanced Media Picker Package for Flutter_
-###### [![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/C0C8Z5SA5)
 
 ## Getting Started
 
@@ -248,7 +247,7 @@ ______________________________________________
 
 ## Plugins
 
-Dillinger is currently extended with the following plugins.
+This package is currently extended with the following plugins.
 Instructions on how to use them in your own application are linked below.
 
 | Plugin                       | README                                                |
@@ -256,5 +255,9 @@ Instructions on how to use them in your own application are linked below.
 | photo_manager                | https://pub.dev/packages/photo_manager                |
 | photo_manager_image_provider | https://pub.dev/packages/photo_manager_image_provider |
 | flutter_sticky_header        | https://pub.dev/packages/flutter_sticky_header        |
-| camera                       | https://pub.dev/packages/camera                       |
+| camerawesome                 | https://pub.dev/packages/camerawesome                 |
+
+
+###### [![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/C0C8Z5SA5)
+
 

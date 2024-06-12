@@ -111,43 +111,4 @@ class AssetsService {
     return true;
   }
 
-  Future<void> initCameras() async {
-    dataStore.cameras = await availableCameras();
-    for(int i= 0; i < dataStore.cameras.length ; i++){
-      dataStore.cameraControllers.add(CameraController(
-        dataStore.cameras[i],
-        ResolutionPreset.medium,
-      ));
-      await dataStore.cameraControllers[i].initialize();
-      await dataStore.cameraControllers[i].setFocusMode(FocusMode.auto);
-    }
-  }
-
-  void changeCamera(int index){
-    dataStore.selectedCameraIndex.value = index;
-    dataStore.cameraControllers.forEach((CameraController controller) {
-      if(controller.value.isInitialized){
-        controller.setFlashMode(FlashMode.off);
-      }
-    });
-    dataStore.flashModeNotifier.value = FlashMode.off;
-  }
-
-  void changeFlashMode(FlashMode mode) {
-    dataStore.flashModeNotifier.value = mode;
-    switch (mode) {
-      case FlashMode.off:
-        dataStore.cameraControllers[dataStore.selectedCameraIndex.value].setFlashMode(FlashMode.off);
-        break;
-      case FlashMode.torch:
-        dataStore.cameraControllers[dataStore.selectedCameraIndex.value].setFlashMode(FlashMode.torch);
-        break;
-      case FlashMode.auto:
-        dataStore.cameraControllers[dataStore.selectedCameraIndex.value].setFlashMode(FlashMode.auto);
-        break;
-      case FlashMode.always:
-        dataStore.cameraControllers[dataStore.selectedCameraIndex.value].setFlashMode(FlashMode.always);
-        break;
-    }
-  }
 }

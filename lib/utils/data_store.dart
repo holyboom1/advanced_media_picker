@@ -28,14 +28,12 @@ final class DataStore {
   Map<String, int> pages = <String, int>{};
   Map<String, bool> hasMoreToLoad = <String, bool>{};
 
-  ValueNotifier<AssetPathEntity?> selectedPath =
-      ValueNotifier<AssetPathEntity?>(null);
+  ValueNotifier<AssetPathEntity?> selectedPath = ValueNotifier<AssetPathEntity?>(null);
   ValueNotifier<List<AssetPathEntity>> availablePath =
       ValueNotifier<List<AssetPathEntity>>(<AssetPathEntity>[]);
   Map<String, ValueNotifier<List<AssetEntity>>> pathData =
       <String, ValueNotifier<List<AssetEntity>>>{};
-  ValueNotifier<List<AssetModel>> selectedAssets =
-      ValueNotifier<List<AssetModel>>(<AssetModel>[]);
+  ValueNotifier<List<AssetModel>> selectedAssets = ValueNotifier<List<AssetModel>>(<AssetModel>[]);
 
   int limitToSelection = -1;
   int maxVideoDuration = -1;
@@ -43,14 +41,21 @@ final class DataStore {
   bool isNeedToTakeVideo = true;
   bool isNeedToShowFolders = true;
 
-  ValueNotifier<FlashMode> flashModeNotifier =
-      ValueNotifier<FlashMode>(FlashMode.off);
-
-  List<CameraController> cameraControllers = <CameraController>[];
-  ValueNotifier<int> selectedCameraIndex = ValueNotifier<int>(0);
-
-  ValueNotifier<bool> isRecording = ValueNotifier<bool>(false);
   ValueNotifier<bool> isPreviewOpen = ValueNotifier<bool>(false);
 
-  List<CameraDescription> cameras = <CameraDescription>[];
+  late CameraController cameraController;
+
+  Future<void> initCameras() async {
+    final List<CameraDescription> cameras = await availableCameras();
+    cameraController = CameraController(
+      cameras.first,
+      ResolutionPreset.medium,
+      enableAudio: true,
+    );
+    await cameraController.initialize();
+  }
+
+  Future<void> dispose() async {
+    await cameraController.dispose();
+  }
 }

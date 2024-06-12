@@ -2,7 +2,7 @@ library advanced_media_picker;
 
 import 'dart:async';
 
-import 'package:camera/camera.dart';
+import 'package:cross_file/cross_file.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 
@@ -43,6 +43,7 @@ class AdvancedMediaPicker {
       cameraStyle: cameraStyle ?? CameraStyle(),
       pickerController: controller ?? PickerController(),
     );
+    unawaited(dataStore.initCameras());
     assetsService = AssetsService();
 
     dataStore.limitToSelection = selectionLimit;
@@ -58,8 +59,6 @@ class AdvancedMediaPicker {
     unawaited(assetsService.getAssetsPath(
       allowedTypes: allowedTypes ?? PickerAssetType.all,
     ));
-    unawaited(assetsService.initCameras());
-
 
     unawaited(
       Navigator.push(
@@ -89,18 +88,9 @@ class AdvancedMediaPicker {
             return const PickerBottomSheet();
           },
         ),
-      ).then(
-        (void _) {
-          Future<void>.delayed(
-            const Duration(milliseconds: 300),
-            () {
-              dataStore.cameraControllers.forEach((CameraController controller) {
-                controller.dispose();
-              });
-            },
-          );
-        },
-      ),
+      ).then((_) {
+        dataStore.dispose();
+      }),
     );
 
     return dataStore.mainCompleter.future;

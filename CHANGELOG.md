@@ -1,3 +1,6 @@
+## 0.0.7
+* Change camera logic
+* update Readme file.
 
 ## 0.0.6
 * fix selected assets in camera mode.
