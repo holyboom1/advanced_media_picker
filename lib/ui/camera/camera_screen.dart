@@ -110,11 +110,8 @@
 //   }
 // }
 
-import 'dart:async';
-import 'dart:io';
-
-import 'package:camerawesome/camerawesome_plugin.dart';
-import 'package:camerawesome/pigeon.dart';
+import 'package:camerawesome_fork/camerawesome_plugin.dart';
+import 'package:camerawesome_fork/pigeon.dart';
 import 'package:cross_file/cross_file.dart';
 import 'package:flutter/material.dart';
 

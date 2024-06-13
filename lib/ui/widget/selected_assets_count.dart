@@ -10,7 +10,7 @@ class SelectedAssetsCount extends StatelessWidget {
   const SelectedAssetsCount({
     super.key,
     this.padding = const EdgeInsets.only(right: 16, bottom: 16),
-        this.size = const Size(35, 35),
+    this.size = const Size(35, 35),
   });
 
   @override

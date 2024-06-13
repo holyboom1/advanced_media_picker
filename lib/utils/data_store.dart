@@ -28,12 +28,14 @@ final class DataStore {
   Map<String, int> pages = <String, int>{};
   Map<String, bool> hasMoreToLoad = <String, bool>{};
 
-  ValueNotifier<AssetPathEntity?> selectedPath = ValueNotifier<AssetPathEntity?>(null);
+  ValueNotifier<AssetPathEntity?> selectedPath =
+      ValueNotifier<AssetPathEntity?>(null);
   ValueNotifier<List<AssetPathEntity>> availablePath =
       ValueNotifier<List<AssetPathEntity>>(<AssetPathEntity>[]);
   Map<String, ValueNotifier<List<AssetEntity>>> pathData =
       <String, ValueNotifier<List<AssetEntity>>>{};
-  ValueNotifier<List<AssetModel>> selectedAssets = ValueNotifier<List<AssetModel>>(<AssetModel>[]);
+  ValueNotifier<List<AssetModel>> selectedAssets =
+      ValueNotifier<List<AssetModel>>(<AssetModel>[]);
 
   int limitToSelection = -1;
   int maxVideoDuration = -1;
@@ -50,7 +52,6 @@ final class DataStore {
     cameraController = CameraController(
       cameras.first,
       ResolutionPreset.medium,
-      enableAudio: true,
     );
     await cameraController.initialize();
   }
