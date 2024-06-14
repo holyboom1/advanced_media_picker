@@ -82,6 +82,12 @@ class PickerStyle {
   /// Bottom padding
   final double bottomPadding;
 
+  /// Folder divider
+  final Widget folderDivider;
+
+  /// Picker title widget
+  final Widget titleWidget;
+
   /// Picker style
   PickerStyle({
     this.borderRadius = const BorderRadius.all(Radius.circular(10)),
@@ -127,6 +133,8 @@ class PickerStyle {
     this.showCustomAlert,
     this.typeSelectionWidget,
     this.bottomPadding = 0,
+    this.folderDivider = const Divider(),
+    this.titleWidget = const Text('Select media'),
   }) : _closeAlertStyle = closeAlertStyle ??
             CloseAlertStyle(
               title: 'Close',

@@ -17,7 +17,8 @@ class CompleteWidget extends StatelessWidget {
           switchInCurve: Curves.easeInOut,
           switchOutCurve: Curves.easeInOut,
           child: value.isEmpty
-              ? const TypeSelectionWidget()
+              ? dataStore.style.typeSelectionWidget ??
+                  const TypeSelectionWidget()
               : dataStore.style.completeWidget ??
                   SizedBox(
                     height: 100,

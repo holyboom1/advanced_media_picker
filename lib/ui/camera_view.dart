@@ -38,9 +38,15 @@ class CameraView extends StatelessWidget {
         child: Stack(
           children: <Widget>[
             Positioned.fill(
-              child: (!dataStore.cameraController.value.isInitialized)
-                  ? Container()
-                  : CameraPreview(dataStore.cameraController),
+              child: ValueListenableBuilder<bool>(
+                valueListenable: dataStore.isPreviewCameraReady,
+                builder: (BuildContext context, bool value, Widget? child) {
+                  if (!value) {
+                    return Container();
+                  }
+                  return CameraPreview(dataStore.cameraController);
+                },
+              ),
             ),
             Positioned.fill(
               child: Center(

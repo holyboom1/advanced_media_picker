@@ -44,6 +44,7 @@ final class DataStore {
   bool isNeedToShowFolders = true;
 
   ValueNotifier<bool> isPreviewOpen = ValueNotifier<bool>(false);
+  ValueNotifier<bool> isPreviewCameraReady = ValueNotifier<bool>(false);
 
   late CameraController cameraController;
 
@@ -53,7 +54,9 @@ final class DataStore {
       cameras.first,
       ResolutionPreset.medium,
     );
-    await cameraController.initialize();
+    await cameraController.initialize().then((_) {
+      isPreviewCameraReady.value = true;
+    });
   }
 
   Future<void> dispose() async {

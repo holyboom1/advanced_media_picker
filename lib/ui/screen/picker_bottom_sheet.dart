@@ -73,7 +73,7 @@ class _PickerBottomSheetState extends State<PickerBottomSheet> {
           builder: (BuildContext context, ScrollController scrollController) {
             return Material(
               color: Colors.transparent,
-              child: DecoratedBox(
+              child: Container(
                 decoration: BoxDecoration(
                   color: dataStore.style.backgroundColor,
                   borderRadius: BorderRadius.only(
@@ -92,7 +92,14 @@ class _PickerBottomSheetState extends State<PickerBottomSheet> {
                         slivers: <Widget>[
                           SliverStickyHeader(
                             header: Container(
-                              color: dataStore.style.backgroundColor,
+                              decoration: BoxDecoration(
+                                color: dataStore.style.backgroundColor,
+                                borderRadius: BorderRadius.only(
+                                  topLeft: dataStore.style.borderRadius.topLeft,
+                                  topRight:
+                                      dataStore.style.borderRadius.topRight,
+                                ),
+                              ),
                               child: Column(
                                 children: <Widget>[
                                   if (dataStore.style.isNeedDragIndicator)
@@ -114,6 +121,7 @@ class _PickerBottomSheetState extends State<PickerBottomSheet> {
                                         ),
                                       ],
                                     ),
+                                  dataStore.style.titleWidget,
                                   ValueListenableBuilder<List<AssetPathEntity>>(
                                     valueListenable: dataStore.availablePath,
                                     builder: (BuildContext context,
@@ -128,42 +136,41 @@ class _PickerBottomSheetState extends State<PickerBottomSheet> {
                                             isNeedToShowDirectories ? 1 : 0,
                                         child: AnimatedSize(
                                           duration: kThemeAnimationDuration,
-                                          child: Container(
-                                            padding: const EdgeInsets.symmetric(
-                                                vertical: 8),
-                                            margin: const EdgeInsets.only(
-                                                bottom: 8),
-                                            height: isNeedToShowDirectories
-                                                ? 100
-                                                : 0,
-                                            width: double.infinity,
-                                            decoration: BoxDecoration(
-                                              color: dataStore
-                                                  .style.backgroundColor,
-                                              border: isNeedToShowDirectories
-                                                  ? Border(
-                                                      bottom: BorderSide(
-                                                        color: dataStore
-                                                            .style.dividerColor,
-                                                        width: 0.5,
-                                                      ),
-                                                    )
-                                                  : null,
-                                            ),
-                                            child: ListView(
-                                              padding: EdgeInsets.zero,
-                                              scrollDirection: Axis.horizontal,
-                                              children: dataStore
-                                                  .availablePath.value
-                                                  .map(
-                                                (AssetPathEntity e) {
-                                                  return DirectoryWidget(
-                                                    key: ValueKey<String>(e.id),
-                                                    path: e,
-                                                  );
-                                                },
-                                              ).toList(),
-                                            ),
+                                          child: Column(
+                                            children: <Widget>[
+                                              Container(
+                                                padding:
+                                                    const EdgeInsets.symmetric(
+                                                        vertical: 8),
+                                                margin: const EdgeInsets.only(
+                                                    bottom: 8),
+                                                height: isNeedToShowDirectories
+                                                    ? 100
+                                                    : 0,
+                                                width: double.infinity,
+                                                decoration: BoxDecoration(
+                                                  color: dataStore
+                                                      .style.backgroundColor,
+                                                ),
+                                                child: ListView(
+                                                  padding: EdgeInsets.zero,
+                                                  scrollDirection:
+                                                      Axis.horizontal,
+                                                  children: dataStore
+                                                      .availablePath.value
+                                                      .map(
+                                                    (AssetPathEntity e) {
+                                                      return DirectoryWidget(
+                                                        key: ValueKey<String>(
+                                                            e.id),
+                                                        path: e,
+                                                      );
+                                                    },
+                                                  ).toList(),
+                                                ),
+                                              ),
+                                              dataStore.style.folderDivider
+                                            ],
                                           ),
                                         ),
                                       );

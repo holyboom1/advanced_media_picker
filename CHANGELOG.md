@@ -1,3 +1,7 @@
+## 0.0.8
+* Fix camera issue.
+* Added customisation.
+
 ## 0.0.7
 * Change camera logic
 * update Readme file.
