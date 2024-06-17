@@ -39,7 +39,7 @@ class _MyAppState extends State<MyApp> {
                 );
               },
             ),
-            const MyButton(),
+            MyButton(),
           ],
         ),
       ),
@@ -51,7 +51,9 @@ final ValueNotifier<List<XFile>> selectedFiles =
     ValueNotifier<List<XFile>>(<XFile>[]);
 
 class MyButton extends StatelessWidget {
-  const MyButton({super.key});
+  MyButton({super.key});
+
+  final PickerController controller = PickerController();
 
   @override
   Widget build(BuildContext context) {
@@ -61,6 +63,7 @@ class MyButton extends StatelessWidget {
         onPressed: () async {
           final List<XFile> result = await AdvancedMediaPicker.openPicker(
             context: context,
+            controller: controller,
             style: PickerStyle(),
             cameraStyle: CameraStyle(),
             allowedTypes: PickerAssetType.image,

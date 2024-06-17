@@ -1,3 +1,6 @@
+## 0.0.9
+- Controller dispose issue fixed.
+
 ## 0.0.8
 * Fix camera issue.
 * Added customisation.

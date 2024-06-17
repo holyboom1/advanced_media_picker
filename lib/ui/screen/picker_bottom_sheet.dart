@@ -44,12 +44,6 @@ class _PickerBottomSheetState extends State<PickerBottomSheet> {
     }
   }
 
-  @override
-  void dispose() {
-    super.dispose();
-    dataStore.pickerController.dispose();
-  }
-
   DraggableScrollableSheet get sheet =>
       dataStore.pickerController.sheet.currentWidget!
           as DraggableScrollableSheet;
@@ -244,8 +238,8 @@ Future<bool> showCloseAlertDialog({
                   ),
                   TextButton(
                     onPressed: () {
-                      Navigator.of(context)
-                          .popUntil((Route route) => route.isFirst);
+                      Navigator.of(context).pop();
+                      Navigator.of(context).pop();
                       isClose = true;
                     },
                     child: Text(
