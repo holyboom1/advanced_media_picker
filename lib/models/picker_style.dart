@@ -71,7 +71,7 @@ class PickerStyle {
   CloseAlertStyle get closeAlertStyle => _closeAlertStyle;
 
   /// A function that returns a boolean value from your custom alert dialog.
-  final bool Function()? showCustomAlert;
+  final Future<bool> Function()? showCustomAlert;
 
   /// Complete widget for the picker (shown at the bottom of the picker when the user has selected media)
   final Widget? completeWidget;

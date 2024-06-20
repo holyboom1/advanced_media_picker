@@ -46,7 +46,7 @@ class PickerController extends DraggableScrollableController {
       if (!_isAlertOpen) {
         _isAlertOpen = true;
         unawaited(animateSheet(0.3));
-        final bool isClose = dataStore.style.showCustomAlert?.call() ??
+        final bool isClose = await dataStore.style.showCustomAlert?.call() ??
             await showCloseAlertDialog(
               style: dataStore.style.closeAlertStyle,
               context: sheet.currentContext!,

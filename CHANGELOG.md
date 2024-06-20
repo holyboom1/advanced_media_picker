@@ -1,3 +1,6 @@
+## 0.0.10
+- Close alert dialog issue fixed.
+
 ## 0.0.9
 - Controller dispose issue fixed.
 
