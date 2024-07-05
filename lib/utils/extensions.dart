@@ -40,3 +40,11 @@ extension ValueAssetsList on ValueNotifier<List<AssetModel>> {
       ..removeWhere((AssetModel element) => element.id == asset.id);
   }
 }
+
+extension IntExtension on int {
+  String toTime() {
+    final int minutes = this ~/ 60;
+    final int seconds = this % 60;
+    return '$minutes:${seconds < 10 ? '0$seconds' : seconds}';
+  }
+}

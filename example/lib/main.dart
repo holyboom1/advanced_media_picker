@@ -66,7 +66,7 @@ class MyButton extends StatelessWidget {
             controller: controller,
             style: PickerStyle(),
             cameraStyle: CameraStyle(),
-            allowedTypes: PickerAssetType.image,
+            allowedTypes: PickerAssetType.imageAndVideo,
             maxVideoDuration: 60,
             selectionLimit: 10,
           );

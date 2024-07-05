@@ -62,6 +62,36 @@ class AssetWidget extends StatelessWidget {
                 );
               },
             ),
+            if (asset.type == AssetType.video)
+              Positioned(
+                bottom: 4,
+                right: 4,
+                child: Container(
+                  alignment: Alignment.bottomRight,
+                  decoration: BoxDecoration(
+                    color: Colors.black.withOpacity(0.5),
+                    borderRadius: BorderRadius.circular(4),
+                  ),
+                  child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 4,
+                        vertical: 2,
+                      ),
+                      child: Text(
+                        asset.duration.toTime(),
+                        style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 12,
+                            fontWeight: FontWeight.bold,
+                            shadows: <Shadow>[
+                              Shadow(
+                                offset: Offset(1, 1),
+                                blurRadius: 2,
+                              ),
+                            ]),
+                      )),
+                ),
+              )
           ],
         ),
       ),

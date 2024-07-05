@@ -5,6 +5,14 @@ class ContentView extends StatelessWidget {
     super.key,
   });
 
+  int getaditionPathItemCount(String pathId) {
+    if (dataStore.totalEntitiesCount[pathId]! % 4 == 0) {
+      return 1;
+    } else {
+      return 4 - (dataStore.totalEntitiesCount[pathId]! % 4);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return ValueListenableBuilder<AssetPathEntity?>(
@@ -33,17 +41,33 @@ class ContentView extends StatelessWidget {
                   if (index == 0) {
                     return CameraView();
                   }
-                  final AssetEntity asset = assetValue[index - 1];
+                  if (index == assetValue.length + 1 &&
+                      !dataStore.hasMoreToLoad[pathValue.id]!) {
+                    if (index % 4 == 0) {
+                      return const SizedBox.shrink();
+                    }
+                    return const SizedBox.shrink();
+                  }
+
                   if (index == assetValue.length - 1 &&
                       dataStore.hasMoreToLoad[pathValue.id]!) {
                     assetsService.loadMoreAsset(path: pathValue);
                   }
-                  return AssetWidget(
-                    key: ValueKey<int>(asset.hashCode),
-                    asset: asset,
-                  );
+
+                  if (index - 1 < assetValue.length) {
+                    final AssetEntity asset = assetValue[index - 1];
+
+                    return AssetWidget(
+                      key: ValueKey<int>(asset.hashCode),
+                      asset: asset,
+                    );
+                  }
+
+                  return const SizedBox.shrink();
                 },
-                childCount: assetValue.length + 1,
+                childCount: assetValue.length +
+                    1 +
+                    getaditionPathItemCount(pathValue.id),
               ),
               key: const ValueKey<String>('content'),
             );

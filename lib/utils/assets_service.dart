@@ -49,7 +49,8 @@ class AssetsService {
     ];
     dataStore.pages[path.id] = page;
     dataStore.hasMoreToLoad[path.id] =
-        entities.length < dataStore.totalEntitiesCount[path.id]!;
+        dataStore.pathData[path.id]!.value.length <
+            dataStore.totalEntitiesCount[path.id]!;
   }
 
   /// Get assets path

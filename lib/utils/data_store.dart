@@ -22,7 +22,7 @@ final class DataStore {
   final CameraStyle cameraStyle;
 
   List<String> allowedTypes = <String>[];
-  final int sizePerPage = 20;
+  final int sizePerPage = 10;
 
   Map<String, int> totalEntitiesCount = <String, int>{};
   Map<String, int> pages = <String, int>{};

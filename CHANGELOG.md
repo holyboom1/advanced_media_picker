@@ -1,3 +1,7 @@
+## 0.0.11
+- Fixed load more assets issue.
+- Added video assets indication
+
 ## 0.0.10
 - Close alert dialog issue fixed.
 
