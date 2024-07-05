@@ -1,3 +1,8 @@
+## 0.0.12
+- Fixed case : After setting isNeedVideoCamera to false, video recording is still possible in photo mode.
+- Fixed case : After setting selectionLimit, the maximum number of photos in photo mode is not limited.
+- Fixed case : isNeedToShowCamera is set to false, but the camera is still displayed.
+
 ## 0.0.11
 - Fixed load more assets issue.
 - Added video assets indication

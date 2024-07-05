@@ -7,10 +7,14 @@ class ContentView extends StatelessWidget {
 
   int getaditionPathItemCount(String pathId) {
     if (dataStore.totalEntitiesCount[pathId]! % 4 == 0) {
-      return 1;
+      return 2;
     } else {
-      return 4 - (dataStore.totalEntitiesCount[pathId]! % 4);
+      return 4 - (dataStore.totalEntitiesCount[pathId]! % 4) + 1;
     }
+  }
+
+  int isCameraNeedToShow() {
+    return dataStore.isNeedToShowCamera ? 1 : 0;
   }
 
   @override
@@ -18,8 +22,7 @@ class ContentView extends StatelessWidget {
     return ValueListenableBuilder<AssetPathEntity?>(
       valueListenable: dataStore.selectedPath,
       key: const ValueKey<String>('content_view_selected_path'),
-      builder:
-          (BuildContext context, AssetPathEntity? pathValue, Widget? child) {
+      builder: (BuildContext context, AssetPathEntity? pathValue, Widget? child) {
         if (pathValue == null) {
           return const SliverToBoxAdapter(
             child: SizedBox.shrink(),
@@ -28,8 +31,7 @@ class ContentView extends StatelessWidget {
         return ValueListenableBuilder<List<AssetEntity>>(
           valueListenable: dataStore.pathData[pathValue.id]!,
           key: const ValueKey<String>('content_view_assets'),
-          builder: (BuildContext context, List<AssetEntity> assetValue,
-              Widget? child) {
+          builder: (BuildContext context, List<AssetEntity> assetValue, Widget? child) {
             return SliverGrid(
               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 4,
@@ -38,36 +40,32 @@ class ContentView extends StatelessWidget {
               ),
               delegate: SliverChildBuilderDelegate(
                 (BuildContext context, int index) {
-                  if (index == 0) {
+                  int newIndex = index;
+                  if (index == 0 && dataStore.isNeedToShowCamera) {
                     return CameraView();
                   }
-                  if (index == assetValue.length + 1 &&
-                      !dataStore.hasMoreToLoad[pathValue.id]!) {
-                    if (index % 4 == 0) {
-                      return const SizedBox.shrink();
-                    }
+                  if (dataStore.isNeedToShowCamera) {
+                    newIndex = index - 1;
+                  }
+                  if (newIndex >= assetValue.length && !dataStore.hasMoreToLoad[pathValue.id]!) {
                     return const SizedBox.shrink();
                   }
 
-                  if (index == assetValue.length - 1 &&
-                      dataStore.hasMoreToLoad[pathValue.id]!) {
+                  if (newIndex == assetValue.length && dataStore.hasMoreToLoad[pathValue.id]!) {
                     assetsService.loadMoreAsset(path: pathValue);
                   }
 
-                  if (index - 1 < assetValue.length) {
-                    final AssetEntity asset = assetValue[index - 1];
+                  if (newIndex < assetValue.length) {
+                    final AssetEntity asset = assetValue[newIndex];
 
                     return AssetWidget(
                       key: ValueKey<int>(asset.hashCode),
                       asset: asset,
                     );
                   }
-
                   return const SizedBox.shrink();
                 },
-                childCount: assetValue.length +
-                    1 +
-                    getaditionPathItemCount(pathValue.id),
+                childCount: assetValue.length + getaditionPathItemCount(pathValue.id),
               ),
               key: const ValueKey<String>('content'),
             );

@@ -17,6 +17,20 @@ class CameraScreen extends StatelessWidget {
         children: <Widget>[
           CameraAwesomeBuilder.awesome(
             onMediaCaptureEvent: (MediaCapture event) {
+              if (dataStore.selectedAssets.value.length >= dataStore.limitToSelection) {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute<void>(
+                    builder: (BuildContext context) {
+                      return MediaScreen(
+                        filePath: dataStore.selectedAssets.value.last.file.path,
+                        isMediaFromPreview: true,
+                      );
+                    },
+                  ),
+                );
+                return;
+              }
               switch ((event.status, event.isPicture, event.isVideo)) {
                 case (MediaCaptureStatus.capturing, true, false):
                   debugPrint('Capturing picture...');
@@ -24,15 +38,13 @@ class CameraScreen extends StatelessWidget {
                   event.captureRequest.when(
                     single: (SingleCaptureRequest single) {
                       if (single.file != null) {
-                        dataStore.selectedAssets
-                            .addAsset(AssetModel.fromXFile(single.file!));
+                        dataStore.selectedAssets.addAsset(AssetModel.fromXFile(single.file!));
                       }
                     },
                     multiple: (MultipleCaptureRequest multiple) {
                       multiple.fileBySensor.forEach((Sensor key, XFile? value) {
                         if (value != null) {
-                          dataStore.selectedAssets
-                              .addAsset(AssetModel.fromXFile(value));
+                          dataStore.selectedAssets.addAsset(AssetModel.fromXFile(value));
                         }
                       });
                     },
@@ -45,15 +57,13 @@ class CameraScreen extends StatelessWidget {
                   event.captureRequest.when(
                     single: (SingleCaptureRequest single) {
                       if (single.file != null) {
-                        dataStore.selectedAssets
-                            .addAsset(AssetModel.fromXFile(single.file!));
+                        dataStore.selectedAssets.addAsset(AssetModel.fromXFile(single.file!));
                       }
                     },
                     multiple: (MultipleCaptureRequest multiple) {
                       multiple.fileBySensor.forEach((Sensor key, XFile? value) {
                         if (value != null) {
-                          dataStore.selectedAssets
-                              .addAsset(AssetModel.fromXFile(value));
+                          dataStore.selectedAssets.addAsset(AssetModel.fromXFile(value));
                         }
                       });
                     },
@@ -63,14 +73,32 @@ class CameraScreen extends StatelessWidget {
                 default:
                   debugPrint('Unknown event: $event');
               }
+
+              if (dataStore.selectedAssets.value.length >= dataStore.limitToSelection) {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute<void>(
+                    builder: (BuildContext context) {
+                      return MediaScreen(
+                        filePath: dataStore.selectedAssets.value.last.file.path,
+                        isMediaFromPreview: true,
+                      );
+                    },
+                  ),
+                );
+              }
             },
-            saveConfig: SaveConfig.photoAndVideo(
-              exifPreferences: ExifPreferences(saveGPSLocation: false),
-              videoOptions: VideoOptions(
-                quality: VideoRecordingQuality.fhd,
-                enableAudio: true,
-              ),
-            ),
+            saveConfig: (dataStore.isNeedToTakeVideo)
+                ? SaveConfig.photoAndVideo(
+                    exifPreferences: ExifPreferences(saveGPSLocation: false),
+                    videoOptions: VideoOptions(
+                      quality: VideoRecordingQuality.fhd,
+                      enableAudio: true,
+                    ),
+                  )
+                : SaveConfig.photo(
+                    exifPreferences: ExifPreferences(saveGPSLocation: false),
+                  ),
             topActionsBuilder: (CameraState state) {
               return AwesomeTopActions(
                 state: state,
@@ -78,8 +106,7 @@ class CameraScreen extends StatelessWidget {
                     ? <Widget>[const SizedBox.shrink()]
                     : <Widget>[
                         AwesomeFlashButton(state: state),
-                        if (state is PhotoCameraState)
-                          AwesomeAspectRatioButton(state: state),
+                        if (state is PhotoCameraState) AwesomeAspectRatioButton(state: state),
                         GestureDetector(
                           onTap: () {
                             Navigator.of(context).pop();
@@ -89,8 +116,7 @@ class CameraScreen extends StatelessWidget {
                               child: SizedBox(
                                 child: FittedBox(
                                   child: Builder(
-                                    builder: (BuildContext context) =>
-                                        const Icon(
+                                    builder: (BuildContext context) => const Icon(
                                       Icons.close,
                                       color: Colors.white,
                                     ),

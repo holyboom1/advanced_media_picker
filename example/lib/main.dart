@@ -30,8 +30,7 @@ class _MyAppState extends State<MyApp> {
           children: <Widget>[
             ValueListenableBuilder<List<XFile>>(
               valueListenable: selectedFiles,
-              builder:
-                  (BuildContext context, List<XFile> value, Widget? child) {
+              builder: (BuildContext context, List<XFile> value, Widget? child) {
                 return Column(
                   children: value.map((XFile file) {
                     return Text(file.path);
@@ -47,8 +46,7 @@ class _MyAppState extends State<MyApp> {
   }
 }
 
-final ValueNotifier<List<XFile>> selectedFiles =
-    ValueNotifier<List<XFile>>(<XFile>[]);
+final ValueNotifier<List<XFile>> selectedFiles = ValueNotifier<List<XFile>>(<XFile>[]);
 
 class MyButton extends StatelessWidget {
   MyButton({super.key});
@@ -64,11 +62,13 @@ class MyButton extends StatelessWidget {
           final List<XFile> result = await AdvancedMediaPicker.openPicker(
             context: context,
             controller: controller,
+            isNeedVideoCamera: false,
+            isNeedToShowCamera: true,
             style: PickerStyle(),
             cameraStyle: CameraStyle(),
             allowedTypes: PickerAssetType.imageAndVideo,
             maxVideoDuration: 60,
-            selectionLimit: 10,
+            selectionLimit: 2,
           );
           print('#result# : $result');
           selectedFiles.value = result;
