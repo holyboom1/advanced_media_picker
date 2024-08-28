@@ -1,6 +1,6 @@
 name: advanced_media_picker
 description: "This plugin displays a gallery with user's Albums and Photos with ability to take photo and video."
-version: 0.0.13
+version: 0.0.14
 homepage: https://github.com/holyboom1/advanced_media_picker
 
 environment:
