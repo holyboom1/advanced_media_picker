@@ -7,7 +7,7 @@ final class DataStore {
     required this.style,
     required this.cameraStyle,
     required this.pickerController,
-    required this.openCameraPermissionSettings,
+    required this.onCameraPermissionDeniedCallback,
   });
 
   /// Main completer
@@ -23,7 +23,7 @@ final class DataStore {
   final CameraStyle cameraStyle;
 
   /// Open permission settings
-  final VoidCallback openCameraPermissionSettings;
+  final VoidCallback onCameraPermissionDeniedCallback;
 
   List<String> allowedTypes = <String>[];
   final int sizePerPage = 10;

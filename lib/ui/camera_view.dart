@@ -36,7 +36,7 @@ class CameraView extends StatelessWidget {
                     ),
                   );
                 }
-              : () => dataStore.openCameraPermissionSettings(),
+              : () => dataStore.onCameraPermissionDeniedCallback(),
           child: Container(
             decoration: dataStore.style.cameraContainerDecoration,
             clipBehavior: Clip.hardEdge,
