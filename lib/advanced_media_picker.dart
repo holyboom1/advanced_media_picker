@@ -37,11 +37,13 @@ class AdvancedMediaPicker {
     PickerController? controller,
     PickerStyle? style,
     CameraStyle? cameraStyle,
+    VoidCallback? openCameraPermissionSettings,
   }) async {
     dataStore = DataStore(
       style: style ?? PickerStyle(),
       cameraStyle: cameraStyle ?? CameraStyle(),
       pickerController: controller ?? PickerController(),
+      openCameraPermissionSettings: openCameraPermissionSettings ?? () {},
     );
     unawaited(dataStore.initCameras());
     assetsService = AssetsService();
