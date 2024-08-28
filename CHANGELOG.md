@@ -1,3 +1,9 @@
+## 0.0.14
+- Fixed logic to handle permission denied state for camera
+
+## 0.0.13
+- Fixed case : After setting isNeedVideoCamera to false, video recording is still possible in photo mode.
+
 ## 0.0.12
 - Fixed case : After setting isNeedVideoCamera to false, video recording is still possible in photo mode.
 - Fixed case : After setting selectionLimit, the maximum number of photos in photo mode is not limited.
