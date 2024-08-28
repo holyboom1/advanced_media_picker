@@ -1,3 +1,6 @@
+## 0.0.15
+- Fixed case : After setting isPreviewCameraReady to true, Camera opening is still unavailable
+
 ## 0.0.14
 - Fixed logic to handle permission denied state for camera
 
