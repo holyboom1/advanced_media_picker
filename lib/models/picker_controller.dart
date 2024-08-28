@@ -66,4 +66,9 @@ class PickerController extends DraggableScrollableController {
   Future<void> hide() async {
     await animateSheet(0);
   }
+
+  /// Close the picker
+  Future<void> closePicker() async {
+    await assetsService.onClose();
+  }
 }

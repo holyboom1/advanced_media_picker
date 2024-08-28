@@ -73,11 +73,22 @@ If your `compileSdkVersion` or `targetSdkVersion` is `29`,
 you can consider adding `android:requestLegacyExternalStorage="true"`
 to your `AndroidManifest.xml` in order to obtain resources:
 
+
+
 ```xml
 
 <manifest xmlns:android="http://schemas.android.com/apk/res/android" package="com.example">
 
-    <application android:label="example" android:icon="@mipmap/ic_launcher"
+  <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" android:maxSdkVersion="32" />
+  <!-- Devices running Android 13 (API level 33) or higher -->
+  <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
+  <uses-permission android:name="android.permission.READ_MEDIA_VIDEO" />
+  <!-- To handle the reselection within the app on devices running Android 14
+       or higher if your app targets Android 14 (API level 34) or higher.  -->
+  <uses-permission android:name="android.permission.READ_MEDIA_VISUAL_USER_SELECTED" />
+
+
+  <application android:label="example" android:icon="@mipmap/ic_launcher"
         android:requestLegacyExternalStorage="true"></application>
 </manifest>
 ```
