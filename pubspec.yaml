@@ -18,7 +18,7 @@ dependencies:
   file_picker: ^8.0.3
   collection: ^1.18.0
   camera: ^0.11.0+1
-  camerawesome_fork: ^2.0.3
+  camerawesome: ^2.0.1
 
 dev_dependencies:
   flutter_test:
