@@ -1,5 +1,5 @@
-import 'package:camerawesome_fork/camerawesome_plugin.dart';
-import 'package:camerawesome_fork/pigeon.dart';
+import 'package:camerawesome/camerawesome_plugin.dart';
+import 'package:camerawesome/pigeon.dart';
 import 'package:cross_file/cross_file.dart';
 import 'package:flutter/material.dart';
 
@@ -17,8 +17,7 @@ class CameraScreen extends StatelessWidget {
         children: <Widget>[
           CameraAwesomeBuilder.awesome(
             onMediaCaptureEvent: (MediaCapture event) {
-              if (dataStore.selectedAssets.value.length >=
-                  dataStore.limitToSelection) {
+              if (dataStore.selectedAssets.value.length >= dataStore.limitToSelection) {
                 Navigator.push(
                   context,
                   MaterialPageRoute<void>(
@@ -39,15 +38,13 @@ class CameraScreen extends StatelessWidget {
                   event.captureRequest.when(
                     single: (SingleCaptureRequest single) {
                       if (single.file != null) {
-                        dataStore.selectedAssets
-                            .addAsset(AssetModel.fromXFile(single.file!));
+                        dataStore.selectedAssets.addAsset(AssetModel.fromXFile(single.file!));
                       }
                     },
                     multiple: (MultipleCaptureRequest multiple) {
                       multiple.fileBySensor.forEach((Sensor key, XFile? value) {
                         if (value != null) {
-                          dataStore.selectedAssets
-                              .addAsset(AssetModel.fromXFile(value));
+                          dataStore.selectedAssets.addAsset(AssetModel.fromXFile(value));
                         }
                       });
                     },
@@ -60,15 +57,13 @@ class CameraScreen extends StatelessWidget {
                   event.captureRequest.when(
                     single: (SingleCaptureRequest single) {
                       if (single.file != null) {
-                        dataStore.selectedAssets
-                            .addAsset(AssetModel.fromXFile(single.file!));
+                        dataStore.selectedAssets.addAsset(AssetModel.fromXFile(single.file!));
                       }
                     },
                     multiple: (MultipleCaptureRequest multiple) {
                       multiple.fileBySensor.forEach((Sensor key, XFile? value) {
                         if (value != null) {
-                          dataStore.selectedAssets
-                              .addAsset(AssetModel.fromXFile(value));
+                          dataStore.selectedAssets.addAsset(AssetModel.fromXFile(value));
                         }
                       });
                     },
@@ -79,8 +74,7 @@ class CameraScreen extends StatelessWidget {
                   debugPrint('Unknown event: $event');
               }
 
-              if (dataStore.selectedAssets.value.length >=
-                  dataStore.limitToSelection) {
+              if (dataStore.selectedAssets.value.length >= dataStore.limitToSelection) {
                 Navigator.push(
                   context,
                   MaterialPageRoute<void>(
@@ -112,8 +106,7 @@ class CameraScreen extends StatelessWidget {
                     ? <Widget>[const SizedBox.shrink()]
                     : <Widget>[
                         AwesomeFlashButton(state: state),
-                        if (state is PhotoCameraState)
-                          AwesomeAspectRatioButton(state: state),
+                        if (state is PhotoCameraState) AwesomeAspectRatioButton(state: state),
                         GestureDetector(
                           onTap: () {
                             Navigator.of(context).pop();
@@ -123,8 +116,7 @@ class CameraScreen extends StatelessWidget {
                               child: SizedBox(
                                 child: FittedBox(
                                   child: Builder(
-                                    builder: (BuildContext context) =>
-                                        const Icon(
+                                    builder: (BuildContext context) => const Icon(
                                       Icons.close,
                                       color: Colors.white,
                                     ),

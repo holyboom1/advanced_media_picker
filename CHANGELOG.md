@@ -1,3 +1,9 @@
+## 0.0.18
+- Upgrade dependency version
+
+## 0.0.17
+- Resolved dependency issue
+
 ## 0.0.16
 - Fixed case : After setting isPreviewCameraReady to true, Camera opening is still unavailable
 
