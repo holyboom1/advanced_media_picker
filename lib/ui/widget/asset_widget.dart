@@ -2,16 +2,20 @@ part of '../../advanced_media_picker_impl.dart';
 
 class AssetWidget extends StatelessWidget {
   final AssetEntity asset;
+  final bool isAdvancedMediaPicker;
 
   const AssetWidget({
     super.key,
     required this.asset,
+    this.isAdvancedMediaPicker = false,
   });
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () => assetsService.onOnSelectAsset(asset),
+      onTap: () => isAdvancedMediaPicker
+          ? assetsService.onClosePicker(asset)
+          : assetsService.onOnSelectAsset(asset),
       child: Container(
         clipBehavior: Clip.hardEdge,
         decoration: BoxDecoration(
@@ -28,8 +32,8 @@ class AssetWidget extends StatelessWidget {
                 fit: BoxFit.cover,
                 isOriginal: false,
                 thumbnailSize: const ThumbnailSize(150, 150),
-                loadingBuilder: (BuildContext context, Widget child,
-                    ImageChunkEvent? loadingProgress) {
+                loadingBuilder:
+                    (BuildContext context, Widget child, ImageChunkEvent? loadingProgress) {
                   return loadingProgress == null
                       ? child
                       : Shimmer.fromColors(
@@ -42,8 +46,7 @@ class AssetWidget extends StatelessWidget {
             ),
             ValueListenableBuilder<List<AssetModel>>(
               valueListenable: dataStore.selectedAssets,
-              builder: (BuildContext context, List<AssetModel> value,
-                  Widget? child) {
+              builder: (BuildContext context, List<AssetModel> value, Widget? child) {
                 return Align(
                   alignment: dataStore.style.selectIconAlignment,
                   child: Padding(
@@ -73,23 +76,25 @@ class AssetWidget extends StatelessWidget {
                     borderRadius: BorderRadius.circular(4),
                   ),
                   child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 4,
-                        vertical: 2,
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 4,
+                      vertical: 2,
+                    ),
+                    child: Text(
+                      asset.duration.toTime(),
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 12,
+                        fontWeight: FontWeight.bold,
+                        shadows: <Shadow>[
+                          Shadow(
+                            offset: Offset(1, 1),
+                            blurRadius: 2,
+                          ),
+                        ],
                       ),
-                      child: Text(
-                        asset.duration.toTime(),
-                        style: const TextStyle(
-                            color: Colors.white,
-                            fontSize: 12,
-                            fontWeight: FontWeight.bold,
-                            shadows: <Shadow>[
-                              Shadow(
-                                offset: Offset(1, 1),
-                                blurRadius: 2,
-                              ),
-                            ]),
-                      )),
+                    ),
+                  ),
                 ),
               )
           ],

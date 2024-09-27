@@ -88,6 +88,24 @@ class PickerStyle {
   /// Picker title widget
   final Widget titleWidget;
 
+  /// Camera unavailable content
+  final Widget cameraUnavailableContent;
+
+  /// Gallery unavailable content
+  final Widget galleryUnavailableContent;
+
+  /// Camera gallery unavailable content
+  final Widget cameraAndGalleryUnavailableContent;
+
+  /// Permission status for camera
+  final bool hasPermissionToCamera;
+
+  /// Permission status for gallery
+  final bool hasPermissionToGallery;
+
+  /// Camera preview padding
+  final EdgeInsets cameraPreviewPadding;
+
   /// Picker style
   PickerStyle({
     this.borderRadius = const BorderRadius.all(Radius.circular(10)),
@@ -98,7 +116,7 @@ class PickerStyle {
     this.isNeedDragIndicator = true,
     this.selectIconBorder = const Border(),
     this.dragIndicatorColor = Colors.grey,
-    this.mainPadding = const EdgeInsets.all(10),
+    this.mainPadding = const EdgeInsets.all(0),
     this.itemsBorderRadius = const BorderRadius.all(Radius.circular(10)),
     this.shimmerBaseColor = Colors.grey,
     this.shimmerHighlightColor = Colors.white,
@@ -135,6 +153,13 @@ class PickerStyle {
     this.bottomPadding = 0,
     this.folderDivider = const Divider(),
     this.titleWidget = const Text('Select media'),
+    this.cameraAndGalleryUnavailableContent =
+        const Text('There is no permission to access the camera and gallery'),
+    this.cameraUnavailableContent = const Text('There is no permission to access the camera'),
+    this.galleryUnavailableContent = const Text('There is no permission to access the gallery'),
+    this.hasPermissionToCamera = true,
+    this.hasPermissionToGallery = true,
+    this.cameraPreviewPadding = const EdgeInsets.all(16),
   }) : _closeAlertStyle = closeAlertStyle ??
             CloseAlertStyle(
               title: 'Close',

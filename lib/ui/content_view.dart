@@ -22,8 +22,7 @@ class ContentView extends StatelessWidget {
     return ValueListenableBuilder<AssetPathEntity?>(
       valueListenable: dataStore.selectedPath,
       key: const ValueKey<String>('content_view_selected_path'),
-      builder:
-          (BuildContext context, AssetPathEntity? pathValue, Widget? child) {
+      builder: (BuildContext context, AssetPathEntity? pathValue, Widget? child) {
         if (pathValue == null) {
           return const SliverToBoxAdapter(
             child: SizedBox.shrink(),
@@ -32,8 +31,7 @@ class ContentView extends StatelessWidget {
         return ValueListenableBuilder<List<AssetEntity>>(
           valueListenable: dataStore.pathData[pathValue.id]!,
           key: const ValueKey<String>('content_view_assets'),
-          builder: (BuildContext context, List<AssetEntity> assetValue,
-              Widget? child) {
+          builder: (BuildContext context, List<AssetEntity> assetValue, Widget? child) {
             return SliverGrid(
               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 4,
@@ -44,21 +42,17 @@ class ContentView extends StatelessWidget {
                 (BuildContext context, int index) {
                   int newIndex = index;
                   if (index == 0 && dataStore.isNeedToShowCamera) {
-                    return CameraView();
+                    return const CameraView();
                   }
                   if (dataStore.isNeedToShowCamera) {
                     newIndex = index - 1;
                   }
-                  if (newIndex >= assetValue.length &&
-                      !dataStore.hasMoreToLoad[pathValue.id]!) {
+                  if (newIndex >= assetValue.length && !dataStore.hasMoreToLoad[pathValue.id]!) {
                     return const SizedBox.shrink();
                   }
-
-                  if (newIndex == assetValue.length &&
-                      dataStore.hasMoreToLoad[pathValue.id]!) {
+                  if (newIndex == assetValue.length && dataStore.hasMoreToLoad[pathValue.id]!) {
                     assetsService.loadMoreAsset(path: pathValue);
                   }
-
                   if (newIndex < assetValue.length) {
                     final AssetEntity asset = assetValue[newIndex];
 
@@ -69,8 +63,7 @@ class ContentView extends StatelessWidget {
                   }
                   return const SizedBox.shrink();
                 },
-                childCount:
-                    assetValue.length + getaditionPathItemCount(pathValue.id),
+                childCount: assetValue.length + getaditionPathItemCount(pathValue.id),
               ),
               key: const ValueKey<String>('content'),
             );

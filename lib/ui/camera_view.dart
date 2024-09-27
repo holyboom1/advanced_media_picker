@@ -1,6 +1,13 @@
 part of '../advanced_media_picker_impl.dart';
 
 class CameraView extends StatelessWidget {
+  final double? height;
+
+  const CameraView({
+    this.height,
+    super.key,
+  });
+
   @override
   Widget build(BuildContext context) {
     return ValueListenableBuilder<bool>(
@@ -38,6 +45,7 @@ class CameraView extends StatelessWidget {
                 }
               : () => dataStore.onCameraPermissionDeniedCallback(),
           child: Container(
+            height: height,
             decoration: dataStore.style.cameraContainerDecoration,
             clipBehavior: Clip.hardEdge,
             child: Stack(

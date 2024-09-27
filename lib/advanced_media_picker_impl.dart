@@ -19,14 +19,27 @@ import 'utils/extensions.dart';
 import 'utils/video_file_formatter.dart';
 
 part 'models/assets_type.dart';
+
+part 'ui/advanced_content_view.dart';
+
 part 'ui/camera_view.dart';
+
 part 'ui/content_view.dart';
+
 part 'ui/media/media_preview_list.dart';
+
 part 'ui/screen/media_screen.dart';
+
+part 'ui/screen/advanced_picker_bottom_sheet.dart';
+
 part 'ui/screen/picker_bottom_sheet.dart';
+
 part 'ui/widget/asset_widget.dart';
+
 part 'ui/widget/directory_widget.dart';
+
 part 'utils/assets_service.dart';
+
 part 'utils/data_store.dart';
 
 /// plugin data store

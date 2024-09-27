@@ -98,6 +98,74 @@ class AdvancedMediaPicker {
     return dataStore.mainCompleter.future;
   }
 
+  /// Opens the picker to select images and videos from the Android and iOS image library
+  /// with ability to add different UI states depends on the permission state
+  static Future<List<XFile>> openAdvancedPicker({
+    required BuildContext context,
+    int maxVideoDuration = -1,
+    List<String> fileSelectorAllowedTypes = const <String>['pdf', 'doc'],
+
+    /// The maximum number of files that can be selected in the picker.
+    /// If the value is -1, it means that there is no limit to the number of files that can be selected.
+    int selectionLimit = 3,
+    PickerAssetType? allowedTypes,
+    PickerController? controller,
+    PickerStyle? style,
+    CameraStyle? cameraStyle,
+    VoidCallback? onCameraPermissionDeniedCallback,
+  }) async {
+    dataStore = DataStore(
+      style: style ?? PickerStyle(hasPermissionToGallery: true, hasPermissionToCamera: false),
+      cameraStyle: cameraStyle ?? CameraStyle(),
+      pickerController: controller ?? PickerController(),
+      onCameraPermissionDeniedCallback: onCameraPermissionDeniedCallback ?? () {},
+    );
+    unawaited(dataStore.initCameras());
+    assetsService = AssetsService();
+
+    dataStore.limitToSelection = selectionLimit;
+    dataStore.maxVideoDuration = maxVideoDuration;
+    dataStore.allowedTypes.addAll(fileSelectorAllowedTypes);
+
+    unawaited(assetsService.getAssetsPath(
+      allowedTypes: allowedTypes ?? PickerAssetType.all,
+    ));
+
+    unawaited(
+      Navigator.push(
+        context,
+        PageRouteBuilder<void>(
+          barrierColor: Colors.black26,
+          transitionsBuilder: (
+            BuildContext context,
+            Animation<double> animation,
+            Animation<double> secondaryAnimation,
+            Widget child,
+          ) {
+            return SlideTransition(
+              position: animation.drive(
+                Tween<Offset>(
+                  begin: const Offset(0.0, 1.0),
+                  end: Offset.zero,
+                ),
+              ),
+              child: const AdvancedPickerBottomSheet(),
+            );
+          },
+          opaque: false,
+          fullscreenDialog: true,
+          barrierDismissible: true,
+          pageBuilder: (_, __, ___) {
+            return const AdvancedPickerBottomSheet();
+          },
+        ),
+      ).then((_) {
+        dataStore.dispose();
+      }),
+    );
+    return dataStore.mainCompleter.future;
+  }
+
   /// Opens file picker to select files from the device, use this in case when you use custom bottom widget
   static Future<List<AssetModel>> selectFilesFromDevice() async {
     final FilePickerResult? result = await FilePicker.platform.pickFiles(
