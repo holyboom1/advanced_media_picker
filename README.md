@@ -172,6 +172,16 @@ final List<XFile> result =
                                     showCamera : true,
                                     videoCamera : true,
                                     );
+///openAdvancedPicker method with ability to add different UI states depends on the camera and gallery permission status
+final List<XFile> result =
+        await AdvancedMediaPicker.openAdvancedPicker(
+                                    context: context,
+                                    style: PickerStyle(),
+                                    cameraStyle: CameraStyle(),
+                                    allowedTypes: PickerAssetType.image,
+                                    maxVideoDuration: 60,
+                                    selectionLimit: 10,
+                                    );
 ```
 
 ### Parameters
@@ -205,6 +215,13 @@ final List<XFile> result =
  Widget? completeWidget;
  Widget? typeSelectionWidget;
  double bottomPadding;
+ Widget cameraUnavailableContent;
+ Widget galleryUnavailableContent;
+ Widget cameraAndGalleryUnavailableContent;
+ /// Result of permission request for camera 
+ bool hasPermissionToCamera;
+ /// Result of permission request for gallery
+ bool hasPermissionToGallery;
 ```
 
 - `cameraStyle`: The `CameraStyle` object to customize the camera.
