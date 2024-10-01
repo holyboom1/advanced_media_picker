@@ -1,3 +1,6 @@
+## 0.0.20
+- Added BasicCameraScreen with base camera functionality
+
 ## 0.0.19
 - Added openAdvancedPicker method with ability to add different UI states depends on the camera and gallery permission status and create new layout for this
 

@@ -181,7 +181,9 @@ final StreamSubscription<List<XFile>>? =
                                     allowedTypes: PickerAssetType.image,
                                     maxVideoDuration: 60,
                                     selectionLimit: 10,
-                                    );
+                                    ).listen((assets){
+                                      
+                                    });
 ```
 
 ### Parameters
