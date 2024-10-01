@@ -13,6 +13,9 @@ final class DataStore {
   /// Main completer
   final Completer<List<XFile>> mainCompleter = Completer<List<XFile>>();
 
+  /// Stream controller for the data store
+  final StreamController<List<XFile>> streamController = StreamController<List<XFile>>();
+
   /// Picker controller
   final PickerController pickerController;
 

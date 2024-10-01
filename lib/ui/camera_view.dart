@@ -33,13 +33,17 @@ class CameraView extends StatelessWidget {
                               end: Offset.zero,
                             ),
                           ),
-                          child: CameraScreen(),
+                          child: dataStore.cameraStyle.showBasicCamera
+                              ? const BasicCameraScreen()
+                              : CameraScreen(),
                         );
                       },
                       opaque: false,
                       fullscreenDialog: true,
                       barrierDismissible: true,
-                      pageBuilder: (_, __, ___) => CameraScreen(),
+                      pageBuilder: (_, __, ___) => dataStore.cameraStyle.showBasicCamera
+                          ? const BasicCameraScreen()
+                          : CameraScreen(),
                     ),
                   );
                 }

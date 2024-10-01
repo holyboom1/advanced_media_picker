@@ -14,7 +14,7 @@ class AssetWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () => isAdvancedMediaPicker
-          ? assetsService.onClosePicker(asset)
+          ? assetsService.captureAssetSelection(asset)
           : assetsService.onOnSelectAsset(asset),
       child: Container(
         clipBehavior: Clip.hardEdge,
@@ -57,7 +57,8 @@ class AssetWidget extends StatelessWidget {
                         border: dataStore.style.selectIconBorder,
                         shape: BoxShape.circle,
                       ),
-                      child: dataStore.selectedAssets.value.containsAsset(asset)
+                      child: dataStore.selectedAssets.value.containsAsset(asset) &&
+                              !isAdvancedMediaPicker
                           ? dataStore.style.selectIcon
                           : const SizedBox(),
                     ),

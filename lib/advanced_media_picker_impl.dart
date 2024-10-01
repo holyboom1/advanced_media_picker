@@ -10,6 +10,7 @@ import 'package:photo_manager_image_provider/photo_manager_image_provider.dart';
 
 import 'advanced_media_picker.dart';
 import 'models/asset_model.dart';
+import 'ui/camera/basic_camera_screen.dart';
 import 'ui/camera/camera_screen.dart';
 import 'ui/media/media_preview.dart';
 import 'ui/widget/complete_widget.dart';
@@ -28,9 +29,9 @@ part 'ui/content_view.dart';
 
 part 'ui/media/media_preview_list.dart';
 
-part 'ui/screen/media_screen.dart';
-
 part 'ui/screen/advanced_picker_bottom_sheet.dart';
+
+part 'ui/screen/media_screen.dart';
 
 part 'ui/screen/picker_bottom_sheet.dart';
 

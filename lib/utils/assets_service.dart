@@ -13,14 +13,12 @@ class AssetsService {
     });
     dataStore.selectedAssets.value.clear();
     dataStore.availablePath.value.clear();
-
     dataStore.mainCompleter.complete(assets);
   }
 
   /// Select asset
   Future<void> onOnSelectAsset(AssetEntity asset) async {
     final bool isContain = dataStore.selectedAssets.value.containsAsset(asset);
-
     if (isContain) {
       dataStore.selectedAssets.removeAsset(await AssetModel.fromAssetEntity(asset));
     } else {
@@ -32,10 +30,28 @@ class AssetsService {
     }
   }
 
-  /// select asset and close picker and return selected assets to the caller
-  Future<void> onClosePicker(AssetEntity asset) async {
-    await onOnSelectAsset(asset);
-    await onClose();
+  /// Select asset and return it to the caller
+  Future<void> captureAssetSelection(AssetEntity asset) async {
+    dataStore.selectedAssets.value.clear();
+    dataStore.selectedAssets.addAsset(await AssetModel.fromAssetEntity(asset));
+    final List<XFile> assets = <XFile>[];
+    dataStore.selectedAssets.value.forEach((AssetModel element) {
+      assets.add(element.file);
+    });
+    dataStore.selectedAssets.value.clear();
+    dataStore.availablePath.value.clear();
+    dataStore.streamController.add(assets);
+  }
+
+  /// Take photo from basicCameraScreen and return assets to the caller
+  Future<void> onTakePhoto() async {
+    final List<XFile> assets = <XFile>[];
+    dataStore.selectedAssets.value.forEach((AssetModel element) {
+      assets.add(element.file);
+    });
+    dataStore.selectedAssets.value.clear();
+    dataStore.availablePath.value.clear();
+    dataStore.streamController.add(assets);
   }
 
   /// Load more assets

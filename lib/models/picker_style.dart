@@ -116,7 +116,7 @@ class PickerStyle {
     this.isNeedDragIndicator = true,
     this.selectIconBorder = const Border(),
     this.dragIndicatorColor = Colors.grey,
-    this.mainPadding = const EdgeInsets.all(0),
+    this.mainPadding = const EdgeInsets.all(10),
     this.itemsBorderRadius = const BorderRadius.all(Radius.circular(10)),
     this.shimmerBaseColor = Colors.grey,
     this.shimmerHighlightColor = Colors.white,

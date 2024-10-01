@@ -44,37 +44,40 @@ class _AdvancedContentViewState extends State<AdvancedContentView> {
                     valueListenable: dataStore.pathData[pathValue.id]!,
                     key: const ValueKey<String>('content_view_assets'),
                     builder: (BuildContext context, List<AssetEntity> assetValue, Widget? child) {
-                      return SliverGrid(
-                        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 4,
-                          crossAxisSpacing: 4,
-                          mainAxisSpacing: 4,
-                        ),
-                        delegate: SliverChildBuilderDelegate(
-                          (BuildContext context, int index) {
-                            final int newIndex = index;
-                            if (newIndex >= assetValue.length &&
-                                !dataStore.hasMoreToLoad[pathValue.id]!) {
-                              return const SizedBox.shrink();
-                            }
-                            if (newIndex == assetValue.length &&
-                                dataStore.hasMoreToLoad[pathValue.id]!) {
-                              assetsService.loadMoreAsset(path: pathValue);
-                            }
-                            if (newIndex < assetValue.length) {
-                              final AssetEntity asset = assetValue[newIndex];
+                      return SliverPadding(
+                        padding: const EdgeInsets.symmetric(horizontal: 8),
+                        sliver: SliverGrid(
+                          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 4,
+                            crossAxisSpacing: 4,
+                            mainAxisSpacing: 4,
+                          ),
+                          delegate: SliverChildBuilderDelegate(
+                            (BuildContext context, int index) {
+                              final int newIndex = index;
+                              if (newIndex >= assetValue.length &&
+                                  !dataStore.hasMoreToLoad[pathValue.id]!) {
+                                return const SizedBox.shrink();
+                              }
+                              if (newIndex == assetValue.length &&
+                                  dataStore.hasMoreToLoad[pathValue.id]!) {
+                                assetsService.loadMoreAsset(path: pathValue);
+                              }
+                              if (newIndex < assetValue.length) {
+                                final AssetEntity asset = assetValue[newIndex];
 
-                              return AssetWidget(
-                                key: ValueKey<int>(asset.hashCode),
-                                asset: asset,
-                                isAdvancedMediaPicker: true,
-                              );
-                            }
-                            return const SizedBox.shrink();
-                          },
-                          childCount: assetValue.length + getaditionPathItemCount(pathValue.id),
+                                return AssetWidget(
+                                  key: ValueKey<int>(asset.hashCode),
+                                  asset: asset,
+                                  isAdvancedMediaPicker: true,
+                                );
+                              }
+                              return const SizedBox.shrink();
+                            },
+                            childCount: assetValue.length + getaditionPathItemCount(pathValue.id),
+                          ),
+                          key: const ValueKey<String>('content'),
                         ),
-                        key: const ValueKey<String>('content'),
                       );
                     },
                   )

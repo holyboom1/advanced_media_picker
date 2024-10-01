@@ -173,8 +173,8 @@ final List<XFile> result =
                                     videoCamera : true,
                                     );
 ///openAdvancedPicker method with ability to add different UI states depends on the camera and gallery permission status
-final List<XFile> result =
-        await AdvancedMediaPicker.openAdvancedPicker(
+final StreamSubscription<List<XFile>>? =
+        AdvancedMediaPicker.openAdvancedPicker(
                                     context: context,
                                     style: PickerStyle(),
                                     cameraStyle: CameraStyle(),
@@ -239,6 +239,15 @@ Widget flipCameraIcon;
 String finishButtonTitle;
 TextStyle finishButtonStyle;
 EdgeInsets finishButtonPadding;
+double basicCameraViewBorderRadius;
+double basicCameraCropContainerHeight;
+double basicCameraCropContainerBorderRadius;
+Color basicCameraCropContainerBorderColor;
+Widget basicCameraFlashIcon;
+Widget basicCameraFlashAutoIcon;
+Widget basicCameraFlashOffIcon;
+Widget? basicCameraTakePhotoButton;
+bool showBasicCamera;
 ```
 
 - `allowedTypes`: The `PickerAssetType` enum to allow the user to select.
