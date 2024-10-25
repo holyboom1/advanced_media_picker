@@ -224,6 +224,9 @@ final StreamSubscription<List<XFile>>? =
  bool hasPermissionToCamera;
  /// Result of permission request for gallery
  bool hasPermissionToGallery;
+ int crossAxisCount;
+ double crossAxisSpacing;
+ double mainAxisSpacing;
 ```
 
 - `cameraStyle`: The `CameraStyle` object to customize the camera.

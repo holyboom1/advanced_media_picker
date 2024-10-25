@@ -1,3 +1,6 @@
+## 0.0.21
+- Added ability to change assets grid from gallery
+
 ## 0.0.20
 - Added BasicCameraScreen with base camera functionality
 
