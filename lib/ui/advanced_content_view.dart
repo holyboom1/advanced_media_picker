@@ -45,12 +45,12 @@ class _AdvancedContentViewState extends State<AdvancedContentView> {
                     key: const ValueKey<String>('content_view_assets'),
                     builder: (BuildContext context, List<AssetEntity> assetValue, Widget? child) {
                       return SliverPadding(
-                        padding: const EdgeInsets.symmetric(horizontal: 8),
+                        padding: EdgeInsets.zero,
                         sliver: SliverGrid(
-                          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 4,
-                            crossAxisSpacing: 4,
-                            mainAxisSpacing: 4,
+                          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: dataStore.style.crossAxisCount,
+                            crossAxisSpacing: dataStore.style.crossAxisSpacing,
+                            mainAxisSpacing: dataStore.style.mainAxisSpacing,
                           ),
                           delegate: SliverChildBuilderDelegate(
                             (BuildContext context, int index) {

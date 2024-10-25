@@ -106,6 +106,15 @@ class PickerStyle {
   /// Camera preview padding
   final EdgeInsets cameraPreviewPadding;
 
+  /// The number of children in the cross axis in assets grid
+  final int crossAxisCount;
+
+  /// The number of logical pixels between each child along the cross axis in assets grid
+  final double crossAxisSpacing;
+
+  /// The number of logical pixels between each child along the main axis in assets grid
+  final double mainAxisSpacing;
+
   /// Picker style
   PickerStyle({
     this.borderRadius = const BorderRadius.all(Radius.circular(10)),
@@ -160,6 +169,9 @@ class PickerStyle {
     this.hasPermissionToCamera = true,
     this.hasPermissionToGallery = true,
     this.cameraPreviewPadding = const EdgeInsets.all(16),
+    this.crossAxisCount = 4,
+    this.crossAxisSpacing = 4,
+    this.mainAxisSpacing = 4,
   }) : _closeAlertStyle = closeAlertStyle ??
             CloseAlertStyle(
               title: 'Close',

@@ -33,10 +33,10 @@ class ContentView extends StatelessWidget {
           key: const ValueKey<String>('content_view_assets'),
           builder: (BuildContext context, List<AssetEntity> assetValue, Widget? child) {
             return SliverGrid(
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 4,
-                crossAxisSpacing: 4,
-                mainAxisSpacing: 4,
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: dataStore.style.crossAxisCount,
+                crossAxisSpacing: dataStore.style.crossAxisSpacing,
+                mainAxisSpacing: dataStore.style.mainAxisSpacing,
               ),
               delegate: SliverChildBuilderDelegate(
                 (BuildContext context, int index) {
