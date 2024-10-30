@@ -115,6 +115,15 @@ class PickerStyle {
   /// The number of logical pixels between each child along the main axis in assets grid
   final double mainAxisSpacing;
 
+  /// Unselected asset mark icon
+  final Widget? unselectAssetIcon;
+
+  /// Custom selected asset mark icon
+  final Widget? customSelectAssetIcon;
+
+  /// Custom selected assets count style
+  final TextStyle? customSelectAssetCountStyle;
+
   /// Picker style
   PickerStyle({
     this.borderRadius = const BorderRadius.all(Radius.circular(10)),
@@ -172,6 +181,9 @@ class PickerStyle {
     this.crossAxisCount = 4,
     this.crossAxisSpacing = 4,
     this.mainAxisSpacing = 4,
+    this.unselectAssetIcon,
+    this.customSelectAssetIcon,
+    this.customSelectAssetCountStyle,
   }) : _closeAlertStyle = closeAlertStyle ??
             CloseAlertStyle(
               title: 'Close',

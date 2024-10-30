@@ -16,6 +16,15 @@ class AssetsService {
     dataStore.mainCompleter.complete(assets);
   }
 
+  /// close picker and return selected AssetModels to the caller
+  Future<void> onCloseAssetsPicker() async {
+    final List<AssetModel> assets = List.from(dataStore.selectedAssets.value);
+    unawaited(dataStore.pickerController.hide());
+    dataStore.mainAssetsCompleter.complete(assets);
+    dataStore.selectedAssets.value.clear();
+    dataStore.availablePath.value.clear();
+  }
+
   /// Select asset
   Future<void> onOnSelectAsset(AssetEntity asset) async {
     final bool isContain = dataStore.selectedAssets.value.containsAsset(asset);

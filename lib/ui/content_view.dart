@@ -1,7 +1,10 @@
 part of '../advanced_media_picker_impl.dart';
 
 class ContentView extends StatelessWidget {
+  final bool isAssetsMediaPicker;
+
   const ContentView({
+    this.isAssetsMediaPicker = false,
     super.key,
   });
 
@@ -56,10 +59,15 @@ class ContentView extends StatelessWidget {
                   if (newIndex < assetValue.length) {
                     final AssetEntity asset = assetValue[newIndex];
 
-                    return AssetWidget(
-                      key: ValueKey<int>(asset.hashCode),
-                      asset: asset,
-                    );
+                    return isAssetsMediaPicker
+                        ? CustomAssetWidget(
+                            key: ValueKey<int>(asset.hashCode),
+                            asset: asset,
+                          )
+                        : AssetWidget(
+                            key: ValueKey<int>(asset.hashCode),
+                            asset: asset,
+                          );
                   }
                   return const SizedBox.shrink();
                 },

@@ -35,6 +35,10 @@ part 'ui/screen/media_screen.dart';
 
 part 'ui/screen/picker_bottom_sheet.dart';
 
+part 'ui/screen/assets_picker_bottom_sheet.dart';
+
+part 'ui/widget/custom_asset_widget.dart';
+
 part 'ui/widget/asset_widget.dart';
 
 part 'ui/widget/directory_widget.dart';
