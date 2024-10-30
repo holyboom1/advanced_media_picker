@@ -1,3 +1,6 @@
+## 0.0.23
+- Fixed case : Export AssetModel in order to return it from openAssetPicker
+
 ## 0.0.22
 - Added openAssetsPicker method with ability to select assets from gallery and display previously added assets as already selected
 

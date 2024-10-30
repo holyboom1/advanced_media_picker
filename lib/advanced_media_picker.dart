@@ -15,6 +15,7 @@ import 'models/picker_style.dart';
 export 'package:cross_file/cross_file.dart' show XFile;
 
 export 'advanced_media_picker_impl.dart' show PickerAssetType;
+export 'models/asset_model.dart';
 export 'models/camera_style.dart';
 export 'models/close_alert_style.dart';
 export 'models/picker_controller.dart';
