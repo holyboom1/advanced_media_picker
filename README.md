@@ -173,7 +173,7 @@ final List<XFile> result =
                                     videoCamera : true,
                                     );
 ///openAdvancedPicker method with ability to add different UI states depends on the camera and gallery permission status
-final StreamSubscription<List<XFile>>? =
+final StreamSubscription<List<XFile>>? result =
         AdvancedMediaPicker.openAdvancedPicker(
                                     context: context,
                                     style: PickerStyle(),
@@ -183,6 +183,19 @@ final StreamSubscription<List<XFile>>? =
                                     selectionLimit: 10,
                                     ).listen((assets){
                                       
+                                    });
+
+///openAssetsPicker method with ability to select assets from gallery and display previously added assets as already selected
+final Future<List<AssetModel>> result =
+        AdvancedMediaPicker.openAssetsPicker(
+                                    context: context,
+                                    style: PickerStyle(),
+                                    cameraStyle: CameraStyle(),
+                                    allowedTypes: PickerAssetType.image,
+                                    maxVideoDuration: 60,
+                                    selectionLimit: 10,
+                                    ).listen((assets){
+
                                     });
 ```
 
@@ -227,6 +240,12 @@ final StreamSubscription<List<XFile>>? =
  int crossAxisCount;
  double crossAxisSpacing;
  double mainAxisSpacing;
+ /// Unselected asset mark icon
+ Widget? unselectAssetIcon;
+ /// Custom selected asset mark icon
+ Widget? customSelectAssetIcon;
+ /// Custom selected assets count style
+ TextStyle? customSelectAssetCountStyle;
 ```
 
 - `cameraStyle`: The `CameraStyle` object to customize the camera.

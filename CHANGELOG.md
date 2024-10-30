@@ -1,3 +1,6 @@
+## 0.0.22
+- Added openAssetsPicker method with ability to select assets from gallery and display previously added assets as already selected
+
 ## 0.0.21
 - Added ability to change assets grid from gallery
 
