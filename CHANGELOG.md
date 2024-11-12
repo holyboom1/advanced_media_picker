@@ -1,3 +1,6 @@
+## 0.0.24
+- Fixed case : adjust CameraPreview to Fit Full Width Without Stretching
+
 ## 0.0.23
 - Fixed case : Export AssetModel in order to return it from openAssetPicker
 
