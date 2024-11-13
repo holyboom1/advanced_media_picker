@@ -54,7 +54,9 @@ class CameraView extends StatelessWidget {
             clipBehavior: Clip.hardEdge,
             child: Stack(
               children: <Widget>[
-                Positioned.fill(
+                Positioned(
+                  left: 0,
+                  right: 0,
                   child: !value ? Container() : CameraPreview(dataStore.cameraController),
                 ),
                 Positioned.fill(
