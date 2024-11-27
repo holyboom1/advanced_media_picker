@@ -16,7 +16,7 @@ class CameraView extends StatelessWidget {
         return GestureDetector(
           onTap: value
               ? () {
-                  Navigator.push(
+                  Navigator.pushReplacement(
                     context,
                     PageRouteBuilder<void>(
                       barrierColor: Colors.black26,

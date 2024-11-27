@@ -45,8 +45,7 @@ class _MediaScreenState extends State<MediaScreen> {
             Positioned.fill(
               child: ValueListenableBuilder<bool>(
                 valueListenable: _isPreviewTapped,
-                builder: (BuildContext context, bool isPreviewTapped,
-                    Widget? child) {
+                builder: (BuildContext context, bool isPreviewTapped, Widget? child) {
                   if (isPreviewTapped) {
                     if (_filePath.isVideo()) {
                       _formatVideo(_filePath);
@@ -55,17 +54,13 @@ class _MediaScreenState extends State<MediaScreen> {
                         ? Image.file(File(_filePath))
                         : bytes != null
                             ? Image.memory(bytes!)
-                            : const Center(
-                                child: CircularProgressIndicator(
-                                    color: Colors.grey));
+                            : const Center(child: CircularProgressIndicator(color: Colors.grey));
                   } else {
                     return widget.filePath.isPicture()
                         ? Image.file(File(widget.filePath))
                         : bytes != null
                             ? Image.memory(bytes!)
-                            : const Center(
-                                child: CircularProgressIndicator(
-                                    color: Colors.grey));
+                            : const Center(child: CircularProgressIndicator(color: Colors.grey));
                   }
                 },
               ),
@@ -98,13 +93,11 @@ class _MediaScreenState extends State<MediaScreen> {
                             },
                             onTap: () {
                               _isPreviewTapped.value = true;
-                              _filePath = dataStore
-                                  .selectedAssets.value[index].file.path;
+                              _filePath = dataStore.selectedAssets.value[index].file.path;
                               setState(() {});
                             },
                             path: dataStore.selectedAssets.value.isNotEmpty
-                                ? dataStore
-                                    .selectedAssets.value[index].file.path
+                                ? dataStore.selectedAssets.value[index].file.path
                                 : '',
                           );
                         },
@@ -121,8 +114,7 @@ class _MediaScreenState extends State<MediaScreen> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
                   widget.isLimitReached ||
-                          dataStore.selectedAssets.value.length + 1 >
-                              dataStore.limitToSelection
+                          dataStore.selectedAssets.value.length + 1 > dataStore.limitToSelection
                       ? const SizedBox.shrink()
                       : GestureDetector(
                           onTap: () {
@@ -134,8 +126,7 @@ class _MediaScreenState extends State<MediaScreen> {
                             decoration: BoxDecoration(
                               color: Colors.black.withOpacity(0.7),
                               border: Border.all(color: Colors.white, width: 2),
-                              borderRadius:
-                                  const BorderRadius.all(Radius.circular(15)),
+                              borderRadius: const BorderRadius.all(Radius.circular(15)),
                             ),
                             child: const Icon(
                               Icons.add,
@@ -185,7 +176,9 @@ class _MediaScreenState extends State<MediaScreen> {
                 onTap: () {
                   assetsService.onClose();
                   Navigator.of(context).pop();
-                  Navigator.of(context).pop();
+                  if (!dataStore.cameraStyle.showBasicCamera) {
+                    Navigator.of(context).pop();
+                  }
                 },
                 child: Padding(
                   padding: dataStore.cameraStyle.finishButtonPadding,

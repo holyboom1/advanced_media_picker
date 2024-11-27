@@ -19,6 +19,7 @@ dependencies:
   collection: ^1.18.0
   camera: ^0.11.0+2
   camerawesome: ^2.1.0
+  visibility_detector: ^0.4.0+2
 
 dev_dependencies:
   flutter_test:

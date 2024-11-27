@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_sticky_header/flutter_sticky_header.dart';
 import 'package:photo_manager/photo_manager.dart';
 import 'package:photo_manager_image_provider/photo_manager_image_provider.dart';
+import 'package:visibility_detector/visibility_detector.dart';
 
 import 'advanced_media_picker.dart';
 import 'models/asset_model.dart';

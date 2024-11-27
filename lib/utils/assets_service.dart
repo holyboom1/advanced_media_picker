@@ -49,7 +49,8 @@ class AssetsService {
     });
     dataStore.selectedAssets.value.clear();
     dataStore.availablePath.value.clear();
-    dataStore.streamController.add(assets);
+    unawaited(dataStore.cameraController.dispose());
+    dataStore.mainCompleter.complete(assets);
   }
 
   /// Take photo from basicCameraScreen and return assets to the caller
@@ -60,7 +61,7 @@ class AssetsService {
     });
     dataStore.selectedAssets.value.clear();
     dataStore.availablePath.value.clear();
-    dataStore.streamController.add(assets);
+    dataStore.mainCompleter.complete(assets);
   }
 
   /// Load more assets

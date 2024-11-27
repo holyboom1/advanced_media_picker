@@ -8,6 +8,7 @@ final class DataStore {
     required this.cameraStyle,
     required this.pickerController,
     required this.onCameraPermissionDeniedCallback,
+    required this.enableAudio,
   });
 
   /// Main completer
@@ -30,6 +31,9 @@ final class DataStore {
 
   /// Open permission settings
   final VoidCallback onCameraPermissionDeniedCallback;
+
+  /// Enable audio - if true will request permission to microphone
+  final bool enableAudio;
 
   List<String> allowedTypes = <String>[];
   final int sizePerPage = 10;
@@ -58,12 +62,16 @@ final class DataStore {
 
   late CameraController cameraController;
 
+  /// Initialize camera
   Future<void> initCameras() async {
     final List<CameraDescription> cameras = await availableCameras();
     cameraController = CameraController(
       cameras.first,
       ResolutionPreset.medium,
+      enableAudio: enableAudio,
     );
+    unawaited(cameraController.setFlashMode(FlashMode.off));
+
     try {
       await cameraController.initialize().then((_) {
         isPreviewCameraReady.value = true;

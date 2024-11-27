@@ -39,12 +39,14 @@ class AdvancedMediaPicker {
     PickerStyle? style,
     CameraStyle? cameraStyle,
     VoidCallback? onCameraPermissionDeniedCallback,
+    bool? enableAudio,
   }) async {
     dataStore = DataStore(
       style: style ?? PickerStyle(),
       cameraStyle: cameraStyle ?? CameraStyle(),
       pickerController: controller ?? PickerController(),
       onCameraPermissionDeniedCallback: onCameraPermissionDeniedCallback ?? () {},
+      enableAudio: enableAudio ?? false,
     );
     unawaited(dataStore.initCameras());
     assetsService = AssetsService();
@@ -120,12 +122,14 @@ class AdvancedMediaPicker {
     PickerStyle? style,
     CameraStyle? cameraStyle,
     VoidCallback? onCameraPermissionDeniedCallback,
+    bool? enableAudio,
   }) async {
     dataStore = DataStore(
       style: style ?? PickerStyle(),
       cameraStyle: cameraStyle ?? CameraStyle(),
       pickerController: controller ?? PickerController(),
       onCameraPermissionDeniedCallback: onCameraPermissionDeniedCallback ?? () {},
+      enableAudio: enableAudio ?? false,
     );
     unawaited(dataStore.initCameras());
 
@@ -189,7 +193,7 @@ class AdvancedMediaPicker {
 
   /// Opens the picker to select images and videos from the Android and iOS image library
   /// with ability to add different UI states depends on the permission state
-  static Stream<List<XFile>> openAdvancedPicker({
+  static Future<List<XFile>> openAdvancedPicker({
     required BuildContext context,
     int maxVideoDuration = -1,
     List<String> fileSelectorAllowedTypes = const <String>['pdf', 'doc'],
@@ -202,12 +206,14 @@ class AdvancedMediaPicker {
     PickerStyle? style,
     CameraStyle? cameraStyle,
     VoidCallback? onCameraPermissionDeniedCallback,
+    bool? enableAudio,
   }) {
     dataStore = DataStore(
       style: style ?? PickerStyle(),
       cameraStyle: cameraStyle ?? CameraStyle(),
       pickerController: controller ?? PickerController(),
       onCameraPermissionDeniedCallback: onCameraPermissionDeniedCallback ?? () {},
+      enableAudio: enableAudio ?? false,
     );
     unawaited(dataStore.initCameras());
     assetsService = AssetsService();
@@ -252,7 +258,7 @@ class AdvancedMediaPicker {
         dataStore.dispose();
       }),
     );
-    return dataStore.streamController.stream;
+    return dataStore.mainCompleter.future;
   }
 
   /// Opens file picker to select files from the device, use this in case when you use custom bottom widget

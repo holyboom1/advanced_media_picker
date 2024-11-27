@@ -1,17 +1,66 @@
+import 'dart:async';
+
 import 'package:camerawesome/camerawesome_plugin.dart';
 import 'package:camerawesome/pigeon.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import '../../advanced_media_picker.dart';
 import '../../advanced_media_picker_impl.dart';
-import '../../models/asset_model.dart';
 import '../../utils/extensions.dart';
 import '../widget/blur_button_container.dart';
 import '../widget/crop_container_border.dart';
 
 /// Camera screen with basic functionality
-class BasicCameraScreen extends StatelessWidget {
+class BasicCameraScreen extends StatefulWidget {
   const BasicCameraScreen({super.key});
+
+  @override
+  State<BasicCameraScreen> createState() => _BasicCameraScreenState();
+}
+
+class _BasicCameraScreenState extends State<BasicCameraScreen> {
+  late CameraState cameraState;
+  FlashMode currentFlashMode = FlashMode.none;
+  bool takePhotoFromFrontCamera = false;
+  bool showFlashEffect = false;
+  bool previousSensorPositionWasBack = true;
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  /// Toggle flash mode and set
+  Future<void> toggleFlashMode() async {
+    try {
+      if (currentFlashMode == FlashMode.none &&
+          cameraState.sensorConfig.sensors.first.position != SensorPosition.front) {
+        await cameraState.sensorConfig.setFlashMode(FlashMode.on);
+        currentFlashMode = FlashMode.on;
+      } else if (currentFlashMode == FlashMode.on) {
+        await cameraState.sensorConfig.setFlashMode(FlashMode.auto);
+        currentFlashMode = FlashMode.auto;
+      } else {
+        await cameraState.sensorConfig.setFlashMode(FlashMode.none);
+        currentFlashMode = FlashMode.none;
+      }
+    } on PlatformException catch (e) {
+      if (e.message == "can't set flash for portrait mode") {
+        if (currentFlashMode == FlashMode.none) {
+          currentFlashMode = FlashMode.on;
+          showFlashEffect = true;
+        } else if (currentFlashMode == FlashMode.on) {
+          currentFlashMode = FlashMode.auto;
+          showFlashEffect = false;
+        } else {
+          currentFlashMode = FlashMode.none;
+          showFlashEffect = false;
+        }
+      }
+    }
+    setState(() {});
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -28,20 +77,29 @@ class BasicCameraScreen extends StatelessWidget {
                 child: CameraAwesomeBuilder.custom(
                   onMediaCaptureEvent: (MediaCapture event) {
                     event.captureRequest.when(
-                      single: (SingleCaptureRequest single) {
+                      single: (SingleCaptureRequest single) async {
+                        takePhotoFromFrontCamera =
+                            cameraState.sensorConfig.sensors.first.position == SensorPosition.front;
+
                         if (single.file != null) {
                           dataStore.selectedAssets.value.clear();
                           dataStore.selectedAssets.addAsset(AssetModel.fromXFile(single.file!));
+                          final ModalRoute<Object?>? currentRoute = ModalRoute.of(context);
+
+                          if (event.status == MediaCaptureStatus.success) {
+                            await assetsService.onTakePhoto();
+                            Future<void>.delayed(const Duration(milliseconds: 500), () {
+                              Navigator.removeRoute(context, currentRoute!);
+                            });
+                          }
                         }
                       },
                       multiple: (MultipleCaptureRequest multiple) {
-                        multiple.fileBySensor.forEach(
-                          (Sensor key, XFile? value) {
-                            if (value != null) {
-                              dataStore.selectedAssets.addAsset(AssetModel.fromXFile(value));
-                            }
-                          },
-                        );
+                        multiple.fileBySensor.forEach((Sensor key, XFile? value) {
+                          if (value != null) {
+                            dataStore.selectedAssets.addAsset(AssetModel.fromXFile(value));
+                          }
+                        });
                       },
                     );
                   },
@@ -49,6 +107,7 @@ class BasicCameraScreen extends StatelessWidget {
                     exifPreferences: ExifPreferences(saveGPSLocation: false),
                   ),
                   builder: (CameraState state, Preview preview) {
+                    cameraState = state;
                     return Stack(
                       children: <Widget>[
                         OverlayWithRectangleClipping(),
@@ -70,31 +129,27 @@ class BasicCameraScreen extends StatelessWidget {
                           right: 16,
                           child: Row(
                             children: <Widget>[
-                              AwesomeFlashButton(
-                                state: state,
-                                iconBuilder: (FlashMode mode) {
-                                  switch (mode) {
-                                    case FlashMode.auto:
-                                      return BlurButtonContainer(
-                                        child: dataStore.cameraStyle.basicCameraFlashAutoIcon,
-                                      );
-                                    case FlashMode.always:
-                                      return BlurButtonContainer(
-                                        child: dataStore.cameraStyle.basicCameraFlashIcon,
-                                      );
-                                    case FlashMode.none:
-                                      return BlurButtonContainer(
-                                        child: dataStore.cameraStyle.basicCameraFlashOffIcon,
-                                      );
-                                    default:
-                                      return BlurButtonContainer(
-                                        child: dataStore.cameraStyle.basicCameraFlashOffIcon,
-                                      );
-                                  }
-                                },
+                              GestureDetector(
+                                onTap: toggleFlashMode,
+                                child: BlurButtonContainer(
+                                  child: getFlashIcon(currentFlashMode),
+                                ),
                               ),
                               const SizedBox(width: 12),
                               AwesomeCameraSwitchButton(
+                                onSwitchTap: (CameraState state) async {
+                                  if (previousSensorPositionWasBack) {
+                                    await state.sensorConfig.setFlashMode(FlashMode.none);
+                                    currentFlashMode = FlashMode.none;
+                                  }
+                                  previousSensorPositionWasBack = !previousSensorPositionWasBack;
+                                  await state.switchCameraSensor();
+                                  if (state.sensorConfig.sensors.first.position ==
+                                      SensorPosition.back) {
+                                    await state.sensorConfig.setFlashMode(FlashMode.none);
+                                    currentFlashMode = FlashMode.none;
+                                  }
+                                },
                                 state: state,
                                 iconBuilder: () {
                                   return BlurButtonContainer(
@@ -112,8 +167,20 @@ class BasicCameraScreen extends StatelessWidget {
                               alignment: Alignment.bottomCenter,
                               child: GestureDetector(
                                 onTap: () async {
+                                  if (cameraState.sensorConfig.sensors.first.position ==
+                                      SensorPosition.front) {
+                                    if (currentFlashMode != FlashMode.none) {
+                                      setState(() {
+                                        takePhotoFromFrontCamera = true;
+                                        showFlashEffect = true;
+                                      });
+                                      await Future<void>.delayed(const Duration(seconds: 1));
+                                    }
+                                  }
                                   await state.takePhoto();
-                                  await assetsService.onTakePhoto();
+                                  setState(() {
+                                    showFlashEffect = false;
+                                  });
                                 },
                                 child: dataStore.cameraStyle.basicCameraTakePhotoButton ??
                                     Container(
@@ -155,6 +222,12 @@ class BasicCameraScreen extends StatelessWidget {
               ),
             ),
           ),
+          if (showFlashEffect && takePhotoFromFrontCamera)
+            Container(
+              width: MediaQuery.of(context).size.width,
+              height: MediaQuery.of(context).size.height,
+              color: Colors.white,
+            ),
           const Positioned(
             bottom: 0,
             left: 0,
@@ -174,6 +247,18 @@ class BasicCameraScreen extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  Widget getFlashIcon(FlashMode mode) {
+    switch (mode) {
+      case FlashMode.auto:
+        return dataStore.cameraStyle.basicCameraFlashAutoIcon;
+      case FlashMode.on:
+        return dataStore.cameraStyle.basicCameraFlashIcon;
+      case FlashMode.none:
+      default:
+        return dataStore.cameraStyle.basicCameraFlashOffIcon;
+    }
   }
 }
 
