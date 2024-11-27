@@ -1,3 +1,6 @@
+## 0.0.25
+- Fixed case : deactivate camera when navigate to another screen/ update logic to flash mode in front camera
+
 ## 0.0.24
 - Fixed case : adjust CameraPreview to Fit Full Width Without Stretching
 

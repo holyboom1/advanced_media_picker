@@ -173,7 +173,7 @@ final List<XFile> result =
                                     videoCamera : true,
                                     );
 ///openAdvancedPicker method with ability to add different UI states depends on the camera and gallery permission status
-final StreamSubscription<List<XFile>>? result =
+final List<XFile> result result =
         AdvancedMediaPicker.openAdvancedPicker(
                                     context: context,
                                     style: PickerStyle(),
@@ -181,9 +181,7 @@ final StreamSubscription<List<XFile>>? result =
                                     allowedTypes: PickerAssetType.image,
                                     maxVideoDuration: 60,
                                     selectionLimit: 10,
-                                    ).listen((assets){
-                                      
-                                    });
+                                    );
 
 ///openAssetsPicker method with ability to select assets from gallery and display previously added assets as already selected
 final Future<List<AssetModel>> result =
