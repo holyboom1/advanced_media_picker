@@ -1,6 +1,6 @@
 name: advanced_media_picker
 description: "This plugin displays a gallery with user's Albums and Photos with ability to take photo and video."
-version: 0.0.25
+version: 0.0.26
 homepage: https://github.com/holyboom1/advanced_media_picker
 
 environment:
@@ -10,12 +10,12 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  photo_manager: ^3.3.0
-  photo_manager_image_provider: ^2.1.1
-  flutter_sticky_header: ^0.6.5
+  photo_manager: ^3.6.3
+  photo_manager_image_provider: ^2.2.0
+  flutter_sticky_header: ^0.7.0
   cross_file: ^0.3.4+2
   video_thumbnail: ^0.5.3
-  file_picker: ^8.1.2
+  file_picker: ^8.1.5
   collection: ^1.18.0
   camera: ^0.11.0+2
   camerawesome: ^2.1.0
@@ -24,4 +24,4 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  flutter_lints: ^4.0.0
+  flutter_lints: ^5.0.0
