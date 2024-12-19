@@ -50,6 +50,7 @@ class AssetsService {
     dataStore.selectedAssets.value.clear();
     dataStore.availablePath.value.clear();
     unawaited(dataStore.cameraController.dispose());
+    dataStore.isPreviewCameraReady.value = false;
     dataStore.mainCompleter.complete(assets);
   }
 

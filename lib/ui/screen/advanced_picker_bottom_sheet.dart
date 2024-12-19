@@ -46,9 +46,14 @@ class _AdvancedPickerBottomSheetState extends State<AdvancedPickerBottomSheet> {
           dataStore.pickerController.hide();
           isPopped = true;
           final ModalRoute<Object?>? currentRoute = ModalRoute.of(context);
-          Future<void>.delayed(const Duration(milliseconds: 500), () {
-            Navigator.removeRoute(context, currentRoute!);
-          });
+          Future<void>.delayed(
+            const Duration(milliseconds: 500),
+            () {
+              if (currentRoute != null) {
+                Navigator.removeRoute(context, currentRoute);
+              }
+            },
+          );
         }
       },
       child: LayoutBuilder(
