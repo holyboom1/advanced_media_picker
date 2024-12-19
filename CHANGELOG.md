@@ -1,3 +1,6 @@
+## 0.0.27
+- Fixed case : 'openAdvancedPicker' method is not working properly when navigate to another screen and dispose camera controller
+
 ## 0.0.26
 - Update dependencies
 

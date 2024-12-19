@@ -173,7 +173,8 @@ final List<XFile> result =
                                     videoCamera : true,
                                     );
 ///openAdvancedPicker method with ability to add different UI states depends on the camera and gallery permission status
-final List<XFile> result result =
+///and with ability to get and display result on screen inside app 
+final List<XFile> result =
         AdvancedMediaPicker.openAdvancedPicker(
                                     context: context,
                                     style: PickerStyle(),
