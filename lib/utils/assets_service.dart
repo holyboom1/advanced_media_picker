@@ -51,18 +51,24 @@ class AssetsService {
     dataStore.availablePath.value.clear();
     unawaited(dataStore.cameraController.dispose());
     dataStore.isPreviewCameraReady.value = false;
-    dataStore.mainCompleter.complete(assets);
+    dataStore.advancedPickerCompleter.complete((
+      assets: assets,
+      needMirrorPhoto: false,
+    ));
   }
 
   /// Take photo from basicCameraScreen and return assets to the caller
-  Future<void> onTakePhoto() async {
+  Future<void> onTakePhoto({bool needMirrorPhoto = false}) async {
     final List<XFile> assets = <XFile>[];
-    dataStore.selectedAssets.value.forEach((AssetModel element) {
+    dataStore.selectedAssets.value.forEach((AssetModel element) async {
       assets.add(element.file);
     });
     dataStore.selectedAssets.value.clear();
     dataStore.availablePath.value.clear();
-    dataStore.mainCompleter.complete(assets);
+    dataStore.advancedPickerCompleter.complete((
+      assets: assets,
+      needMirrorPhoto: needMirrorPhoto,
+    ));
   }
 
   /// Load more assets

@@ -193,7 +193,7 @@ class AdvancedMediaPicker {
 
   /// Opens the picker to select images and videos from the Android and iOS image library
   /// with ability to add different UI states depends on the permission state
-  static Future<List<XFile>> openAdvancedPicker({
+  static Future<({List<XFile> assets, bool needMirrorPhoto})> openAdvancedPicker({
     required BuildContext context,
     int maxVideoDuration = -1,
     List<String> fileSelectorAllowedTypes = const <String>['pdf', 'doc'],
@@ -258,7 +258,7 @@ class AdvancedMediaPicker {
         dataStore.dispose();
       }),
     );
-    return dataStore.mainCompleter.future;
+    return dataStore.advancedPickerCompleter.future;
   }
 
   /// Opens file picker to select files from the device, use this in case when you use custom bottom widget

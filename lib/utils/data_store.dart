@@ -14,6 +14,10 @@ final class DataStore {
   /// Main completer
   final Completer<List<XFile>> mainCompleter = Completer<List<XFile>>();
 
+  /// Main completer for advancedPicker
+  final Completer<({List<XFile> assets, bool needMirrorPhoto})> advancedPickerCompleter =
+      Completer<({List<XFile> assets, bool needMirrorPhoto})>();
+
   /// Main completer for assets picker
   final Completer<List<AssetModel>> mainAssetsCompleter = Completer<List<AssetModel>>();
 
