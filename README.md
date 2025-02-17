@@ -174,7 +174,7 @@ final List<XFile> result =
                                     );
 ///openAdvancedPicker method with ability to add different UI states depends on the camera and gallery permission status
 ///and with ability to get and display result on screen inside app 
-final List<XFile> result =
+final ({List<XFile> assets, bool needMirrorPhoto}) =
         AdvancedMediaPicker.openAdvancedPicker(
                                     context: context,
                                     style: PickerStyle(),

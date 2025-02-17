@@ -1,3 +1,6 @@
+## 0.0.28
+- Fixed case : Fix UI freeze after get photo taken by front camera
+
 ## 0.0.27
 - Fixed case : 'openAdvancedPicker' method is not working properly when navigate to another screen and dispose camera controller
 
