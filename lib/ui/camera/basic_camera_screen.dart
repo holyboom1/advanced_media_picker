@@ -95,151 +95,157 @@ class _BasicCameraScreenState extends State<BasicCameraScreen> {
               child: ClipRRect(
                 borderRadius:
                     BorderRadius.circular(dataStore.cameraStyle.basicCameraViewBorderRadius),
-                child: CameraAwesomeBuilder.custom(
-                  sensorConfig: SensorConfig.single(sensor: Sensor.position(SensorPosition.front)),
-                  onMediaCaptureEvent: (MediaCapture event) {
-                    event.captureRequest.when(
-                      single: (SingleCaptureRequest single) async {
-                        takePhotoFromFrontCamera =
-                            cameraState.sensorConfig.sensors.first.position == SensorPosition.front;
+                child: isPopped
+                    ? const SizedBox.shrink()
+                    : CameraAwesomeBuilder.custom(
+                        sensorConfig:
+                            SensorConfig.single(sensor: Sensor.position(SensorPosition.front)),
+                        onMediaCaptureEvent: (MediaCapture event) {
+                          event.captureRequest.when(
+                            single: (SingleCaptureRequest single) async {
+                              takePhotoFromFrontCamera =
+                                  cameraState.sensorConfig.sensors.first.position ==
+                                      SensorPosition.front;
 
-                        if (single.file != null) {
-                          dataStore.selectedAssets.value.clear();
-                          dataStore.selectedAssets.addAsset(AssetModel.fromXFile(single.file!));
+                              if (single.file != null) {
+                                dataStore.selectedAssets.value.clear();
+                                dataStore.selectedAssets
+                                    .addAsset(AssetModel.fromXFile(single.file!));
 
-                          if (event.status == MediaCaptureStatus.success) {
-                            await assetsService.onTakePhoto(
-                                needMirrorPhoto: takePhotoFromFrontCamera);
-                          }
-                        }
-                      },
-                      multiple: (MultipleCaptureRequest multiple) {
-                        multiple.fileBySensor.forEach((Sensor key, XFile? value) {
-                          if (value != null) {
-                            dataStore.selectedAssets.addAsset(AssetModel.fromXFile(value));
-                          }
-                        });
-                      },
-                    );
-                  },
-                  saveConfig: SaveConfig.photo(
-                    exifPreferences: ExifPreferences(saveGPSLocation: false),
-                  ),
-                  builder: (CameraState state, Preview preview) {
-                    cameraState = state;
-                    return Stack(
-                      children: <Widget>[
-                        OverlayWithRectangleClipping(),
-                        const CropContainerBorder(),
-                        Positioned(
-                          top: 16,
-                          left: 16,
-                          child: GestureDetector(
-                            onTap: () {
-                              isPopped = true;
-                              Navigator.of(context).pop();
+                                if (event.status == MediaCaptureStatus.success) {
+                                  await assetsService.onTakePhoto(
+                                      needMirrorPhoto: takePhotoFromFrontCamera);
+                                }
+                              }
                             },
-                            child: BlurButtonContainer(
-                              child: dataStore.cameraStyle.cameraCloseIcon,
-                            ),
-                          ),
+                            multiple: (MultipleCaptureRequest multiple) {
+                              multiple.fileBySensor.forEach((Sensor key, XFile? value) {
+                                if (value != null) {
+                                  dataStore.selectedAssets.addAsset(AssetModel.fromXFile(value));
+                                }
+                              });
+                            },
+                          );
+                        },
+                        saveConfig: SaveConfig.photo(
+                          exifPreferences: ExifPreferences(saveGPSLocation: false),
                         ),
-                        Positioned(
-                          top: 16,
-                          right: 16,
-                          child: Row(
+                        builder: (CameraState state, Preview preview) {
+                          cameraState = state;
+                          return Stack(
                             children: <Widget>[
-                              GestureDetector(
-                                onTap: toggleFlashMode,
-                                child: BlurButtonContainer(
-                                  child: getFlashIcon(currentFlashMode),
+                              OverlayWithRectangleClipping(),
+                              const CropContainerBorder(),
+                              Positioned(
+                                top: 16,
+                                left: 16,
+                                child: GestureDetector(
+                                  onTap: () {
+                                    isPopped = true;
+                                    Navigator.of(context).pop();
+                                  },
+                                  child: BlurButtonContainer(
+                                    child: dataStore.cameraStyle.cameraCloseIcon,
+                                  ),
                                 ),
                               ),
-                              const SizedBox(width: 12),
-                              AwesomeCameraSwitchButton(
-                                onSwitchTap: (CameraState state) async {
-                                  if (previousSensorPositionWasBack) {
-                                    await state.sensorConfig.setFlashMode(FlashMode.none);
-                                    currentFlashMode = FlashMode.none;
-                                  }
-                                  previousSensorPositionWasBack = !previousSensorPositionWasBack;
-                                  await state.switchCameraSensor();
-                                  if (state.sensorConfig.sensors.first.position ==
-                                      SensorPosition.back) {
-                                    await state.sensorConfig.setFlashMode(FlashMode.none);
-                                    currentFlashMode = FlashMode.none;
-                                  }
-                                },
-                                state: state,
-                                iconBuilder: () {
-                                  return BlurButtonContainer(
-                                    child: dataStore.cameraStyle.flipCameraIcon,
-                                  );
-                                },
-                              )
-                            ],
-                          ),
-                        ),
-                        if (state is PhotoCameraState)
-                          Padding(
-                            padding: const EdgeInsets.only(bottom: 12),
-                            child: Align(
-                              alignment: Alignment.bottomCenter,
-                              child: GestureDetector(
-                                onTap: () async {
-                                  if (cameraState.sensorConfig.sensors.first.position ==
-                                      SensorPosition.front) {
-                                    if (currentFlashMode != FlashMode.none) {
-                                      setState(() {
-                                        takePhotoFromFrontCamera = true;
-                                        showFlashEffect = true;
-                                      });
-                                      await Future<void>.delayed(const Duration(seconds: 1));
-                                    }
-                                  }
-                                  await state.takePhoto();
-                                  state.dispose();
-                                  setState(() {
-                                    showFlashEffect = false;
-                                  });
-                                },
-                                child: dataStore.cameraStyle.basicCameraTakePhotoButton ??
-                                    Container(
-                                      width: 72,
-                                      height: 72,
-                                      padding: const EdgeInsets.all(6),
-                                      decoration: const BoxDecoration(
-                                        gradient: LinearGradient(
-                                          colors: <Color>[
-                                            Color(0xFFE64036),
-                                            Color(0xFFFF8C01),
-                                          ],
-                                        ),
-                                        shape: BoxShape.circle,
-                                      ),
-                                      child: Container(
-                                        padding: const EdgeInsets.all(2),
-                                        decoration: const BoxDecoration(
-                                          shape: BoxShape.circle,
-                                          color: Colors.black,
-                                        ),
-                                        child: Container(
-                                          width: 58,
-                                          height: 58,
-                                          decoration: const BoxDecoration(
-                                            shape: BoxShape.circle,
-                                            color: Colors.white,
-                                          ),
-                                        ),
+                              Positioned(
+                                top: 16,
+                                right: 16,
+                                child: Row(
+                                  children: <Widget>[
+                                    GestureDetector(
+                                      onTap: toggleFlashMode,
+                                      child: BlurButtonContainer(
+                                        child: getFlashIcon(currentFlashMode),
                                       ),
                                     ),
+                                    const SizedBox(width: 12),
+                                    AwesomeCameraSwitchButton(
+                                      onSwitchTap: (CameraState state) async {
+                                        if (previousSensorPositionWasBack) {
+                                          await state.sensorConfig.setFlashMode(FlashMode.none);
+                                          currentFlashMode = FlashMode.none;
+                                        }
+                                        previousSensorPositionWasBack =
+                                            !previousSensorPositionWasBack;
+                                        await state.switchCameraSensor();
+                                        if (state.sensorConfig.sensors.first.position ==
+                                            SensorPosition.back) {
+                                          await state.sensorConfig.setFlashMode(FlashMode.none);
+                                          currentFlashMode = FlashMode.none;
+                                        }
+                                      },
+                                      state: state,
+                                      iconBuilder: () {
+                                        return BlurButtonContainer(
+                                          child: dataStore.cameraStyle.flipCameraIcon,
+                                        );
+                                      },
+                                    )
+                                  ],
+                                ),
                               ),
-                            ),
-                          ),
-                      ],
-                    );
-                  },
-                ),
+                              if (state is PhotoCameraState)
+                                Padding(
+                                  padding: const EdgeInsets.only(bottom: 12),
+                                  child: Align(
+                                    alignment: Alignment.bottomCenter,
+                                    child: GestureDetector(
+                                      onTap: () async {
+                                        if (cameraState.sensorConfig.sensors.first.position ==
+                                            SensorPosition.front) {
+                                          if (currentFlashMode != FlashMode.none) {
+                                            setState(() {
+                                              takePhotoFromFrontCamera = true;
+                                              showFlashEffect = true;
+                                            });
+                                            await Future<void>.delayed(const Duration(seconds: 1));
+                                          }
+                                        }
+                                        await state.takePhoto();
+                                        state.dispose();
+                                        setState(() {
+                                          showFlashEffect = false;
+                                        });
+                                      },
+                                      child: dataStore.cameraStyle.basicCameraTakePhotoButton ??
+                                          Container(
+                                            width: 72,
+                                            height: 72,
+                                            padding: const EdgeInsets.all(6),
+                                            decoration: const BoxDecoration(
+                                              gradient: LinearGradient(
+                                                colors: <Color>[
+                                                  Color(0xFFE64036),
+                                                  Color(0xFFFF8C01),
+                                                ],
+                                              ),
+                                              shape: BoxShape.circle,
+                                            ),
+                                            child: Container(
+                                              padding: const EdgeInsets.all(2),
+                                              decoration: const BoxDecoration(
+                                                shape: BoxShape.circle,
+                                                color: Colors.black,
+                                              ),
+                                              child: Container(
+                                                width: 58,
+                                                height: 58,
+                                                decoration: const BoxDecoration(
+                                                  shape: BoxShape.circle,
+                                                  color: Colors.white,
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                    ),
+                                  ),
+                                ),
+                            ],
+                          );
+                        },
+                      ),
               ),
             ),
           ),
