@@ -1,3 +1,6 @@
+## 0.0.29
+- Update dependencies
+
 ## 0.0.28
 - Fixed case : Fix UI freeze after get photo taken by front camera
 

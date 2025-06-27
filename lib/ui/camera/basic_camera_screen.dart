@@ -130,7 +130,7 @@ class _BasicCameraScreenState extends State<BasicCameraScreen> {
                         saveConfig: SaveConfig.photo(
                           exifPreferences: ExifPreferences(saveGPSLocation: false),
                         ),
-                        builder: (CameraState state, Preview preview) {
+                        builder: (CameraState state, AnalysisPreview preview) {
                           cameraState = state;
                           return Stack(
                             children: <Widget>[
